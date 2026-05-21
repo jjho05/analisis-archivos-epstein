@@ -265,12 +265,9 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configurar variables de entorno:
-Crea un archivo `.env` dentro de la carpeta `04 Aplicacion Shiny/` con tus API Keys:
+Crea un archivo `.env` dentro de la carpeta `04 Aplicacion Shiny/` con tu API Key:
 ```env
-OPENROUTER_API_KEY="tu_clave_aquí"
-GROQ_API_KEY="tu_clave_aquí"
 GEMINI_API_KEY="tu_clave_aquí"
-TAVILY_API_KEY="tu_clave_aquí"
 ```
 
 ### 3. Ejecutar el Dashboard:
@@ -285,4 +282,4 @@ shiny run --reload app.py
 
 El proyecto incluye un `Dockerfile` optimizado en la carpeta raíz. Al subir los archivos de este directorio a tu Space de Hugging Face configurado con el SDK **Docker**, la plataforma compilará y desplegará la app automáticamente.
 
-> **🔒 Seguridad**: Recuerda agregar tus claves (`OPENROUTER_API_KEY`, `GROQ_API_KEY`, etc.) de forma segura dentro de la sección **Variables de Entorno (Secrets)** en la configuración de tu Space en Hugging Face. Nunca subas el archivo `.env` al repositorio público.
+> **🔒 Seguridad**: Recuerda agregar tu clave (`GEMINI_API_KEY`) de forma segura dentro de la sección **Variables de Entorno (Secrets)** en la configuración de tu Space en Hugging Face. Nunca subas el archivo `.env` al repositorio público.
