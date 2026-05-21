@@ -624,7 +624,57 @@ app_ui = ui.page_sidebar(
     ),
     
     ui.tags.head(
-        ui.tags.style(CUSTOM_CSS)
+        ui.tags.style(CUSTOM_CSS),
+        ui.tags.script("""
+            function injectShadowStyles() {
+                const chatEl = document.querySelector('shiny-chat') || document.querySelector('[id="chat"]');
+                if (chatEl && chatEl.shadowRoot) {
+                    if (!chatEl.shadowRoot.querySelector('#shadow-table-styles')) {
+                        const style = document.createElement('style');
+                        style.id = 'shadow-table-styles';
+                        style.textContent = `
+                            table {
+                                width: 100% !important;
+                                border-collapse: collapse !important;
+                                margin: 14px 0 !important;
+                                font-size: 0.84rem !important;
+                                background: #120e1d !important;
+                                border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                                border-radius: 6px !important;
+                                overflow: hidden !important;
+                            }
+                            th {
+                                background-color: rgba(255, 255, 255, 0.1) !important;
+                                color: #ffffff !important;
+                                padding: 10px 14px !important;
+                                text-align: left !important;
+                                border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                                font-weight: 700 !important;
+                                letter-spacing: 0.5px !important;
+                                font-size: 0.8rem !important;
+                                text-transform: uppercase !important;
+                            }
+                            td {
+                                background-color: rgba(20, 20, 20, 0.55) !important;
+                                color: #e5e5e5 !important;
+                                padding: 8px 14px !important;
+                                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                                vertical-align: top !important;
+                            }
+                            tr:nth-child(even) td {
+                                background-color: rgba(255, 255, 255, 0.02) !important;
+                            }
+                            tr:hover td {
+                                background-color: rgba(255, 255, 255, 0.06) !important;
+                            }
+                        `;
+                        chatEl.shadowRoot.appendChild(style);
+                    }
+                }
+            }
+            setInterval(injectShadowStyles, 500);
+            document.addEventListener('DOMContentLoaded', injectShadowStyles);
+        """)
     ),
     title=""
 )
