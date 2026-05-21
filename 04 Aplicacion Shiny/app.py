@@ -469,6 +469,59 @@ shiny-chat-message[role="user"] {
     border-radius: 12px !important;
     padding: 12px !important;
 }
+
+/* ── Tablas dentro del chat (respuestas markdown del Copilot) ── */
+.shiny-chat table,
+.shiny-chat-messages table,
+.shiny-chat-message table,
+.shiny-chat-message-body table,
+.shiny-chat-message-assistant table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 14px 0 !important;
+    font-size: 0.84rem !important;
+    background: transparent !important;
+}
+
+.shiny-chat th,
+.shiny-chat-messages th,
+.shiny-chat-message th,
+.shiny-chat-message-body th,
+.shiny-chat-message-assistant th {
+    background-color: rgba(168, 85, 247, 0.25) !important;
+    color: #e9d5ff !important;
+    padding: 9px 14px !important;
+    text-align: left !important;
+    border: 1px solid rgba(168, 85, 247, 0.35) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.4px !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase !important;
+}
+
+.shiny-chat td,
+.shiny-chat-messages td,
+.shiny-chat-message td,
+.shiny-chat-message-body td,
+.shiny-chat-message-assistant td {
+    background-color: rgba(15, 10, 27, 0.6) !important;
+    color: #e5e0eb !important;
+    padding: 8px 14px !important;
+    border: 1px solid rgba(168, 85, 247, 0.18) !important;
+    vertical-align: top !important;
+}
+
+.shiny-chat tr:nth-child(even) td,
+.shiny-chat-messages tr:nth-child(even) td,
+.shiny-chat-message-assistant tr:nth-child(even) td {
+    background-color: rgba(168, 85, 247, 0.06) !important;
+}
+
+.shiny-chat tr:hover td,
+.shiny-chat-messages tr:hover td,
+.shiny-chat-message-assistant tr:hover td {
+    background-color: rgba(168, 85, 247, 0.12) !important;
+}
 """
 
 # Obtener lista de PDFs disponibles en la carpeta de datasets
