@@ -14,9 +14,19 @@ CUSTOM_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap');
 
 /* --- Estilos Globales --- */
+:root, body, html {
+    --bs-table-bg: #120e20 !important;
+    --bs-table-striped-bg: #0e0a17 !important;
+    --bs-table-hover-bg: #1a152e !important;
+    --bs-table-color: #ebdff5 !important;
+    --bs-table-border-color: rgba(255, 255, 255, 0.1) !important;
+    --bs-pre-bg: #0e0a17 !important;
+    --bs-pre-color: #ebdff5 !important;
+}
+
 body {
-    background-color: #0b090f;
-    color: #e5e0eb;
+    background-color: #0b090f !important;
+    color: #e5e0eb !important;
     font-family: 'Outfit', sans-serif;
     font-size: 1rem;
 }
@@ -470,25 +480,27 @@ shiny-chat-message[role="user"] {
     padding: 12px !important;
 }
 
-/* ── Tablas dentro del chat (respuestas markdown del Copilot) ── */
+/* ── Estilos de Tablas Globales y de Chat (Modo Oscuro) ── */
+table, 
+.table,
 .shiny-chat table,
 .shiny-chat-messages table,
-.shiny-chat-message table,
-.shiny-chat-message-body table,
-.shiny-chat-message-assistant table {
+.shiny-chat-message-body table {
     width: 100% !important;
     border-collapse: collapse !important;
     margin: 14px 0 !important;
     font-size: 0.84rem !important;
-    background: transparent !important;
+    background-color: #0e0a17 !important;
+    background: #0e0a17 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
+th,
+.table th,
 .shiny-chat th,
-.shiny-chat-messages th,
-.shiny-chat-message th,
-.shiny-chat-message-body th,
-.shiny-chat-message-assistant th {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+.shiny-chat-messages th {
+    background-color: #1a152e !important;
+    background: #1a152e !important;
     color: #ffffff !important;
     padding: 10px 14px !important;
     text-align: left !important;
@@ -499,28 +511,43 @@ shiny-chat-message[role="user"] {
     text-transform: uppercase !important;
 }
 
+td,
+.table td,
 .shiny-chat td,
-.shiny-chat-messages td,
-.shiny-chat-message td,
-.shiny-chat-message-body td,
-.shiny-chat-message-assistant td {
-    background-color: rgba(20, 20, 20, 0.55) !important;
-    color: #e5e5e5 !important;
+.shiny-chat-messages td {
+    background-color: #120e20 !important;
+    background: #120e20 !important;
+    color: #ebdff5 !important;
     padding: 8px 14px !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     vertical-align: top !important;
 }
 
-.shiny-chat tr:nth-child(even) td,
-.shiny-chat-messages tr:nth-child(even) td,
-.shiny-chat-message-assistant tr:nth-child(even) td {
-    background-color: rgba(255, 255, 255, 0.02) !important;
+tr:nth-child(even) td,
+.table tr:nth-child(even) td {
+    background-color: #0e0a17 !important;
+    background: #0e0a17 !important;
 }
 
-.shiny-chat tr:hover td,
-.shiny-chat-messages tr:hover td,
-.shiny-chat-message-assistant tr:hover td {
-    background-color: rgba(255, 255, 255, 0.06) !important;
+tr:hover td,
+.table tr:hover td {
+    background-color: #1a152e !important;
+    background: #1a152e !important;
+}
+
+/* ── Estilos Globales de Código (pre / code) ── */
+pre, 
+code, 
+.code-block, 
+.markdown-code-block,
+pre code {
+    background-color: #0e0a17 !important;
+    background: #0e0a17 !important;
+    color: #ebdff5 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    font-family: 'Courier New', Courier, monospace !important;
 }
 """
 
