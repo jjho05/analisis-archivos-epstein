@@ -626,25 +626,30 @@ app_ui = ui.page_sidebar(
     ui.tags.head(
         ui.tags.style(CUSTOM_CSS),
         ui.tags.script("""
-            function injectShadowStyles() {
-                const chatEl = document.querySelector('shiny-chat') || document.querySelector('[id="chat"]');
-                if (chatEl && chatEl.shadowRoot) {
-                    if (!chatEl.shadowRoot.querySelector('#shadow-table-styles')) {
+            function injectStylesRecursively(root) {
+                if (!root) return;
+                
+                // Si el elemento tiene Shadow DOM
+                if (root.shadowRoot) {
+                    const shadow = root.shadowRoot;
+                    if (!shadow.querySelector('#shadow-table-styles')) {
                         const style = document.createElement('style');
                         style.id = 'shadow-table-styles';
                         style.textContent = `
+                            /* Tablas dentro del Shadow DOM */
                             table {
                                 width: 100% !important;
                                 border-collapse: collapse !important;
                                 margin: 14px 0 !important;
                                 font-size: 0.84rem !important;
                                 background: #120e1d !important;
+                                color: #e5e5e5 !important;
                                 border: 1px solid rgba(255, 255, 255, 0.15) !important;
                                 border-radius: 6px !important;
                                 overflow: hidden !important;
                             }
                             th {
-                                background-color: rgba(255, 255, 255, 0.1) !important;
+                                background-color: rgba(255, 255, 255, 0.12) !important;
                                 color: #ffffff !important;
                                 padding: 10px 14px !important;
                                 text-align: left !important;
@@ -667,13 +672,36 @@ app_ui = ui.page_sidebar(
                             tr:hover td {
                                 background-color: rgba(255, 255, 255, 0.06) !important;
                             }
+                            
+                            /* Bloques de código (pre, code) dentro del Shadow DOM */
+                            pre, code, .code-block, .markdown-code-block {
+                                background-color: #120e1d !important;
+                                color: #ebdff5 !important;
+                                border: 1px solid rgba(255, 255, 255, 0.12) !important;
+                                padding: 12px !important;
+                                border-radius: 8px !important;
+                            }
                         `;
-                        chatEl.shadowRoot.appendChild(style);
+                        shadow.appendChild(style);
+                        console.log("Estilos inyectados exitosamente en Shadow Root de:", root.tagName);
                     }
+                    // Buscar recursivamente dentro del Shadow DOM
+                    shadow.querySelectorAll('*').forEach(child => injectStylesRecursively(child));
+                }
+                
+                // Buscar recursivamente en hijos estándar
+                if (root.children) {
+                    Array.from(root.children).forEach(child => injectStylesRecursively(child));
                 }
             }
-            setInterval(injectShadowStyles, 500);
-            document.addEventListener('DOMContentLoaded', injectShadowStyles);
+
+            function runShadowInjection() {
+                injectStylesRecursively(document.body);
+            }
+
+            // Monitorear e inyectar de manera constante cada 300ms
+            setInterval(runShadowInjection, 300);
+            document.addEventListener('DOMContentLoaded', runShadowInjection);
         """)
     ),
     title=""
