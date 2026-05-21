@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+
+# Archivos de Claves y Variables de Entorno (SEGURIDAD CRÍTICA)
+.env
+.env.local
+.env.*
+04 Aplicacion Shiny/.env
+04 Aplicacion Shiny/.env.*
+
+# Archivos de datos pesados y temporales
+*.pdf
+01 Datasets Usados/*.pdf
+temp_extracted.txt
+04 Aplicacion Shiny/temp_extracted.txt
+04 Aplicacion Shiny/www/gen_images/
+
+# OS metadata
+.DS_Store
+Thumbs.db
