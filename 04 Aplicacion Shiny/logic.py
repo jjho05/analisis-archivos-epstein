@@ -38,7 +38,7 @@ def resolve_model(model_id: str) -> tuple[str, dict]:
     return model_id, {}
 
 
-# ── Tavily ────────────────────────────────────────────────────────────────────
+#  Tavily 
 tavily_client = None
 if os.getenv("TAVILY_API_KEY"):
     tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
@@ -56,9 +56,9 @@ async def get_web_search_context(query: str) -> str:
         )
         results = response.get("results", [])
         if not results:
-            return "\n\n⚠️ No se encontraron resultados.\n"
+            return "\n\n No se encontraron resultados.\n"
 
-        context = "\n\n📰 RESULTADOS DE BÚSQUEDA WEB:\n"
+        context = "\n\n RESULTADOS DE BÚSQUEDA WEB:\n"
         for i, r in enumerate(results, 1):
             title   = r.get("title", "Sin título")
             url     = r.get("url", "")
@@ -68,7 +68,7 @@ async def get_web_search_context(query: str) -> str:
         return context
     except Exception as e:
         print(f"[Tavily] Error: {e}")
-        return "\n\n⚠️ La búsqueda web falló.\n"
+        return "\n\n La búsqueda web falló.\n"
 
 
 def get_system_prompt(search_context: str = "", timezone: str = "America/Mexico_City") -> str:
@@ -87,12 +87,10 @@ def get_system_prompt(search_context: str = "", timezone: str = "America/Mexico_
 - Evita el lenguaje excesivamente informal o juvenil.
 - Tu confianza proviene de tu precisión técnica y tu capacidad de resolución.
 
-## REGLA DE SALUDO — CATCHPHRASE "5 MINUTOS"
-Si el usuario te saluda directamente (ej. "Hola", "Buenos días"), incorpora la referencia a "5 minutos" de forma profesional y variada.
+## REGLA DE SALUDO — CATCHPHRASE "5 MINUTOS"Si el usuario te saluda directamente (ej. "Hola", "Buenos días"), incorpora la referencia a "5 minutos" de forma profesional y variada.
 Ejemplos:
   - "Hola. Dame 5 minutos y lo resolvemos."
-  - "Buenos días. En menos de 5 minutos tendremos una respuesta."
-REGLA ESTRICTA: NUNCA uses este saludo si el usuario envía una imagen, un archivo, o hace una pregunta directa. Ve directo al análisis.
+  - "Buenos días. En menos de 5 minutos tendremos una respuesta."REGLA ESTRICTA: NUNCA uses este saludo si el usuario envía una imagen, un archivo, o hace una pregunta directa. Ve directo al análisis.
 
 ## FORMATO Y ESTILO
 - Responde siempre en español (MX) con excelente gramática.
@@ -120,7 +118,7 @@ async def stream_chat_response(
     image_b64: Optional[str] = None,
 ) -> AsyncGenerator[str, None]:
     
-    # ── INTERCEPTOR DE IMÁGENES (Cloudflare Flux v2) ──────────────────────────────
+    #  INTERCEPTOR DE IMÁGENES (Cloudflare Flux v2) 
     if model == "olvera-image-1.0":
         last_msg = messages[-1]
         user_prompt = last_msg.content if hasattr(last_msg, 'content') else last_msg.get('content', '')
@@ -196,7 +194,7 @@ async def stream_chat_response(
         yield f"\n\n{html_text}"
         return
         
-    # ── PREPARAR MENSAJES Y BÚSQUEDA WEB ──────────────────────────────────────────
+    #  PREPARAR MENSAJES Y BÚSQUEDA WEB 
     
     # 1. Búsqueda web (si aplica)
     search_context = ""
@@ -290,7 +288,7 @@ async def stream_chat_response(
 
     # Si todos los intentos fallaron, reportar el último error
     if last_error:
-        yield f"\n\n🔥 **Error en el motor de IA:** No fue posible conectar con ningún proveedor de IA (incluyendo motores de respaldo). Detalle técnico: {str(last_error)}"
+        yield f"\n\n **Error en el motor de IA:** No fue posible conectar con ningún proveedor de IA (incluyendo motores de respaldo). Detalle técnico: {str(last_error)}"
 
 async def transcribe_audio(b64_data: str) -> str:
     import base64

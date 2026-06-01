@@ -46,8 +46,7 @@ class PDFExtractorEngine:
     """Clase principal que encapsula el motor de extracción y análisis semántico-analítico de PDFs."""
     
     def __init__(self, pdf_file_like=None):
-        """
-        Inicializa el motor con un objeto tipo archivo PDF opcional.
+        """Inicializa el motor con un objeto tipo archivo PDF opcional.
         """
         if pdf_file_like is not None:
             self.reader = pypdf.PdfReader(pdf_file_like)
@@ -59,7 +58,7 @@ class PDFExtractorEngine:
     def extract_metadata(self) -> Dict[str, Any]:
         """Extrae metadatos y los devuelve en un formato limpio."""
         return {
-            "Título": "Proyecto Final | Análisis Estructural de Expedientes Judiciales Desclasificados - Caso Epstein",
+            "Título": "Proyecto Final  Análisis Estructural de Expedientes Judiciales Desclasificados - Caso Epstein",
             "Autor": "Jesús Olvera"
         }
 
@@ -84,7 +83,7 @@ class PDFExtractorEngine:
 
     def process_document(self, start_page: int, end_page: int, clean: bool = True, language: str = "en") -> Tuple[str, Dict[str, Any]]:
         """Extrae el contenido y calcula métricas analíticas del documento."""
-        # ── Carga acelerada desde CSVs preprocesados (Paso 3) para máxima velocidad y evitar lag ──
+        #  Carga acelerada desde CSVs preprocesados (Paso 3) para máxima velocidad y evitar lag 
         proc_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico"))
         csv_granular = os.path.join(proc_dir, "analytic_01_paginas_granular.csv")
         csv_persons = os.path.join(proc_dir, "analytic_02_personas_sentimiento.csv")
@@ -223,10 +222,10 @@ class PDFExtractorEngine:
                     "top_co_occurrences": sorted_co_occur
                 }
                 
-                print("⚡ [EXTRACTION ENGINE] ¡Métricas cargadas con éxito y todos los gráficos poblados reactivamente!")
+                print(" [EXTRACTION ENGINE] ¡Métricas cargadas con éxito y todos los gráficos poblados reactivamente!")
                 return full_text, metrics
             except Exception as e:
-                print(f"⚠️ [EXTRACTION ENGINE] Error cargando CSVs: {e}. Iniciando fallback pesado...")
+                print(f" [EXTRACTION ENGINE] Error cargando CSVs: {e}. Iniciando fallback pesado...")
                 pass
 
         # Fallback a procesamiento pesado original
@@ -312,11 +311,11 @@ class PDFExtractorEngine:
         # 2. ÍNDICE DE EVASIVIDAD VERBAL (Evasiveness Index)
         # Contamos evasiones típicas en testimonios y objeciones de abogados
         evasion_patterns = {
-            "I don't recall / remember": r"\b(don't|do\s+not)\s+(recall|remember|recollect)\b",
-            "Objections": r"\b(objection|i\s+object)\b",
-            "Refusal / Decline to answer": r"\b(decline\s+to\s+answer|refuse\s+to\s+answer)\b",
-            "Pleading the Fifth": r"\b(fifth\s+amendment|plead\s+the\s+fifth)\b",
-            "Not sure / Don't know": r"\b(not\s+sure|don't\s+know|do\s+not\s+know)\b"
+            "I don't recall / remember": r"\b(don'tdo\s+not)\s+(recallrememberrecollect)\b",
+            "Objections": r"\b(objectioni\s+object)\b",
+            "Refusal / Decline to answer": r"\b(decline\s+to\s+answerrefuse\s+to\s+answer)\b",
+            "Pleading the Fifth": r"\b(fifth\s+amendmentplead\s+the\s+fifth)\b",
+            "Not sure / Don't know": r"\b(not\s+suredon't\s+knowdo\s+not\s+know)\b"
         }
         
         evasions_count = 0
@@ -367,7 +366,7 @@ class PDFExtractorEngine:
         sorted_persons = sorted(person_mentions.items(), key=lambda x: x[1], reverse=True)[:10]
 
         # 5. EXTRACTOR CRONOLÓGICO (LÍNEA DE TIEMPO)
-        years = re.findall(r'\b(199[0-9]|20[0-2][0-9])\b', full_raw_text)
+        years = re.findall(r'\b(199[0-9]20[0-2][0-9])\b', full_raw_text)
         year_freq: Dict[str, int] = {}
         for y in years:
             year_freq[y] = year_freq.get(y, 0) + 1

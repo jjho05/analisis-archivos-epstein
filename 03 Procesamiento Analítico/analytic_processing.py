@@ -15,10 +15,10 @@ try:
         ENGLISH_STOPWORDS
     )
 except ImportError as e:
-    print(f"❌ Error: No se pudo importar desde la carpeta del Paso 4: {e}")
+    print(f"Error: No se pudo importar desde la carpeta del Paso 4: {e}")
     sys.exit(1)
 
-# ─── Léxicos de Sentimiento ────────────────────────────────────────────────────
+#  Léxicos de Sentimiento 
 NEGATIVE_LEXICON = {
     'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking',
     'forced', 'illegal', 'crime', 'complicit', 'rape', 'sex', 'underage',
@@ -53,11 +53,11 @@ TOPIC_KEYWORDS = {
                      r'\bexhibit\b', r'\bgrand\s+jury\b', r'\baffidavit\b', r'\bwitness\b']
 }
 EVASION_PATTERNS = {
-    "I don't recall": r"\b(don't|do\s+not)\s+(recall|remember|recollect)\b",
-    "Objection": r"\b(objection|i\s+object)\b",
-    "Decline to answer": r"\b(decline\s+to\s+answer|refuse\s+to\s+answer)\b",
-    "Fifth Amendment": r"\b(fifth\s+amendment|plead\s+the\s+fifth)\b",
-    "Don't know": r"\b(not\s+sure|don't\s+know|do\s+not\s+know)\b"
+    "I don't recall": r"\b(don'tdo\s+not)\s+(recallrememberrecollect)\b",
+    "Objection": r"\b(objectioni\s+object)\b",
+    "Decline to answer": r"\b(decline\s+to\s+answerrefuse\s+to\s+answer)\b",
+    "Fifth Amendment": r"\b(fifth\s+amendmentplead\s+the\s+fifth)\b",
+    "Don't know": r"\b(not\s+suredon't\s+knowdo\s+not\s+know)\b"
 }
 REDACTION_PATTERNS = [
     r'\bREDACTED\b', r'\bredacted\b', r'\[\s*redacted\s*\]',
@@ -100,16 +100,16 @@ def sentiment_score(pos: int, neg: int) -> tuple:
 
 def main():
     print("=" * 70)
-    print("⚖️  PROCESAMIENTO ANALÍTICO AVANZADO — GENERACIÓN DE DATASETS RICOS (PASO 3)")
+    print("PROCESAMIENTO ANALÍTICO AVANZADO — GENERACIÓN DE DATASETS RICOS (PASO 3)")
     print("=" * 70)
 
     dataset_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "01 Datasets Usados"))
     txt_path    = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "02 Preprocesamiento", "consolidated_cleaned_text.txt"))
     out_dir     = os.path.dirname(__file__)
 
-    # ── Cargar texto preprocesado ────────────────────────────────────────────
+    #  Cargar texto preprocesado 
     if os.path.exists(txt_path):
-        print(f"⚡ Texto preprocesado detectado — cargando {os.path.basename(txt_path)}...")
+        print(f"Texto preprocesado detectado — cargando {os.path.basename(txt_path)}...")
         with open(txt_path, "r", encoding="utf-8") as f:
             txt_content = f.read()
         pages_text = [p.strip() for p in re.split(r'---\s*P[ÁA]GINA\s+\d+\s*---', txt_content) if p.strip()]
@@ -118,22 +118,22 @@ def main():
         pdf_files = sorted([f for f in os.listdir(dataset_dir) if f.endswith(".pdf")],
                            key=lambda x: os.path.getsize(os.path.join(dataset_dir, x)), reverse=True)
         if not pdf_files:
-            print("❌ Error: No hay PDF ni TXT disponible.")
+            print("Error: No hay PDF ni TXT disponible.")
             sys.exit(1)
-        print(f"📂 Cargando PDF: {pdf_files[0]}...")
+        print(f"Cargando PDF: {pdf_files[0]}...")
         engine = PDFExtractorEngine(os.path.join(dataset_dir, pdf_files[0]))
         _, metrics_dummy = engine.process_document(1, engine.num_pages)
         pages_text = [engine.reader.pages[i].extract_text() or "" for i in range(engine.num_pages)]
         source = pdf_files[0]
 
     total_pages = len(pages_text)
-    print(f"📖 Total de páginas cargadas: {total_pages:,}")
+    print(f"Total de páginas cargadas: {total_pages:,}")
     print()
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 1: ANÁLISIS GRANULAR PÁGINA A PÁGINA (5,028 filas)
-    # ═══════════════════════════════════════════════════════════════════════════
-    print("📊 [1/5] Generando dataset PÁGINA × PÁGINA (granular, 5,000+ filas)...")
+    # 
+    print(" [1/5] Generando dataset PÁGINA × PÁGINA (granular, 5,000+ filas)...")
     page_rows = []
     person_page_map = {p: [] for p in TARGET_PERSONS}  # track which pages each person appears
 
@@ -156,7 +156,7 @@ def main():
         neg_hits = len(words_set.intersection(NEGATIVE_LEXICON))
         score, category = sentiment_score(pos_hits, neg_hits)
 
-        years_found = re.findall(r'\b(199[0-9]|20[0-2][0-9])\b', page)
+        years_found = re.findall(r'\b(199[0-9]20[0-2][0-9])\b', page)
 
         persons_on_page = []
         for person in TARGET_PERSONS:
@@ -190,13 +190,13 @@ def main():
 
     df_pages = pd.DataFrame(page_rows)
     df_pages.to_csv(os.path.join(out_dir, "analytic_01_paginas_granular.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: analytic_01_paginas_granular.csv — {len(df_pages):,} filas\n")
+    print(f"Guardado: analytic_01_paginas_granular.csv — {len(df_pages):,} filas\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 2: ANÁLISIS DE SENTIMIENTO Y RIESGO POR PERSONA
     # Solo personas reales de TARGET_PERSONS
-    # ═══════════════════════════════════════════════════════════════════════════
-    print("👥 [2/5] Generando dataset de SENTIMIENTO y RIESGO por persona...")
+    # 
+    print(" [2/5] Generando dataset de SENTIMIENTO y RIESGO por persona...")
     person_rows = []
 
     full_text = "\n".join(pages_text)
@@ -255,12 +255,12 @@ def main():
 
     df_persons = pd.DataFrame(person_rows).sort_values("Total_Menciones", ascending=False)
     df_persons.to_csv(os.path.join(out_dir, "analytic_02_personas_sentimiento.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: analytic_02_personas_sentimiento.csv — {len(df_persons)} personas\n")
+    print(f"Guardado: analytic_02_personas_sentimiento.csv — {len(df_persons)} personas\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 3: REGISTRO DE EVASIONES VERBALES (instancia por instancia)
     # Una fila por cada evasión detectada en el texto, con contexto
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     print("🤐 [3/5] Generando dataset EVASIONES VERBALES por instancia...")
     evasion_rows = []
     for i, page in enumerate(pages_text, start=1):
@@ -281,13 +281,13 @@ def main():
 
     df_evasions = pd.DataFrame(evasion_rows)
     df_evasions.to_csv(os.path.join(out_dir, "analytic_03_evasiones_instancias.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: analytic_03_evasiones_instancias.csv — {len(df_evasions):,} filas\n")
+    print(f"Guardado: analytic_03_evasiones_instancias.csv — {len(df_evasions):,} filas\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 4: MAPA DE REDACCIONES / CENSURA ([REDACTED] por página)
     # Una fila por cada instancia de censura detectada con contexto
-    # ═══════════════════════════════════════════════════════════════════════════
-    print("🔏 [4/5] Generando dataset MAPA DE CENSURA (REDACTED) por instancia...")
+    # 
+    print(" [4/5] Generando dataset MAPA DE CENSURA (REDACTED) por instancia...")
     redaction_rows = []
     for i, page in enumerate(pages_text, start=1):
         for pat in REDACTION_PATTERNS:
@@ -307,16 +307,16 @@ def main():
 
     df_redactions = pd.DataFrame(redaction_rows)
     df_redactions.to_csv(os.path.join(out_dir, "analytic_04_censura_redacted.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: analytic_04_censura_redacted.csv — {len(df_redactions):,} filas\n")
+    print(f"Guardado: analytic_04_censura_redacted.csv — {len(df_redactions):,} filas\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 5: LÍNEA DE TIEMPO — AÑO × PÁGINA × PERSONA
     # Una fila por cada año mencionado, con la página y personas presentes
-    # ═══════════════════════════════════════════════════════════════════════════
-    print("📅 [5/5] Generando dataset LÍNEA DE TIEMPO cronológica...")
+    # 
+    print(" [5/5] Generando dataset LÍNEA DE TIEMPO cronológica...")
     timeline_rows = []
     for i, page in enumerate(pages_text, start=1):
-        years = re.findall(r'\b(199[0-9]|20[0-2][0-9])\b', page)
+        years = re.findall(r'\b(199[0-9]20[0-2][0-9])\b', page)
         if not years:
             continue
         persons_on_page = [p for p in TARGET_PERSONS
@@ -335,12 +335,12 @@ def main():
 
     df_timeline = pd.DataFrame(timeline_rows).sort_values(["Año", "Pagina"])
     df_timeline.to_csv(os.path.join(out_dir, "analytic_05_timeline_cronologica.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: analytic_05_timeline_cronologica.csv — {len(df_timeline):,} filas\n")
+    print(f"Guardado: analytic_05_timeline_cronologica.csv — {len(df_timeline):,} filas\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 6: GEOESPACIAL (MAPA LOGÍSTICO Y OPERATIVO)
-    # ═══════════════════════════════════════════════════════════════════════════
-    print("🌍 [6/8] Generando dataset GEOESPACIAL...")
+    # 
+    print(" [6/8] Generando dataset GEOESPACIAL...")
     locations = [
         {"name": "Little St. James (US Virgin Islands)", "lat": 18.3003, "lon": -64.8255, "type": "Isla Privada", "mentions": 1420, "desc": "Sede principal de operaciones clandestinas y presunto tráfico."},
         {"name": "Palm Beach, Florida", "lat": 26.7056, "lon": -80.0364, "type": "Residencia Principal", "mentions": 850, "desc": "Punto de reclutamiento primario y red de masajistas."},
@@ -351,12 +351,12 @@ def main():
     ]
     df_geo = pd.DataFrame(locations)
     df_geo.to_csv(os.path.join(out_dir, "geospatial_data.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: geospatial_data.csv — {len(df_geo)} locaciones estructurales\n")
+    print(f"Guardado: geospatial_data.csv — {len(df_geo)} locaciones estructurales\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 7: RED CORPORATIVA FINANCIERA (SHADOW NETWORK)
-    # ═══════════════════════════════════════════════════════════════════════════
-    print("🕸️ [7/8] Generando dataset RED CORPORATIVA FINANCIERA...")
+    # 
+    print(" [7/8] Generando dataset RED CORPORATIVA FINANCIERA...")
     financial_links = [
         {"source": "Jeffrey Epstein", "target": "J.P. Morgan Chase", "type": "Financiamiento Principal", "color": "#06b6d4", "width": 4},
         {"source": "Jeffrey Epstein", "target": "Deutsche Bank", "type": "Cuentas Offshore", "color": "#06b6d4", "width": 4},
@@ -372,12 +372,12 @@ def main():
     ]
     df_fin = pd.DataFrame(financial_links)
     df_fin.to_csv(os.path.join(out_dir, "financial_network_data.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: financial_network_data.csv — {len(df_fin)} vínculos financieros\n")
+    print(f"Guardado: financial_network_data.csv — {len(df_fin)} vínculos financieros\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # DATASET 8: REPORTE ESTRUCTURAL JSON DE INVESTIGACIÓN
-    # ═══════════════════════════════════════════════════════════════════════════
-    print("💾 [8/8] Generando reporte consolidado estructural JSON...")
+    # 
+    print(" [8/8] Generando reporte consolidado estructural JSON...")
     
     total_words_doc = int(df_pages["Palabras"].sum())
     total_redact_doc = int(df_pages["Menciones_Censuradas_REDACTED"].sum())
@@ -386,7 +386,7 @@ def main():
     report_json = {
         "documento": source,
         "metadatos": {
-            "Título": "Proyecto Final | Análisis Estructural de Expedientes Judiciales Desclasificados - Caso Epstein",
+            "Título": "Proyecto Final  Análisis Estructural de Expedientes Judiciales Desclasificados - Caso Epstein",
             "Autor": "Jesús Olvera"
         },
         "paginas_analizadas": total_pages,
@@ -409,13 +409,13 @@ def main():
     json_path = os.path.join(out_dir, "analytic_report_full.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report_json, f, indent=4, ensure_ascii=False)
-    print(f"   ✅ Guardado: analytic_report_full.json — Reporte Maestro\n")
+    print(f"Guardado: analytic_report_full.json — Reporte Maestro\n")
 
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     # REPORTE RESUMEN EN CONSOLA
-    # ═══════════════════════════════════════════════════════════════════════════
+    # 
     print("=" * 70)
-    print("📋 RESUMEN EJECUTIVO DE DATASETS GENERADOS")
+    print("RESUMEN EJECUTIVO DE DATASETS GENERADOS")
     print("=" * 70)
     print(f"{'Dataset':<45} {'Filas':>8}")
     print("-" * 55)
@@ -428,7 +428,7 @@ def main():
     total_rows = len(df_pages) + len(df_persons) + len(df_evasions) + len(df_redactions) + len(df_timeline)
     print(f"{'TOTAL DE FILAS EN TODOS LOS DATASETS':<45} {total_rows:>8,}")
     print("=" * 70)
-    print("✅ PIPELINE DE EXPORTACIÓN ANALÍTICO AVANZADO COMPLETADO")
+    print("PIPELINE DE EXPORTACIÓN ANALÍTICO AVANZADO COMPLETADO")
     print("=" * 70)
 
 if __name__ == "__main__":

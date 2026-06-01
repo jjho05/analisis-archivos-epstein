@@ -497,7 +497,7 @@ shiny-chat-message[role="user"] {
     padding: 12px !important;
 }
 
-/* ── Estilos de Tablas Globales y de Chat (Modo Oscuro) ── */
+/*  Estilos de Tablas Globales y de Chat (Modo Oscuro)  */
 table, 
 .table,
 .shiny-chat table,
@@ -552,7 +552,7 @@ tr:hover td,
     background: #1a152e !important;
 }
 
-/* ── Estilos Globales de Código (pre / code) ── */
+/*  Estilos Globales de Código (pre / code)  */
 pre, 
 code, 
 .code-block, 
@@ -584,14 +584,14 @@ app_ui = ui.page_sidebar(
         ),
         
         ui.div(
-            ui.p("💡 AUDITORÍA ANALÍTICO:", style="font-weight: bold; color: #ffffff; font-size: 0.85em; letter-spacing: 0.5px;"),
+            ui.p("AUDITORÍA ANALÍTICO:", style="font-weight: bold; color: #ffffff; font-size: 0.85em; letter-spacing: 0.5px;"),
             ui.p("Este sistema realiza minería de texto y análisis de co-ocurrencia sobre testimonios judiciales desclasificados. Emplea procesamiento de lenguaje natural y visualizaciones de grado de investigación para mapear redes de interés en el caso Epstein.", style="font-size: 0.82em; color: #ebdff5; line-height: 1.5;"),
             style="background: rgba(168, 85, 247, 0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.2); margin-bottom: 20px;"
         ),
         
         # PANEL DE FILTROS INTERACTIVOS SEPHORA-STYLE
         ui.div(
-            ui.div("🚨 FILTROS INTERACTIVOS", style="font-weight: 800; color: #a855f7; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; border-left: 3px solid #a855f7; padding-left: 8px;"),
+            ui.div("FILTROS INTERACTIVOS", style="font-weight: 800; color: #a855f7; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; border-left: 3px solid #a855f7; padding-left: 8px;"),
             
             # Filtro por Persona de Interés (Checkbox Group Sephora-Style)
             ui.input_checkbox_group(
@@ -648,16 +648,16 @@ app_ui = ui.page_sidebar(
         
         # TAB 3: Buscador Semántico (RAG Local)
         ui.nav_panel(
-            "🔍 Búsqueda Semántica",
+            "Búsqueda Semántica",
             ui.div(
                 ui.h3("Buscador Inteligente (Por Contexto)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("A diferencia de un buscador normal que requiere la palabra exacta, este motor utiliza un algoritmo matemático para entender la intención y el significado de tu búsqueda. Esto te permite encontrar evidencia aunque los testigos hayan usado términos distintos para referirse a lo mismo.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
-                    ui.input_text("search_query", "📝 ¿Qué intentas encontrar en el expediente? (Ej. Encuentros en la isla, logística de vuelos secretos):", width="100%"),
-                    ui.input_action_button("search_btn", "🔍 Buscar", class_="btn-primary", style="margin-top:24px; background:#a855f7; border:none; height:40px;"),
+                    ui.input_text("search_query", " ¿Qué intentas encontrar en el expediente? (Ej. Encuentros en la isla, logística de vuelos secretos):", width="100%"),
+                    ui.input_action_button("search_btn", "Buscar", class_="btn-primary", style="margin-top:24px; background:#a855f7; border:none; height:40px;"),
                     ui.panel_conditional(
                         "input.search_btn > 0",
-                        ui.download_button("download_report", "📄 Descargar Reporte de Evidencia", class_="btn-primary", style="margin-top:24px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;")
+                        ui.download_button("download_report", "Descargar Reporte de Evidencia", class_="btn-primary", style="margin-top:24px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;")
                     ),
                     col_widths=[8, 2, 2]
                 ),
@@ -669,7 +669,7 @@ app_ui = ui.page_sidebar(
         
         # TAB 4: Auditor de Contradicciones (Agente Lógico)
         ui.nav_panel(
-            "⚖️ Auditor de Contradicciones",
+            "Auditor de Contradicciones",
             ui.div(
                 ui.h3("Agente Autónomo Detector de Contradicciones", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("Inicia un proceso lógico donde el LLM escanea los testimonios clave (ej. Maxwell y Giuffre) buscando discrepancias cruzadas o evasiones intencionales detectadas en las transcripciones.", style="color:#bfaec2; margin-bottom:25px;"),
@@ -679,7 +679,7 @@ app_ui = ui.page_sidebar(
                     ui.input_select("audit_strictness", "Nivel de Severidad:", ["Estándar", "Implacable (Crítico)", "Leve (Solo hechos obvios)"]),
                     col_widths=[4, 4, 4]
                 ),
-                ui.input_action_button("audit_btn", "⚡ Iniciar Auditoría Profunda", class_="btn-danger", style="background:#f43f5e; border:none; padding:10px 20px; font-weight:bold; width: 100%; margin-top: 15px;"),
+                ui.input_action_button("audit_btn", "Iniciar Auditoría Profunda", class_="btn-danger", style="background:#f43f5e; border:none; padding:10px 20px; font-weight:bold; width: 100%; margin-top: 15px;"),
                 ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
                 ui.output_ui("contradictions_results_ui"),
                 style="padding: 20px;"
@@ -688,14 +688,14 @@ app_ui = ui.page_sidebar(
         
         # TAB 5: Inteligencia Geoespacial
         ui.nav_panel(
-            "🌍 Mapa Geoespacial",
+            "Mapa Geoespacial",
             ui.div(
                 ui.h3("Red Logística Internacional (Footprint)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("Visualización de coordenadas clave extraídas del expediente. Identifica las rutas de vuelo, islas privadas y bases de operaciones utilizadas en la red.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
                     ui.output_ui("geospatial_map_ui"),
                     ui.div(
-                        ui.h4("🕵️‍♂️ Análisis de Rutas", style="color:#06b6d4; font-weight:bold; margin-bottom:15px;"),
+                        ui.h4("‍ Análisis de Rutas", style="color:#06b6d4; font-weight:bold; margin-bottom:15px;"),
                         ui.markdown("""
 **Little St. James (USVI):** Identificada en los registros de vuelo como el destino principal y punto ciego legal.
                         
@@ -715,14 +715,14 @@ app_ui = ui.page_sidebar(
         
         # TAB 6: Mapeo Financiero (Shadow Network)
         ui.nav_panel(
-            "🕸️ Red Financiera",
+            "Red Financiera",
             ui.div(
                 ui.h3("Shadow Network (Grafo Corporativo)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("Grafo interactivo de relaciones financieras, empresas fachada (LLCs) y actores clave que facilitaron el flujo de dinero en la organización.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
                     ui.output_ui("shadow_network_ui"),
                     ui.div(
-                        ui.h4("💸 Anatomía Financiera", style="color:#10b981; font-weight:bold; margin-bottom:15px;"),
+                        ui.h4("Anatomía Financiera", style="color:#10b981; font-weight:bold; margin-bottom:15px;"),
                         ui.markdown("""
 **Cuentas Ciegas (Tier 1):**
 J.P. Morgan y Deutsche Bank proveyeron la infraestructura para flujos masivos de liquidez.
@@ -743,14 +743,14 @@ Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrá
         
         # TAB 7: Co-ocurrencia Social
         ui.nav_panel(
-            "🔗 Co-ocurrencia Social",
+            "Co-ocurrencia Social",
             ui.div(
                 ui.h3("Red de Co-ocurrencia en el Expediente", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("Este módulo identifica qué actores de alto perfil aparecen mencionados simultáneamente en las mismas páginas del expediente, evidenciando conexiones documentadas.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
                     ui.output_ui("co_occur_chart_ui"),
                     ui.div(
-                        ui.h4("🔍 Lectura de Co-ocurrencia", style="color:#c084fc; font-weight:bold; margin-bottom:15px;"),
+                        ui.h4("Lectura de Co-ocurrencia", style="color:#c084fc; font-weight:bold; margin-bottom:15px;"),
                         ui.markdown("""
 **¿Qué significa esto?**
 Esta red no asume culpabilidad por sí sola, pero **mapea la proximidad en los testimonios**. 
@@ -956,7 +956,7 @@ def server(input, output, session):
             
         if not results:
             return ui.div(
-                ui.span("⚠️", style="font-size: 3.5rem; display: block; margin-bottom: 0.8rem;"),
+                ui.span("", style="font-size: 3.5rem; display: block; margin-bottom: 0.8rem;"),
                 ui.h4("Error de Carga o Inicialización", style="color: #ef4444;"),
                 ui.p("Por favor, asegúrate de que el archivo Epstein_documents.pdf exista en la carpeta '01 Datasets Usados'.", style="color: #bfaec2;"),
                 style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.012); border-radius: 12px; border: 1px dashed rgba(239,68,68,0.2);"
@@ -986,7 +986,7 @@ def server(input, output, session):
                 ui.div(
                     ui.div(
                         ui.div("Menciones Censuradas", class_="kpi-title"),
-                        ui.div(f"🔏 {metrics['redactions_count']:,}", class_="kpi-value", style="color: #ef4444;"),
+                        ui.div(f" {metrics['redactions_count']:,}", class_="kpi-value", style="color: #ef4444;"),
                         class_="kpi-card"
                     ),
                     class_="kpi-wrapper"
@@ -1032,7 +1032,7 @@ def server(input, output, session):
                     ui.card_header("Proporción de Red Filtrada (Donut Reactivo)"),
                     ui.output_plot("plot_anillo_streaming"),
                     ui.div(
-                        ui.div("🍩 STREAMING DE PROPORCIONES", class_="explanation-title"),
+                        ui.div("STREAMING DE PROPORCIONES", class_="explanation-title"),
                         ui.p("Gráfica de anillo interactiva que reacciona instantáneamente a los sliders y checkboxes del panel lateral."),
                         class_="explanation-box"
                     )
@@ -1048,7 +1048,7 @@ def server(input, output, session):
                     ui.card_header("Personas Clave Identificadas (Menciones)"),
                     ui.output_plot("person_chart"),
                     ui.div(
-                        ui.div("👥 ANÁLISIS DE ENTIDADES DE ALTO INTERÉS", class_="explanation-title"),
+                        ui.div("ANÁLISIS DE ENTIDADES DE ALTO INTERÉS", class_="explanation-title"),
                         ui.p("Rastrea menciones de personajes clave en la red del caso Epstein (como Ghislaine Maxwell, Donald Trump, Virginia Giuffre, Prince Andrew, Bill Clinton) combinando listas y heurísticas de reconocimiento de entidades."),
                         class_="explanation-box"
                     )
@@ -1071,7 +1071,7 @@ def server(input, output, session):
                     ui.card_header("Prevalencia Temática en el Documento"),
                     ui.output_plot("topics_prevalence_chart"),
                     ui.div(
-                        ui.div("🚩 MAPEO DE TEMÁTICAS DE SOSPECHA", class_="explanation-title"),
+                        ui.div("MAPEO DE TEMÁTICAS DE SOSPECHA", class_="explanation-title"),
                         ui.p("Cuantifica el volumen de palabras asociadas a categorías sospechosas: Propiedades/Lugares de interés, Logística y vuelos de Lolita Express, Tópicos de Abuso y vocabulario del Ámbito Judicial del Juicio."),
                         class_="explanation-box"
                     )
@@ -1087,7 +1087,7 @@ def server(input, output, session):
                     ui.card_header("Correlación de Riesgo vs Sentimiento por Persona"),
                     ui.output_plot("risk_sentiment_chart"),
                     ui.div(
-                        ui.div("⚠️ CUADRANTE DE RIESGO SEMÁNTICO", class_="explanation-title"),
+                        ui.div("CUADRANTE DE RIESGO SEMÁNTICO", class_="explanation-title"),
                         ui.p("Cruza el Índice de Sentimiento Analítico (eje X, negativo a positivo) con el Índice de Riesgo Analítico (eje Y, co-ocurrencia con abusos o logística). Las burbujas más grandes indican mayor volumen de menciones. Los implicados en el cuadrante superior izquierdo representan el perfil de mayor criticidad en el expediente."),
                         class_="explanation-box"
                     )
@@ -1096,7 +1096,7 @@ def server(input, output, session):
                     ui.card_header("Top 10 Vocablos Semánticos más Frecuentes"),
                     ui.output_plot("content_words_chart"),
                     ui.div(
-                        ui.div("📝 ANÁLISIS DE FRECUENCIA DE TÉRMINOS", class_="explanation-title"),
+                        ui.div("ANÁLISIS DE FRECUENCIA DE TÉRMINOS", class_="explanation-title"),
                         ui.p("Muestra los términos generales más recurrentes dentro de la transcripción judicial, excluyendo stopwords y nombres propios. Revela los conceptos clave en torno a los cuales giran las deposiciones y testimonios."),
                         class_="explanation-box"
                     )
@@ -1115,7 +1115,7 @@ def server(input, output, session):
             
         if not results:
             return ui.div(
-                ui.span("⚠️", style="font-size: 3.5rem; display: block; margin-bottom: 0.8rem;"),
+                ui.span("", style="font-size: 3.5rem; display: block; margin-bottom: 0.8rem;"),
                 ui.h4("Error de Carga o Inicialización", style="color: #ef4444;"),
                 ui.p("Por favor, asegúrate de que el archivo Epstein_documents.pdf exista en la carpeta '01 Datasets Usados'.", style="color: #bfaec2;"),
                 style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.012); border-radius: 12px; border: 1px dashed rgba(239,68,68,0.2);"
@@ -1127,7 +1127,7 @@ def server(input, output, session):
         
         return ui.layout_columns(
             ui.card(
-                ui.card_header("⚖️ Vista Previa Judicial (Transcripción Limpia)"),
+                ui.card_header("Vista Previa Judicial (Transcripción Limpia)"),
                 ui.input_text_area(
                     "preview_area", 
                     "", 
@@ -1137,7 +1137,7 @@ def server(input, output, session):
                 ),
                 ui.download_button(
                     "download_btn", 
-                    "📥 DESCARGAR TRANSCRIPCIÓN ANALÍTICO (.TXT)", 
+                    "DESCARGAR TRANSCRIPCIÓN ANALÍTICO (.TXT)", 
                     class_="btn-primary btn-download w-100",
                     style="margin-top: 0.8rem;"
                 ),
@@ -1150,10 +1150,10 @@ def server(input, output, session):
                 )
             ),
             ui.card(
-                ui.card_header("📅 Frecuencia Temporal (Años Mencionados)"),
+                ui.card_header("Frecuencia Temporal (Años Mencionados)"),
                 ui.output_plot("timeline_chart"),
                 ui.div(
-                    ui.div("📅 HISTOGRAMA CRONOLÓGICO ANALÍTICO", class_="explanation-title"),
+                    ui.div("HISTOGRAMA CRONOLÓGICO ANALÍTICO", class_="explanation-title"),
                     ui.p("Rastrea la presencia de años lógicos específicos dentro de los testimonios o deposiciones judiciales. Ayuda a identificar en qué años se concentran los abusos o vuelos reportados en este expediente judicial."),
                     class_="explanation-box"
                 )
@@ -1229,7 +1229,7 @@ def server(input, output, session):
             
         list_items = []
         for i, (name, freq) in enumerate(filtered, 1):
-            emoji = "🚨" if i == 1 else "📌" if i <= 3 else "▪"
+            emoji = "" if i == 1 else "" if i <= 3 else ""
             list_items.append(
                 ui.div(
                     ui.span(f"{emoji} {i}. "),
@@ -1657,7 +1657,7 @@ def server(input, output, session):
                 is_first_message = len([m for m in llm_messages if m["role"] == "user"]) == 1
                 
                 ctx = f"\n\n[CONTEXTO ANALÍTICO — {doc_name}]\n"
-                ctx += f"Páginas: {results['pages_processed']} | Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f}) | Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
+                ctx += f"Páginas: {results['pages_processed']}  Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f})  Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
                 ctx += f"Tópicos: {metrics['topic_scores']}\n"
                 ctx += f"Metadata: {meta}\n"
                 
@@ -1703,7 +1703,7 @@ def server(input, output, session):
                 meta = results["metadata"]
                 doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
                 ctx = f"\n\n[CONTEXTO ANALÍTICO — {doc_name}]\n"
-                ctx += f"Páginas: {results['pages_processed']} | Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f}) | Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
+                ctx += f"Páginas: {results['pages_processed']}  Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f})  Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
                 ctx += f"Tópicos: {metrics['topic_scores']}\n"
                 ctx += f"Metadata: {meta}\n"
                 ctx += f"Fragmento del expediente (primeras 2500 chars):\n{results['text'][:2500]}\n"
@@ -1748,13 +1748,13 @@ def server(input, output, session):
             ),
             ui.div(
                 ui.div(
-                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'>📊 Explicar Métricas</div><div style='color:#bfaec2;font-size:0.82rem;'>Analiza los gráficos y los KPIs actuales</div>"),
+                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'> Explicar Métricas</div><div style='color:#bfaec2;font-size:0.82rem;'>Analiza los gráficos y los KPIs actuales</div>"),
                     onclick="Shiny.setInputValue('suggestion_click', 'Analiza y resume los KPIs y gráficos analíticas del documento actual', {priority:'event'})",
                     class_="chat-suggestion-box",
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"
                 ),
                 ui.div(
-                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'>👥 Personas Implicadas</div><div style='color:#bfaec2;font-size:0.82rem;'>Busca conexiones e implicaciones de red</div>"),
+                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'> Personas Implicadas</div><div style='color:#bfaec2;font-size:0.82rem;'>Busca conexiones e implicaciones de red</div>"),
                     onclick="Shiny.setInputValue('suggestion_click', '¿Qué personas clave tienen mayor número de menciones y co-ocurrencias en este expediente y qué sugiere esto?', {priority:'event'})",
                     class_="chat-suggestion-box",
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"
@@ -1766,7 +1766,7 @@ def server(input, output, session):
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"
                 ),
                 ui.div(
-                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'>🔏 Censura e Información</div><div style='color:#bfaec2;font-size:0.82rem;'>Determina el nivel de censura [REDACTED]</div>"),
+                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'> Censura e Información</div><div style='color:#bfaec2;font-size:0.82rem;'>Determina el nivel de censura [REDACTED]</div>"),
                     onclick="Shiny.setInputValue('suggestion_click', 'Explica el índice de censura encontrado. ¿Qué tan censurado está el documento y qué podemos deducir?', {priority:'event'})",
                     class_="chat-suggestion-box",
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"
@@ -1782,7 +1782,7 @@ def server(input, output, session):
         return ui.HTML("""
             <div style='border-top:1px solid rgba(168, 85, 247, 0.2);padding:12px 10px 0;margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;'>
                 <span style='font-size:0.78rem;color:#ffffff;font-weight:700;letter-spacing:0.5px;'>OLVERA AI</span>
-                <span style='font-size:0.78rem;color:rgba(168,85,247,0.4);'>|</span>
+                <span style='font-size:0.78rem;color:rgba(168,85,247,0.4);'></span>
                 <span style='font-size:0.78rem;color:#bfaec2;'>Llama 3.3 70B (Groq) &bull; Contexto analítico inyectado &bull; Fallback multi-proveedor activo</span>
             </div>
         """)
@@ -1830,8 +1830,8 @@ def server(input, output, session):
                     clean_text = re.sub(r'HIGHLY CONFIDENTIAL AEO', '', clean_text, flags=re.IGNORECASE)
                     clean_text = re.sub(r'Page \d+', '', clean_text, flags=re.IGNORECASE)
                     clean_text = re.sub(r'\b\d+\s+', ' ', clean_text)  # Quitar números de línea sueltos
-                    clean_text = clean_text.replace(" Q. ", "\n\n**Abogado/Juez:** ")
-                    clean_text = clean_text.replace(" A. ", "\n**Testigo:** ")
+                    clean_text = clean_text.replace("Q. ", "\n\n**Abogado/Juez:** ")
+                    clean_text = clean_text.replace("A. ", "\n**Testigo:** ")
                     
                     if len(clean_text.strip()) < 50:
                         continue
@@ -1852,7 +1852,7 @@ def server(input, output, session):
                     collected_snippets.append(snippet)
                     ui_elements.append(
                         ui.div(
-                            ui.div(f"🔥 Relevancia: {score:.2f} | Fragmento Documental", style="color:#a855f7; font-weight:bold; font-size:0.9em; margin-bottom:10px;"),
+                            ui.div(f"Relevancia: {score:.2f}  Fragmento Documental", style="color:#a855f7; font-weight:bold; font-size:0.9em; margin-bottom:10px;"),
                             ui.markdown(snippet.strip()),
                             style="background:#161224; border-left:4px solid #a855f7; padding:15px; margin-bottom:15px; border-radius:4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color:#e5e0eb; font-size:0.95em; line-height:1.6;"
                         )
@@ -1879,7 +1879,7 @@ def server(input, output, session):
                 })
                 
                 explanation_box = ui.div(
-                    ui.h5("🧠 Interpretación de la IA", style="color:#06b6d4; font-weight:bold; margin-bottom:10px;"),
+                    ui.h5("Interpretación de la IA", style="color:#06b6d4; font-weight:bold; margin-bottom:10px;"),
                     ui.markdown(ai_explanation),
                     style="background:rgba(6, 182, 212, 0.1); border:1px solid #06b6d4; padding:20px; border-radius:8px; margin-bottom:15px; color:#e5e0eb; font-size:1.05em; line-height:1.6;"
                 )
@@ -1937,7 +1937,7 @@ def server(input, output, session):
         # Agente Lógico que evalúa contradicciones
         ui_loading = ui.HTML("""
         <div style='color:#06b6d4; padding:30px; text-align:center;'>
-            <div style='font-size:2em; margin-bottom:15px;'>⚙️</div>
+            <div style='font-size:2em; margin-bottom:15px;'></div>
             <div style='font-weight:bold;'>AGENTE LÓGICO INICIADO</div>
             <div style='color:#bfaec2; font-size:0.9em;'>Cruzando declaraciones de testigos... Evaluando inconsistencias temporales...</div>
         </div>
@@ -1998,7 +1998,7 @@ def server(input, output, session):
             
             # Formatear la respuesta usando markdown a HTML básico o dejar que Shiny lo renderice
             return ui.div(
-                ui.h4("🚨 Reporte de Auditoría de Contradicciones", style="color:#f43f5e; margin-bottom:15px; font-weight:bold;"),
+                ui.h4("Reporte de Auditoría de Contradicciones", style="color:#f43f5e; margin-bottom:15px; font-weight:bold;"),
                 ui.div(
                     ui.markdown(response),
                     style="background:#161224; border:1px solid #f43f5e; padding:20px; border-radius:8px; color:#e5e0eb; font-size:1em; line-height:1.7;"

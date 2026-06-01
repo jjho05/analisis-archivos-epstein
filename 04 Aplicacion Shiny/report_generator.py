@@ -29,7 +29,7 @@ class ReportPDF(FPDF):
         self.set_y(-15)
         self.set_font("helvetica", "I", 8)
         self.set_text_color(128, 128, 128)
-        self.cell(0, 10, f"Documento Forense Generado Automáticamente | Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Página {self.page_no()}/{{nb}}", align="C")
+        self.cell(0, 10, f"Documento Forense Generado Automáticamente  Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}  Página {self.page_no()}/{{nb}}", align="C")
 
     def chapter_title(self, title, color=(6, 182, 212)):
         self.set_font("helvetica", "B", 14)
@@ -59,8 +59,7 @@ class ReportPDF(FPDF):
         self.cell(0, 8, safe_val, border=0, new_x="LMARGIN", new_y="NEXT")
 
 def generate_report(target_person, ai_summary, snippets, metrics_dict, output_dir="www/reports"):
-    """
-    Genera el PDF del reporte y retorna la ruta del archivo generado.
+    """Genera el PDF del reporte y retorna la ruta del archivo generado.
     """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

@@ -12,8 +12,7 @@ import pypdf
 import sys
 
 def normalize_legal_text(text: str) -> str:
-    """
-    Aplica una limpieza profunda basada en expresiones regulares para actas legales.
+    """Aplica una limpieza profunda basada en expresiones regulares para actas legales.
     """
     if not text:
         return ""
@@ -34,18 +33,18 @@ def normalize_legal_text(text: str) -> str:
 
 def main():
     print("=" * 70)
-    print("🛡️  INICIANDO PIPELINE DE PREPROCESAMIENTO ANALÍTICO (PASO 2) 🛡️")
+    print("INICIANDO PIPELINE DE PREPROCESAMIENTO ANALÍTICO (PASO 2) ")
     print("=" * 70)
     
     dataset_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "01 Datasets Usados"))
     if not os.path.exists(dataset_dir):
-        print(f"❌ Error: La carpeta '{dataset_dir}' no existe.")
+        print(f"Error: La carpeta '{dataset_dir}' no existe.")
         print("Por favor, cree la carpeta y coloque los PDFs judiciales allí.")
         sys.exit(1)
         
     pdf_files = [f for f in os.listdir(dataset_dir) if f.endswith(".pdf")]
     if not pdf_files:
-        print(f"❌ Error: No se encontraron archivos PDF en '{dataset_dir}'.")
+        print(f"Error: No se encontraron archivos PDF en '{dataset_dir}'.")
         sys.exit(1)
         
     # Seleccionamos el expediente principal (el más grande o el primero de la lista)
@@ -54,19 +53,19 @@ def main():
     pdf_path = os.path.join(dataset_dir, selected_pdf)
     
     size_mb = os.path.getsize(pdf_path) / (1024 * 1024)
-    print(f"📂 Archivo seleccionado para procesamiento: {selected_pdf} ({size_mb:.2f} MB)")
+    print(f"Archivo seleccionado para procesamiento: {selected_pdf} ({size_mb:.2f} MB)")
     
     try:
         reader = pypdf.PdfReader(pdf_path)
         total_pages = len(reader.pages)
-        print(f"📖 Total de páginas detectadas: {total_pages}")
+        print(f"Total de páginas detectadas: {total_pages}")
     except Exception as e:
-        print(f"❌ Error al abrir el PDF: {e}")
+        print(f"Error al abrir el PDF: {e}")
         sys.exit(1)
         
     # Se ha configurado para procesar la totalidad de las páginas (5,000+ páginas) del expediente judicial.
     limit_pages = total_pages
-    print(f"⚙️  Procesando y normalizando las {limit_pages} páginas totales del expediente...")
+    print(f"Procesando y normalizando las {limit_pages} páginas totales del expediente...")
     
     consolidated_text = []
     
@@ -85,7 +84,7 @@ def main():
                 print(f"   [+] Progreso: {idx + 1}/{limit_pages} páginas ({percent:.1f}%)")
                 
         except Exception as e:
-            print(f"   [⚠️ Warning] Error procesando página {idx + 1}: {e}")
+            print(f"   [ Warning] Error procesando página {idx + 1}: {e}")
             
     # Guardar el texto plano consolidado
     output_filename = "consolidated_cleaned_text.txt"
@@ -95,12 +94,12 @@ def main():
         with open(output_path, "w", encoding="utf-8") as f:
             f.write("\n\n".join(consolidated_text))
         print("=" * 70)
-        print("✅ PIPELINE DE PREPROCESAMIENTO COMPLETADO")
-        print(f"📝 Archivo de texto plano guardado en: {output_path}")
-        print(f"📊 Páginas consolidadas: {limit_pages} | Caracteres totales: {sum(len(p) for p in consolidated_text):,}")
+        print("PIPELINE DE PREPROCESAMIENTO COMPLETADO")
+        print(f"Archivo de texto plano guardado en: {output_path}")
+        print(f"Páginas consolidadas: {limit_pages}  Caracteres totales: {sum(len(p) for p in consolidated_text):,}")
         print("=" * 70)
     except Exception as e:
-        print(f"❌ Error al guardar el archivo consolidado: {e}")
+        print(f"Error al guardar el archivo consolidado: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
