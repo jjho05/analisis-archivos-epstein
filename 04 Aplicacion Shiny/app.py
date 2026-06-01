@@ -2110,18 +2110,23 @@ def server(input, output, session):
             os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Anal\u00edtico", "analytic_report_full.json")
         )
         metrics_dict = {"Estado": "Datos no encontrados"}
+        themes_dict = {}
+        persons_list = []
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 metrics_dict = {
-                    "Total de Páginas Procesadas": str(data.get("paginas_analizadas", 0)),
-                    "Entidades Detectadas": str(len(data.get("personas_analizadas", []))),
-                    "Menciones Evasivas": str(data.get("kpis", {}).get("evasions", 0)),
-                    "Frases Censuradas (Redacted)": str(data.get("kpis", {}).get("redactions", 0)),
+                    "Total de Páginas Procesadas": f"{data.get('paginas_analizadas', 0):,}",
+                    "Total de Palabras Analizadas": f"{data.get('kpis', {}).get('total_words', 0):,}",
+                    "Entidades Clave Identificadas": f"{len(data.get('personas_analizadas', []))}",
+                    "Menciones Evasivas (Juramento)": f"{data.get('kpis', {}).get('evasions', 0):,}",
+                    "Frases Censuradas (Redacted)": f"{data.get('kpis', {}).get('redactions', 0):,}",
                 }
+                themes_dict = data.get("prevalencia_temas", {})
+                persons_list = data.get("personas_analizadas", [])
         except Exception as e:
             print(f"Error al leer JSON de métricas: {e}")
-        return generate_dashboard_report(metrics_dict)
+        return generate_dashboard_report(metrics_dict, themes_dict, persons_list)
 
     # --- DESCARGA: REPORTE GEOESPACIAL ---
     @render.download(

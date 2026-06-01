@@ -133,20 +133,101 @@ def generate_audit_report(target_person, analysis_text, output_dir="www/reports"
     pdf.output(filepath)
     return filepath
 
-def generate_dashboard_report(metrics_dict, output_dir="www/reports"):
+def generate_dashboard_report(metrics_dict, themes_dict, persons_list, output_dir="www/reports"):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     pdf = ReportPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
+    
+    # --- PÁGINA 1: INTRODUCCIÓN Y KPIS ---
     pdf.add_page()
     
-    pdf.chapter_title("RESUMEN DE MÉTRICAS GLOBALES", color=(16, 185, 129)) # Verde
-    pdf.ln(5)
+    pdf.chapter_title("1. INTRODUCCIÓN Y METODOLOGÍA DEL PIPELINE", color=(16, 185, 129))
+    pdf.chapter_body(
+        "Este documento presenta el informe ejecutivo consolidado del proyecto de Minería de Texto y "
+        "Análisis Analítico aplicado sobre el corpus desclasificado de fojas judiciales del Caso Epstein. "
+        "El pipeline de datos comprende la extracción del texto de 5,028 páginas, la normalización profunda "
+        "de ruido analógico y lingüístico mediante expresiones regulares (Regex), y el procesamiento de "
+        "lenguaje natural (NLP) para la detección de entidades, análisis de sentimiento y mapeo relacional."
+    )
+    pdf.ln(2)
     
+    pdf.chapter_title("2. MÉTRICAS GLOBALES Y CONTROLES CLAVE", color=(16, 185, 129))
+    pdf.ln(2)
     for k, v in metrics_dict.items():
         pdf.add_metric_box(k, v)
+    pdf.ln(5)
     
-    filename = f"Dashboard_Metricas_{datetime.now().strftime('%Y%m%d')}.pdf"
+    # --- PÁGINA 2: PREVALENCIA TEMÁTICA Y TABLA DE RIESGO ---
+    pdf.add_page()
+    
+    pdf.chapter_title("3. PREVALENCIA TEMÁTICA EN LAS DEPOSICIONES", color=(16, 185, 129))
+    pdf.chapter_body(
+        "A través de lexicones dirigidos y modelos de minería léxica, se clasificó la frecuencia de "
+        "menciones de conceptos clave dentro del expediente. Las categorías reflejan la distribución del "
+        "interrogatorio y los focos de interés de la fiscalía:"
+    )
+    pdf.ln(1)
+    
+    # Imprimir temas
+    pdf.set_font("helvetica", "B", 10)
+    pdf.set_fill_color(240, 240, 245)
+    pdf.cell(100, 8, "Categoría Temática", border=1, fill=True)
+    pdf.cell(80, 8, "Volumen de Menciones", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.set_font("helvetica", "", 9)
+    for k, v in themes_dict.items():
+        safe_k = str(k).encode('latin-1', 'ignore').decode('latin-1')
+        pdf.cell(100, 8, f"  {safe_k}", border=1)
+        pdf.cell(80, 8, f"  {v:,} menciones", border=1, new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(8)
+    
+    pdf.chapter_title("4. PERFIL DE RIESGO Y SENTIMIENTO DE ACTORES", color=(16, 185, 129))
+    pdf.chapter_body(
+        "Mapeo semántico de los principales personajes de interés. El Índice de Sentimiento "
+        "varía de -1.0 (altamente negativo) a +1.0 (positivo). El Índice de Riesgo representa la "
+        "co-ocurrencia del actor con tópicos críticos de abuso o logística de transporte:"
+    )
+    pdf.ln(1)
+    
+    # Tabla de actores
+    pdf.set_font("helvetica", "B", 9)
+    pdf.set_fill_color(220, 220, 220)
+    pdf.cell(50, 8, "Actor Clave", border=1, fill=True)
+    pdf.cell(35, 8, "Total Menciones", border=1, fill=True)
+    pdf.cell(55, 8, "Sentimiento Promedio", border=1, fill=True)
+    pdf.cell(40, 8, "Índice de Riesgo", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.set_font("helvetica", "", 8.5)
+    # Tomar los top 6 actores para que quepa perfectamente en la página
+    for actor in persons_list[:6]:
+        name = str(actor.get('Persona', '')).encode('latin-1', 'ignore').decode('latin-1')
+        mentions = str(actor.get('Total_Menciones', ''))
+        sentiment = f"{actor.get('Indice_Sentimiento', 0.0)} ({actor.get('Clasificacion_Sentimiento', '')})"
+        sentiment = sentiment.encode('latin-1', 'ignore').decode('latin-1')
+        risk = str(actor.get('Indice_Riesgo_Analítico', 0))
+        
+        pdf.cell(50, 8, f" {name}", border=1)
+        pdf.cell(35, 8, f" {mentions}", border=1)
+        pdf.cell(55, 8, f" {sentiment}", border=1)
+        pdf.cell(40, 8, f" {risk}", border=1, new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(5)
+    
+    # --- PÁGINA 3: CONCLUSIÓN ---
+    pdf.add_page()
+    pdf.chapter_title("5. CONCLUSIONES DE AUDITORÍA Y CIENCIA DE DATOS", color=(16, 185, 129))
+    pdf.chapter_body(
+        "La aplicación de técnicas avanzadas de procesamiento de lenguaje natural (NLP) y teoría de grafos "
+        "sobre el corpus desclasificado del Caso Epstein demuestra el enorme potencial de la Ciencia de Datos "
+        "en los procesos de auditoría y e-Discovery. A través de este pipeline, se transformó un volumen de "
+        "texto altamente desestructurado de más de 5,000 páginas en una matriz relacional y métricas objetivas. "
+        "El presente informe ejecutivo constituye un registro científico de auditoría sólida y formal, estructurando "
+        "patrones lingüísticos y co-ocurrencias con total objetividad y a velocidades de respuesta que "
+        "de otro modo requerirían meses de revisión jurídica manual tradicional."
+    )
+    pdf.ln(5)
+    
+    filename = f"Reporte_Ejecutivo_Dashboard_{datetime.now().strftime('%Y%m%d')}.pdf"
     filepath = os.path.join(output_dir, filename)
     pdf.output(filepath)
     return filepath
