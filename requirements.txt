@@ -11,3 +11,4 @@ pyvis
 networkx
 folium
 scikit-learn
+fpdf2

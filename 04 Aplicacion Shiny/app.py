@@ -9,6 +9,8 @@ import os
 from extractor import PDFExtractorEngine, TARGET_PERSONS
 import logic
 import providers
+from dossier_generator import generate_dossier
+from datetime import datetime
 
 # --- ESTILADO CSS PREMIUM (Cyber-Noir & High-Fidelity Style) ---
 CUSTOM_CSS = """
@@ -797,6 +799,7 @@ app_ui = ui.page_sidebar(
 def server(input, output, session):
     
     is_empty = reactive.Value(True)
+    current_dossier_data = reactive.Value(None)
     chat = ui.Chat(id="chat")
 
     # Obtener el motor de procesamiento para el archivo seleccionado
@@ -1842,13 +1845,27 @@ def server(input, output, session):
                 
                 ai_explanation = await logic.call_llm_async(model, system_prompt, f"Término buscado: '{query}'\n\nFragmentos:\n{combined_context}")
                 
+                # Actualizar el valor reactivo para el generador de PDF
+                current_dossier_data.set({
+                    "query": query,
+                    "summary": ai_explanation,
+                    "snippets": collected_snippets
+                })
+                
                 explanation_box = ui.div(
                     ui.h5("🧠 Interpretación de la IA", style="color:#06b6d4; font-weight:bold; margin-bottom:10px;"),
                     ui.markdown(ai_explanation),
-                    style="background:rgba(6, 182, 212, 0.1); border:1px solid #06b6d4; padding:20px; border-radius:8px; margin-bottom:25px; color:#e5e0eb; font-size:1.05em; line-height:1.6;"
+                    style="background:rgba(6, 182, 212, 0.1); border:1px solid #06b6d4; padding:20px; border-radius:8px; margin-bottom:15px; color:#e5e0eb; font-size:1.05em; line-height:1.6;"
                 )
-                # Insertar la explicación justo después del título
+                
+                btn_dossier = ui.div(
+                    ui.download_button("download_dossier", "📄 Exportar Dossier Oficial (PDF)", class_="btn-primary", style="background:#a855f7; border:none; padding:10px 20px; font-weight:bold; color:white; width: 100%; border-radius:6px; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);"),
+                    style="margin-bottom: 25px;"
+                )
+                
+                # Insertar la explicación y el botón justo después del título
                 ui_elements.insert(1, explanation_box)
+                ui_elements.insert(2, btn_dossier)
             except Exception as e:
                 print(f"Error en AI explanation: {e}")
                 
@@ -1856,6 +1873,23 @@ def server(input, output, session):
             
         except Exception as e:
             return ui.HTML(f"<div style='color:#f43f5e;'>Error en motor semántico: {str(e)}</div>")
+
+    @render.download(
+        filename=lambda: f"Dossier_Forense_{input.search_query()}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+    )
+    def download_dossier():
+        data = current_dossier_data.get()
+        if not data:
+            return ""
+            
+        metrics = {
+            "Término Rastreado": str(data['query']),
+            "Fragmentos Encontrados": str(len(data['snippets'])),
+            "Clasificación": "ALTA PRIORIDAD / DOCUMENTO ANALIZADO POR IA"
+        }
+        
+        filepath = generate_dossier(data['query'], data['summary'], data['snippets'], metrics)
+        return filepath
 
     @render.ui
     @reactive.event(input.audit_btn)
