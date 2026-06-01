@@ -648,10 +648,10 @@ app_ui = ui.page_sidebar(
         ui.nav_panel(
             "🔍 Búsqueda Semántica",
             ui.div(
-                ui.h3("Motor de Búsqueda Semántica Algorítmica", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
-                ui.p("Busca conceptos o significados en lugar de palabras exactas. Este motor (basado en Vectores TF-IDF y Similitud del Coseno) mapea tu búsqueda con el texto del expediente desclasificado.", style="color:#bfaec2; margin-bottom:25px;"),
+                ui.h3("Buscador Inteligente (Por Contexto)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
+                ui.p("A diferencia de un buscador normal que requiere la palabra exacta, este motor utiliza un algoritmo matemático para entender la intención y el significado de tu búsqueda. Esto te permite encontrar evidencia aunque los testigos hayan usado términos distintos para referirse a lo mismo.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
-                    ui.input_text("search_query", "Término de búsqueda (Ej. vuelos a la isla, reuniones secretas):", width="100%"),
+                    ui.input_text("search_query", "📝 ¿Qué intentas encontrar en el expediente? (Ej. Encuentros en la isla, logística de vuelos secretos):", width="100%"),
                     ui.input_action_button("search_btn", "🔍 Buscar", class_="btn-primary", style="margin-top:24px; background:#a855f7; border:none; height:40px;"),
                     col_widths=[10, 2]
                 ),
