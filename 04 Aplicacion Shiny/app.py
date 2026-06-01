@@ -2114,13 +2114,13 @@ def server(input, output, session):
             with open(json_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 metrics_dict = {
-                    "Total de P\u00e1ginas Procesadas": str(data.get("total_paginas", 0)),
-                    "Entidades Detectadas": str(data.get("total_entidades_unicas", 0)),
-                    "Menciones Evasivas": str(data.get("total_menciones_evasivas", 0)),
-                    "Frases Censuradas (Redacted)": str(data.get("total_frases_censuradas", 0)),
+                    "Total de Páginas Procesadas": str(data.get("paginas_analizadas", 0)),
+                    "Entidades Detectadas": str(len(data.get("personas_analizadas", []))),
+                    "Menciones Evasivas": str(data.get("kpis", {}).get("evasions", 0)),
+                    "Frases Censuradas (Redacted)": str(data.get("kpis", {}).get("redactions", 0)),
                 }
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Error al leer JSON de métricas: {e}")
         return generate_dashboard_report(metrics_dict)
 
     # --- DESCARGA: REPORTE GEOESPACIAL ---
