@@ -57,7 +57,10 @@ def generate_shadow_network(output_dir="www/graphs"):
     net.add_edge("Deutsche Bank", "Southern Trust Co.", color="#06b6d4", width=3)
     net.add_edge("Darren Indyke", "St. Thomas LLC", color="#10b981", width=2)
     
-    # Generar y guardar el HTML localmente
+    # Generar y guardar el HTML temporalmente para leerlo
     net.save_graph(html_path)
     
-    return html_path
+    with open(html_path, 'r', encoding='utf-8') as f:
+        html_content = f.read()
+        
+    return html_content

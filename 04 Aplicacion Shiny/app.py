@@ -1854,14 +1854,10 @@ def server(input, output, session):
     def shadow_network_ui():
         try:
             from network_generator import generate_shadow_network
-            html_path = generate_shadow_network()
-            src_path = html_path.replace("www/", "")
-            return ui.tags.iframe(
-                src=src_path,
-                width="100%",
-                height="650px",
-                style="border:none; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); background:#0b090f;"
-            )
+            import html
+            html_content = generate_shadow_network()
+            escaped_html = html.escape(html_content)
+            return ui.HTML(f"<iframe srcdoc='{escaped_html}' style='width:100%; height:650px; border:none; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); background:#0b090f;'></iframe>")
         except Exception as e:
             return ui.HTML(f"<div style='color:#f43f5e;'>Error renderizando red: {str(e)}</div>")
 
