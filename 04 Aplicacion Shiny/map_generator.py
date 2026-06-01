@@ -5,8 +5,8 @@ import os
 import pandas as pd
 
 def generate_geospatial_map():
-    # Leer datos geoespaciales desde el CSV estructurado
-    csv_path = os.path.join(os.path.dirname(__file__), "geospatial_data.csv")
+    # Leer datos geoespaciales desde el CSV estructurado (Fase 3: Procesamiento Analítico)
+    csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico", "geospatial_data.csv"))
     df = pd.read_csv(csv_path)
     locations = df.to_dict('records')
 

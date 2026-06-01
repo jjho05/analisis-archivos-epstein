@@ -15,8 +15,8 @@ def generate_shadow_network(output_dir="www/graphs"):
     
     import pandas as pd
     
-    # Leer datos de la red financiera estructurada
-    csv_path = os.path.join(os.path.dirname(__file__), "financial_network_data.csv")
+    # Leer datos de la red financiera estructurada (Fase 3: Procesamiento Analítico)
+    csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico", "financial_network_data.csv"))
     df = pd.read_csv(csv_path)
     
     # --- NODOS Y ARISTAS ---
