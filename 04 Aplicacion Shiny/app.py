@@ -741,7 +741,33 @@ Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrá
             )
         ),
         
-        # TAB 7: Olvera AI (AI Chatbot)
+        # TAB 7: Co-ocurrencia Social
+        ui.nav_panel(
+            "🔗 Co-ocurrencia Social",
+            ui.div(
+                ui.h3("Red de Co-ocurrencia en el Expediente", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
+                ui.p("Este módulo identifica qué actores de alto perfil aparecen mencionados simultáneamente en las mismas páginas del expediente, evidenciando conexiones documentadas.", style="color:#bfaec2; margin-bottom:25px;"),
+                ui.layout_columns(
+                    ui.output_ui("co_occur_chart_ui"),
+                    ui.div(
+                        ui.h4("🔍 Lectura de Co-ocurrencia", style="color:#c084fc; font-weight:bold; margin-bottom:15px;"),
+                        ui.markdown("""
+**¿Qué significa esto?**
+Esta red no asume culpabilidad por sí sola, pero **mapea la proximidad en los testimonios**. 
+Si dos nodos (personas) están conectados, significa que sus nombres fueron documentados en el mismo contexto o evento (por ejemplo, los mismos registros de vuelo o testimonios cruzados).
+
+**Nodos (Personas):** El tamaño representa su peso total en los documentos.
+**Aristas (Líneas):** El grosor indica la frecuencia de aparición simultánea (co-ocurrencia).
+                        """),
+                        style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(192,132,252,0.3); color:#e5e0eb; height:100%;"
+                    ),
+                    col_widths=[8, 4]
+                ),
+                style="padding: 20px;"
+            )
+        ),
+        
+        # TAB 8: Olvera AI (AI Chatbot)
         ui.nav_panel(
             "Olvera AI",
             ui.div(
@@ -1027,16 +1053,7 @@ def server(input, output, session):
                         class_="explanation-box"
                     )
                 ),
-                ui.card(
-                    ui.card_header("Red de Co-ocurrencia Social en Páginas"),
-                    ui.output_ui("co_occur_chart_ui"),
-                    ui.div(
-                        ui.div("🕸️ MAPA DE RELACIONES ANALÍTICOS", class_="explanation-title"),
-                        ui.p("Identifica qué personas de interés aparecen juntas en la misma página del documento. Esencial para destapar conexiones directas, reuniones o menciones cruzadas en los testimonios."),
-                        class_="explanation-box"
-                    )
-                ),
-                col_widths=[7, 5]
+                col_widths=[12]
             ),
             
             # FILA DE GRÁFICOS 2 (Evasión Verbal y Temáticas)
