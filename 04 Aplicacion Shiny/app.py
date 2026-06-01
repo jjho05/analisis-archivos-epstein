@@ -9,7 +9,7 @@ import os
 from extractor import PDFExtractorEngine, TARGET_PERSONS
 import logic
 import providers
-from dossier_generator import generate_dossier
+from report_generator import generate_report
 from datetime import datetime
 
 # --- ESTILADO CSS PREMIUM (Cyber-Noir & High-Fidelity Style) ---
@@ -814,7 +814,7 @@ app_ui = ui.page_sidebar(
 def server(input, output, session):
     
     is_empty = reactive.Value(True)
-    current_dossier_data = reactive.Value(None)
+    current_report_data = reactive.Value(None)
     chat = ui.Chat(id="chat")
 
     # Obtener el motor de procesamiento para el archivo seleccionado
@@ -1861,7 +1861,7 @@ def server(input, output, session):
                 ai_explanation = await logic.call_llm_async(model, system_prompt, f"Término buscado: '{query}'\n\nFragmentos:\n{combined_context}")
                 
                 # Actualizar el valor reactivo para el generador de PDF
-                current_dossier_data.set({
+                current_report_data.set({
                     "query": query,
                     "summary": ai_explanation,
                     "snippets": collected_snippets
@@ -1896,7 +1896,7 @@ def server(input, output, session):
         filename=lambda: f"Reporte_Evidencia_{input.search_query()}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
     )
     def download_report():
-        data = current_dossier_data.get()
+        data = current_report_data.get()
         if not data:
             return ""
             
@@ -1906,7 +1906,7 @@ def server(input, output, session):
             "Clasificación": "ALTA PRIORIDAD / DOCUMENTO ANALIZADO POR IA"
         }
         
-        filepath = generate_dossier(data['query'], data['summary'], data['snippets'], metrics)
+        filepath = generate_report(data['query'], data['summary'], data['snippets'], metrics)
         return filepath
 
     @render.ui
