@@ -271,12 +271,24 @@ textarea.form-control {
     flex-direction: column !important;
     height: 100% !important;
     min-height: 500px !important;
+    overflow: hidden !important;
 }
 
 .shiny-chat-messages {
     flex-grow: 1 !important;
     overflow-y: auto !important;
-    padding-bottom: 80px !important;
+    padding-bottom: 130px !important;
+}
+
+/* Fijar el input del chat al fondo, sin solapamiento */
+.shiny-chat-input-container,
+.shiny-chat > *:last-child {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #0b090f !important;
+    z-index: 10 !important;
+    padding-top: 8px !important;
+    border-top: 1px solid rgba(168, 85, 247, 0.15) !important;
 }
 
 .chat-suggestion-box:hover {

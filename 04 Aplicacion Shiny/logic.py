@@ -256,25 +256,9 @@ async def stream_chat_response(
 
     for idx, current_model in enumerate(models_to_try):
         try:
-            # Si no es el primer intento, notificar de manera elegante la conmutación al respaldo
+            # Conmutación silenciosa: registrar en consola del servidor, NO en el chat
             if idx > 0:
-                friendly_name = current_model
-                if "llama-3.3-70b" in current_model:
-                    friendly_name = "Olvera AI (Llama 3.3 70B - Groq)"
-                elif "llama3.1-70b" in current_model:
-                    friendly_name = "Olvera AI (Llama 3.1 70B - Cerebras)"
-                elif "gpt-oss" in current_model:
-                    friendly_name = "GPT OSS 120B (OpenRouter)"
-                elif "gemini-2.0-flash" in current_model:
-                    friendly_name = "Google Gemini 2.0 Flash (AI Studio)"
-                elif "gemini-1.5-flash" in current_model:
-                    friendly_name = "Google Gemini 1.5 Flash (AI Studio)"
-                
-                status_msg = (
-                    f"\n\n⚠️ *El motor principal ('{model}') está experimentando alta demanda o problemas de acceso (503). "
-                    f"Olvera AI ha activado de forma transparente el motor de respaldo: **{friendly_name}**...*\n\n"
-                )
-                yield status_msg
+                print(f"[Fallback System] Motor principal '{model}' no disponible. Conmutando a respaldo: '{current_model}'.")
 
             # Resolver proveedor y autenticación
             litellm_model, auth_kwargs = resolve_model(current_model)
