@@ -1778,13 +1778,17 @@ def server(input, output, session):
             for idx in top_indices:
                 score = similarities[idx]
                 if score > 0.05:  # Umbral mínimo de relevancia
-                    # Limpieza de transcripción cruda (quitar números de línea, confidencial, etc.)
+                    # Limpieza de transcripción cruda (quitar confidencialidad sin borrar el texto)
                     clean_text = pages[idx]
-                    clean_text = re.sub(r'Highly Confidential.*?Page \d+', '', clean_text, flags=re.IGNORECASE)
+                    clean_text = re.sub(r'Highly Confidential', '', clean_text, flags=re.IGNORECASE)
                     clean_text = re.sub(r'HIGHLY CONFIDENTIAL AEO', '', clean_text, flags=re.IGNORECASE)
+                    clean_text = re.sub(r'Page \d+', '', clean_text, flags=re.IGNORECASE)
                     clean_text = re.sub(r'\b\d+\s+', ' ', clean_text)  # Quitar números de línea sueltos
                     clean_text = clean_text.replace(" Q. ", "\n\n**Abogado/Juez:** ")
                     clean_text = clean_text.replace(" A. ", "\n**Testigo:** ")
+                    
+                    if len(clean_text.strip()) < 50:
+                        continue
                     
                     # Tratar de centrar el snippet alrededor de la palabra clave
                     search_term = query.lower().split()[0] if query else ""
