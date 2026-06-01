@@ -1743,7 +1743,7 @@ def server(input, output, session):
 
     @render.ui
     @reactive.event(input.search_btn)
-    def search_results_ui():
+    async def search_results_ui():
         query = input.search_query()
         if not query:
             return ui.HTML("<div style='color:#bfaec2;'>Por favor ingresa un término de búsqueda y presiona Buscar.</div>")
@@ -1773,6 +1773,7 @@ def server(input, output, session):
             top_indices = similarities.argsort()[-3:][::-1]
             
             ui_elements = [ui.h4(f"Resultados Semánticos para: '{query}'", style="color:#06b6d4; margin-bottom:15px; font-weight:bold;")]
+            collected_snippets = []
             
             for idx in top_indices:
                 score = similarities[idx]
@@ -1790,14 +1791,15 @@ def server(input, output, session):
                     match = re.search(re.escape(search_term), clean_text, re.IGNORECASE)
                     
                     if match:
-                        start_idx = max(0, match.start() - 150)
-                        end_idx = min(len(clean_text), match.end() + 450)
+                        start_idx = max(0, match.start() - 300)
+                        end_idx = min(len(clean_text), match.end() + 800)
                         snippet = clean_text[start_idx:end_idx]
                         if start_idx > 0: snippet = "..." + snippet
                         if end_idx < len(clean_text): snippet = snippet + "..."
                     else:
-                        snippet = clean_text[:600] + "..." if len(clean_text) > 600 else clean_text
+                        snippet = clean_text[:1000] + "..." if len(clean_text) > 1000 else clean_text
                         
+                    collected_snippets.append(snippet)
                     ui_elements.append(
                         ui.div(
                             ui.div(f"🔥 Relevancia: {score:.2f} | Fragmento Documental", style="color:#a855f7; font-weight:bold; font-size:0.9em; margin-bottom:10px;"),
@@ -1808,6 +1810,26 @@ def server(input, output, session):
             
             if len(ui_elements) == 1:
                 return ui.HTML(f"<div style='color:#f43f5e; padding:20px; background:#161224; border-radius:8px;'>No se encontraron coincidencias semánticas fuertes para '{query}'.</div>")
+                
+            # INYECCIÓN LLM: Explicar los fragmentos
+            try:
+                import providers
+                import logic
+                model = providers.DEFAULT_MODEL
+                system_prompt = "Eres un analista experto. Lee los siguientes fragmentos judiciales que el usuario buscó. Escribe un resumen de máximo 2 párrafos explicando qué revelan estos fragmentos de manera clara, directa y fácil de entender. Sin saludos ni conclusiones genéricas."
+                combined_context = "\n\n---\n\n".join(collected_snippets)
+                
+                ai_explanation = await logic.call_llm_async(model, system_prompt, f"Término buscado: '{query}'\n\nFragmentos:\n{combined_context}")
+                
+                explanation_box = ui.div(
+                    ui.h5("🧠 Interpretación de la IA", style="color:#06b6d4; font-weight:bold; margin-bottom:10px;"),
+                    ui.markdown(ai_explanation),
+                    style="background:rgba(6, 182, 212, 0.1); border:1px solid #06b6d4; padding:20px; border-radius:8px; margin-bottom:25px; color:#e5e0eb; font-size:1.05em; line-height:1.6;"
+                )
+                # Insertar la explicación justo después del título
+                ui_elements.insert(1, explanation_box)
+            except Exception as e:
+                print(f"Error en AI explanation: {e}")
                 
             return ui.div(*ui_elements)
             
