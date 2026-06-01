@@ -22,7 +22,7 @@ ENGLISH_STOPWORDS = {
     'there', 'their', 'more', 'all', 'any', 'other', 'some', 'than', 'into', 'out', 'up', 'down'
 }
 
-# Lista de personas de alto interés para análisis forense del caso Epstein
+# Lista de personas de alto interés para análisis analítico del caso Epstein
 TARGET_PERSONS = [
     "Jeffrey Epstein", "Ghislaine Maxwell", "Virginia Giuffre", "Prince Andrew",
     "Bill Clinton", "Donald Trump", "Alan Dershowitz", "Johanna Sjoberg",
@@ -43,7 +43,7 @@ BLACKLIST_NAMES = {
 }
 
 class PDFExtractorEngine:
-    """Clase principal que encapsula el motor de extracción y análisis semántico-forense de PDFs."""
+    """Clase principal que encapsula el motor de extracción y análisis semántico-analítico de PDFs."""
     
     def __init__(self, pdf_file_like=None):
         """
@@ -83,12 +83,12 @@ class PDFExtractorEngine:
         return text.strip()
 
     def process_document(self, start_page: int, end_page: int, clean: bool = True, language: str = "en") -> Tuple[str, Dict[str, Any]]:
-        """Extrae el contenido y calcula métricas forenses del documento."""
+        """Extrae el contenido y calcula métricas analíticas del documento."""
         # ── Carga acelerada desde CSVs preprocesados (Paso 3) para máxima velocidad y evitar lag ──
-        proc_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Forense"))
-        csv_granular = os.path.join(proc_dir, "forensic_01_paginas_granular.csv")
-        csv_persons = os.path.join(proc_dir, "forensic_02_personas_sentimiento.csv")
-        csv_timeline = os.path.join(proc_dir, "forensic_05_timeline_cronologica.csv")
+        proc_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico"))
+        csv_granular = os.path.join(proc_dir, "analytic_01_paginas_granular.csv")
+        csv_persons = os.path.join(proc_dir, "analytic_02_personas_sentimiento.csv")
+        csv_timeline = os.path.join(proc_dir, "analytic_05_timeline_cronologica.csv")
         
         if os.path.exists(csv_granular) and os.path.exists(csv_persons) and os.path.exists(csv_timeline):
             try:
@@ -154,7 +154,7 @@ class PDFExtractorEngine:
                 sorted_co_occur = sorted(co_occurrences.items(), key=lambda x: x[1], reverse=True)[:50]
                 
                 # Detalles de evasiones
-                csv_evasions = os.path.join(proc_dir, "forensic_03_evasiones_instancias.csv")
+                csv_evasions = os.path.join(proc_dir, "analytic_03_evasiones_instancias.csv")
                 evasions_details = {
                     "I don't recall / remember": 0,
                     "Objections": 0,
@@ -189,7 +189,7 @@ class PDFExtractorEngine:
                         "Indicador Negativo (Contexto)": neg_val,
                         "Indice Sentimiento": float(row['Indice_Sentimiento']),
                         "Clasificacion Sentimiento": row['Clasificacion_Sentimiento'],
-                        "Indice de Riesgo Forense": int(row['Indice_Riesgo_Forense'])
+                        "Indice de Riesgo Analítico": int(row['Indice_Riesgo_Analítico'])
                     })
                     
                 # Top semantic words
@@ -252,7 +252,7 @@ class PDFExtractorEngine:
                     extracted_pages.append(f"\n--- PÁGINA {idx + 1} ---\n{page_content}")
                 
                 full_text = "\n\n".join(extracted_pages)
-                metrics = self.calculate_forensic_metrics(raw_pages_text, language=language)
+                metrics = self.calculate_analytic_metrics(raw_pages_text, language=language)
                 return full_text, metrics
             except Exception:
                 pass
@@ -267,12 +267,12 @@ class PDFExtractorEngine:
             extracted_pages.append(f"\n--- PÁGINA {idx + 1} ---\n{page_content}")
         
         full_text = "\n\n".join(extracted_pages)
-        metrics = self.calculate_forensic_metrics(raw_pages_text, language=language)
+        metrics = self.calculate_analytic_metrics(raw_pages_text, language=language)
         
         return full_text, metrics
 
-    def calculate_forensic_metrics(self, pages_text: List[str], language: str = "en") -> Dict[str, Any]:
-        """Calcula estadísticas lingüísticas y métricas de análisis forense avanzadas."""
+    def calculate_analytic_metrics(self, pages_text: List[str], language: str = "en") -> Dict[str, Any]:
+        """Calcula estadísticas lingüísticas y métricas de análisis analítico avanzadas."""
         full_raw_text = "\n".join(pages_text)
         
         # Conteo básico de palabras
@@ -441,7 +441,7 @@ class PDFExtractorEngine:
                 "Indicador Negativo (Contexto)": neg_hits,
                 "Indice Sentimiento": round(sentiment_score, 2),
                 "Clasificacion Sentimiento": sent_cat,
-                "Indice de Riesgo Forense": risk_hits
+                "Indice de Riesgo Analítico": risk_hits
             })
 
         return {

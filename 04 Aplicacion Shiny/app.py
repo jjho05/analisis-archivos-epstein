@@ -130,7 +130,7 @@ textarea:focus {
     color: #ffffff;
 }
 
-/* Sephora Explanation Box Styling but Adapted to Forensic dark theme */
+/* Sephora Explanation Box Styling but Adapted to Analytic dark theme */
 .explanation-box {
     background: rgba(15, 11, 27, 0.85);
     border-top: 1px solid rgba(168, 85, 247, 0.22);
@@ -627,11 +627,11 @@ app_ui = ui.page_sidebar(
     ),
 
     ui.navset_tab(
-        # TAB 1: Dashboard Forense
+        # TAB 1: Dashboard Analítico
         ui.nav_panel(
-            "Dashboard Forense",
+            "Dashboard Analítico",
             ui.div(
-                ui.output_ui("forensic_dashboard_ui")
+                ui.output_ui("analytic_dashboard_ui")
             )
         ),
         
@@ -804,7 +804,7 @@ def server(input, output, session):
         engine = pdf_engine()
         return engine.num_pages if engine else 1
 
-    # Proceso de extracción e inteligencia forense reactiva
+    # Proceso de extracción e inteligencia analítico reactiva
     @reactive.calc
     def extraction_results():
         engine = pdf_engine()
@@ -822,7 +822,7 @@ def server(input, output, session):
         text, metrics = engine.process_document(start, end, clean=clean, language=lang)
         
         orig_name = pdf_files[0] if pdf_files and not pdf_files[0].startswith("Ningún") else "Epstein_documents.pdf"
-        filename = f"forensic_{orig_name.replace('.pdf', '')}.txt"
+        filename = f"analytic_{orig_name.replace('.pdf', '')}.txt"
         meta = engine.extract_metadata()
         
         return {
@@ -835,7 +835,7 @@ def server(input, output, session):
 
 
     # Descargar TXT limpio
-    @render.download(filename=lambda: extraction_results()["filename"] if extraction_results() else "forensic.txt")
+    @render.download(filename=lambda: extraction_results()["filename"] if extraction_results() else "analytic.txt")
     def download_btn():
         results = extraction_results()
         if not results:
@@ -847,7 +847,7 @@ def server(input, output, session):
 
     # RENDERIZADO DEL TAB 1: DASHBOARD FORENSE
     @render.ui
-    def forensic_dashboard_ui():
+    def analytic_dashboard_ui():
         try:
             results = extraction_results()
         except Exception:
@@ -1012,7 +1012,7 @@ def server(input, output, session):
                     ui.output_plot("risk_sentiment_chart"),
                     ui.div(
                         ui.div("⚠️ CUADRANTE DE RIESGO SEMÁNTICO", class_="explanation-title"),
-                        ui.p("Cruza el Índice de Sentimiento Forense (eje X, negativo a positivo) con el Índice de Riesgo Forense (eje Y, co-ocurrencia con abusos o logística). Las burbujas más grandes indican mayor volumen de menciones. Los implicados en el cuadrante superior izquierdo representan el perfil de mayor criticidad en el expediente."),
+                        ui.p("Cruza el Índice de Sentimiento Analítico (eje X, negativo a positivo) con el Índice de Riesgo Analítico (eje Y, co-ocurrencia con abusos o logística). Las burbujas más grandes indican mayor volumen de menciones. Los implicados en el cuadrante superior izquierdo representan el perfil de mayor criticidad en el expediente."),
                         class_="explanation-box"
                     )
                 ),
@@ -1507,7 +1507,7 @@ def server(input, output, session):
             
         names = [p["Persona"] for p in valid_data]
         sentiment = [p["Indice Sentimiento"] for p in valid_data]
-        risk = [p["Indice de Riesgo Forense"] for p in valid_data]
+        risk = [p["Indice de Riesgo Analítico"] for p in valid_data]
         mentions = [p["Menciones"] for p in valid_data]
         
         fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
@@ -1601,7 +1601,7 @@ def server(input, output, session):
             content = m.content if hasattr(m, 'content') else m.get('content', '')
             llm_messages.append({"role": role, "content": content})
             
-        # Inyectar contexto forense SOLO en el primer mensaje del turno actual (el último del usuario)
+        # Inyectar contexto analítico SOLO en el primer mensaje del turno actual (el último del usuario)
         # Fragmento reducido a 2,500 chars para no saturar el payload
         try:
             with reactive.isolate():
@@ -1624,7 +1624,7 @@ def server(input, output, session):
                 
                 llm_messages[-1]["content"] += ctx
         except Exception as e:
-            print(f"Error inyectando contexto forense al Copilot: {e}")
+            print(f"Error inyectando contexto analítico al Copilot: {e}")
 
         async_gen = logic.stream_chat_response(
             messages=llm_messages,
@@ -1661,7 +1661,7 @@ def server(input, output, session):
             else:
                 enriched_prompt = prompt
         except Exception as e:
-            print(f"Error inyectando contexto de sugerencia forense: {e}")
+            print(f"Error inyectando contexto de sugerencia analítico: {e}")
             enriched_prompt = prompt
             
         messages = [{"role": "user", "content": enriched_prompt}]
@@ -1688,14 +1688,14 @@ def server(input, output, session):
                         </svg>
                     </div>
                     <h2 style='font-family:"Space Grotesk",sans-serif;font-weight:800;font-size:1.4rem;color:#ffffff;margin-bottom:8px;'>Hola, soy Olvera AI</h2>
-                    <p style='color:#bfaec2;font-size:0.95rem;'>Tengo acceso en tiempo real a los resultados de minería y transcripciones forenses del documento. ¿Qué deseas examinar?</p>
+                    <p style='color:#bfaec2;font-size:0.95rem;'>Tengo acceso en tiempo real a los resultados de minería y transcripciones analíticas del documento. ¿Qué deseas examinar?</p>
                 """),
                 style="text-align:center;padding:30px 20px 20px;"
             ),
             ui.div(
                 ui.div(
                     ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'>📊 Explicar Métricas</div><div style='color:#bfaec2;font-size:0.82rem;'>Analiza los gráficos y los KPIs actuales</div>"),
-                    onclick="Shiny.setInputValue('suggestion_click', 'Analiza y resume los KPIs y gráficos forenses del documento actual', {priority:'event'})",
+                    onclick="Shiny.setInputValue('suggestion_click', 'Analiza y resume los KPIs y gráficos analíticas del documento actual', {priority:'event'})",
                     class_="chat-suggestion-box",
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"
                 ),
@@ -1729,7 +1729,7 @@ def server(input, output, session):
             <div style='border-top:1px solid rgba(168, 85, 247, 0.2);padding:12px 10px 0;margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;'>
                 <span style='font-size:0.78rem;color:#ffffff;font-weight:700;letter-spacing:0.5px;'>OLVERA AI</span>
                 <span style='font-size:0.78rem;color:rgba(168,85,247,0.4);'>|</span>
-                <span style='font-size:0.78rem;color:#bfaec2;'>Llama 3.3 70B (Groq) &bull; Contexto forense inyectado &bull; Fallback multi-proveedor activo</span>
+                <span style='font-size:0.78rem;color:#bfaec2;'>Llama 3.3 70B (Groq) &bull; Contexto analítico inyectado &bull; Fallback multi-proveedor activo</span>
             </div>
         """)
 
@@ -1807,7 +1807,7 @@ def server(input, output, session):
             results = extraction_results()
             context = results["text"][:3500] if results else "Contexto no disponible."
             
-            system_prompt = "Eres un Agente Forense de Inteligencia Lógica. Analiza el siguiente fragmento del expediente de Epstein y extrae ÚNICAMENTE contradicciones, mentiras probables o evasiones notorias. Sé directo, forense y crudo. Usa viñetas."
+            system_prompt = "Eres un Agente Analítico de Inteligencia Lógica. Analiza el siguiente fragmento del expediente de Epstein y extrae ÚNICAMENTE contradicciones, mentiras probables o evasiones notorias. Sé directo, analítico y crudo. Usa viñetas."
             
             import providers
             model = providers.DEFAULT_MODEL

@@ -1,14 +1,5 @@
----
-title: Epstein Forensic Text Mining
-emoji: ⚖️
-colorFrom: purple
-colorTo: indigo
-sdk: docker
-app_port: 7860
-pinned: false
----
 
-# MINERÍA DE TEXTO FORENSE Y ANÁLISIS DE CO-OCURRENCIA ⚖️🕵️‍♂️
+# MINERÍA DE TEXTO ANALÍTICO Y ANÁLISIS DE CO-OCURRENCIA ⚖️🕵️‍♂️
 ## Proyecto Final: Análisis de los Expedientes Judiciales Desclasificados del Caso Epstein
 
 > **Programación para Ciencia de Datos**  
@@ -22,7 +13,7 @@ Este proyecto aplica **Procesamiento de Lenguaje Natural (NLP)**, **Análisis de
 
 ---
 
-## 🗺️ Estructura de la Investigación Forense Digital
+## 🗺️ Estructura de la Investigación Analítico Digital
 
 El pipeline analítico y de desarrollo se estructura en las siguientes fases clave:
 
@@ -30,8 +21,8 @@ El pipeline analítico y de desarrollo se estructura en las siguientes fases cla
 2. **Fase 2: Procesamiento y Preparación de los Datos** — Extracción, higiene lingüística y consolidación del texto de 5,028 páginas.
 3. **Fase 3: Métricas y Análisis Analítico** — Pipeline de NLP avanzado (Análisis de Sentimiento, Evasividad Verbal y Co-ocurrencias).
 4. **Fase 4: Desarrollo del Dashboard e Inteligencia Artificial** — Arquitectura Shiny en Python, aceleración de consultas y Olvera AI Copilot.
-5. **Fase 5: Resultados y Hallazgos Forenses** — Estadísticas métricas consolidadas del caso Epstein y mapeo de evasivas.
-6. **Conclusiones y Perspectivas Técnicas** — Aportaciones y escalabilidad en informática forense legal.
+5. **Fase 5: Resultados y Hallazgos Analíticas** — Estadísticas métricas consolidadas del caso Epstein y mapeo de evasivas.
+6. **Conclusiones y Perspectivas Técnicas** — Aportaciones y escalabilidad en informática analítico legal.
 
 ---
 
@@ -43,7 +34,7 @@ El pipeline está diseñado bajo un enfoque modular y optimizado en 4 fases secu
 graph TD
     A[01 Datasets Usados] -->|Epstein_documents.pdf| B[02 Preprocesamiento]
     B -->|preprocessing.py| C[consolidated_cleaned_text.txt 7.6MB]
-    C -->|forensic_processing.py| D[03 Procesamiento Forense]
+    C -->|analytic_processing.py| D[03 Procesamiento Analítico]
     D -->|Cálculo de Densidades y Co-ocurrencias| E[CSV Datasets Precalculados]
     E -->|Lectura instantánea sin delay| F[04 Aplicacion Shiny]
     F -->|Shiny App + Olvera AI Copilot| G[Hugging Face / Localhost]
@@ -55,7 +46,7 @@ graph TD
 
 ## 🚀 Innovaciones de Grado Arquitectura (LegalTech)
 
-Este proyecto trasciende el análisis de datos tradicional integrando tecnologías **State-of-the-Art** propias del sector forense e inteligencia:
+Este proyecto trasciende el análisis de datos tradicional integrando tecnologías **State-of-the-Art** propias del sector analítico e inteligencia:
 
 1. **Grafo de Conocimiento Interactivo (CyberThreat Intelligence):** Se abandonan las gráficas planas por una red física interactiva generada con `PyVis` y `NetworkX`. El usuario puede interactuar con el grafo para entender las dinámicas de poder y asociaciones entre Epstein, Maxwell, políticos y testigos.
 2. **Motor Semántico RAG Local:** En lugar de búsquedas por palabras clave (`CTRL+F`), implementamos un modelo vectorial (TF-IDF y Similitud de Coseno). Si buscas *"viajes secretos a la isla"*, el algoritmo mapeará matemáticamente los vectores del texto y retornará los fragmentos relevantes, incluso si se usaron otras palabras.
@@ -67,7 +58,7 @@ Este proyecto trasciende el análisis de datos tradicional integrando tecnologí
 ## 🏛️ Fase 1: Contexto y Obtención de Datos
 
 ### Contexto del Expediente Judicial y Objetivos de la Investigación
-Este proyecto de analítica forense se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil entre **Virginia Giuffre** y **Ghislaine Maxwell** en la Corte Federal del Distrito Sur de Nueva York. 
+Este proyecto de analítica analítico se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil entre **Virginia Giuffre** y **Ghislaine Maxwell** en la Corte Federal del Distrito Sur de Nueva York. 
 
 Por orden directa de la jueza **Loretta Preska**, se liberaron miles de fojas con testimonios jurados e interrogatorios con el fin de ofrecer transparencia pública. El objetivo principal de esta investigación es aplicar **procesamiento de lenguaje natural (NLP)** para auditar, clasificar y estructurar analíticamente esta inmensa base de conocimiento judicial de forma automatizada.
 
@@ -124,10 +115,10 @@ El resultado final se consolida en el archivo de alto rendimiento `consolidated_
 
 ---
 
-## 📈 Fase 3: Métricas y Procesamiento Analítico Forense
+## 📈 Fase 3: Métricas y Procesamiento Analítico Analítico
 
-### Arquitectura de Minería Lingüística y Diccionarios Forenses
-Para extraer inteligencia analítica de las 5,028 páginas, implementamos en `forensic_processing.py` un motor de análisis léxico y de reconocimiento de patrones. Definimos diccionarios dirigidos para evaluar la semántica y tácticas procesales del expediente:
+### Arquitectura de Minería Lingüística y Diccionarios Analíticas
+Para extraer inteligencia analítica de las 5,028 páginas, implementamos en `analytic_processing.py` un motor de análisis léxico y de reconocimiento de patrones. Definimos diccionarios dirigidos para evaluar la semántica y tácticas procesales del expediente:
 
 ```python
 # Léxicos de Sentimiento y Evasivas procesales
@@ -140,8 +131,8 @@ EVASION_PATTERNS = {
 }
 ```
 
-### Algoritmo de Sentimiento y Puntuación de Riesgo (`forensic_processing.py`)
-Diseñamos una métrica matemática de sentimiento y un *Índice de Riesgo Forense* basado en la densidad de vocablos negativos cruzados con tópicos críticos (Abuso/Menores y Logística de Aviones):
+### Algoritmo de Sentimiento y Puntuación de Riesgo (`analytic_processing.py`)
+Diseñamos una métrica matemática de sentimiento y un *Índice de Riesgo Analítico* basado en la densidad de vocablos negativos cruzados con tópicos críticos (Abuso/Menores y Logística de Aviones):
 
 ```python
 def sentiment_score(pos: int, neg: int) -> tuple:
@@ -181,7 +172,7 @@ for match in re.finditer(pat, page, re.IGNORECASE):
 ## 💻 Fase 4: Desarrollo del Dashboard e Inteligencia Artificial
 
 ### Arquitectura de la Interfaz y Motor de Aceleración por Caching
-Para la visualización de los datos forenses, construimos un dashboard interactivo en **Python Shiny** (`app.py`). Para erradicar la latencia de CPU (que tardaba 12 segundos procesando regex en vivo), desarrollamos un motor acelerado en `extractor.py` que lee de forma instantánea los dataframes precalculados en la Fase 3:
+Para la visualización de los datos analíticas, construimos un dashboard interactivo en **Python Shiny** (`app.py`). Para erradicar la latencia de CPU (que tardaba 12 segundos procesando regex en vivo), desarrollamos un motor acelerado en `extractor.py` que lee de forma instantánea los dataframes precalculados en la Fase 3:
 
 ```python
 # Aceleración mediante lectura de datasets precalculados en CSV
@@ -205,7 +196,7 @@ results = extraction_results()
 metrics = results["metrics"]
 doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
 
-ctx = f"\n\n[CONTEXTO DE ANÁLISIS FORENSE - DOCUMENTO: {doc_name}]\n"
+ctx = f"\n\n[CONTEXTO DE ANÁLISIS ANALÍTICO - DOCUMENTO: {doc_name}]\n"
 ctx += f"Páginas escaneadas: {results['pages_processed']} (Documento Completo)\n"
 ctx += f"Menciones de Censura [REDACTED]: {metrics['redactions_count']}\n"
 ctx += f"Total de Evasiones Verbales: {metrics['evasiones_count']}\n"
@@ -213,7 +204,7 @@ ctx += f"Fragmento del expediente: {results['text'][:10000]} (fin del fragmento)
 ```
 
 ### Optimización Crítica de UI/UX y Fluidez Conversacional
-Para resolver el congelamiento del chat, modificamos `app.py` para aislar el payload del LLM del render visual del DOM. Clonamos los mensajes de la UI y les inyectamos el contexto forense en segundo plano:
+Para resolver el congelamiento del chat, modificamos `app.py` para aislar el payload del LLM del render visual del DOM. Clonamos los mensajes de la UI y les inyectamos el contexto analítico en segundo plano:
 
 ```python
 # Clonación de mensajes para aislar el contexto del DOM visual de PyShiny
@@ -230,14 +221,14 @@ if llm_messages and llm_messages[-1]["role"] == "user":
 
 ---
 
-## 🔍 Fase 5: Resultados y Hallazgos Forenses Consolidados
+## 🔍 Fase 5: Resultados y Hallazgos Analíticas Consolidados
 
 A partir del análisis de las **5,028 páginas** y **1,323,138 palabras** del expediente judicial desclasificado, el motor analítico extrajo estadísticas concluyentes:
 
 ### 🤐 Tácticas de Evasividad Verbal Detectadas
 Se detectaron un total de **2,338 tácticas verbales de evasividad** bajo juramento y **1,367 instancias de censura administrativa** (`REDACTED`):
 
-| Táctica de Evasividad Detectada | Total de Instancias | Razón e Impacto Forense |
+| Táctica de Evasividad Detectada | Total de Instancias | Razón e Impacto Analítico |
 | :--- | :---: | :--- |
 | **Objection** (Objeciones de Abogados) | 1,915 | Obstrucción sistemática de líneas de cuestionamiento clave. |
 | **Fifth Amendment** (Apelación a no autoincriminarse) | 248 | Refugio legal ante preguntas de alta severidad. |
@@ -245,10 +236,10 @@ Se detectaron un total de **2,338 tácticas verbales de evasividad** bajo jurame
 | **Decline to answer** (Negativa formal) | 44 | Rechazo explícito a cooperar con la fiscalía. |
 | **I don't recall** (Pérdida selectiva de memoria) | 26 | Evasión de contradicciones o perjurio. |
 
-### 👥 Mapeo de Personas de Interés y Densidad de Riesgo Forense
+### 👥 Mapeo de Personas de Interés y Densidad de Riesgo Analítico
 El cruzamiento semántico identificó la densidad de menciones asociadas a tópicos críticos (Abuso/Menores y Logística de Aviones):
 
-| Persona de Interés | Total Menciones | Sentimiento | Riesgo Forense | Clasificación de Contexto |
+| Persona de Interés | Total Menciones | Sentimiento | Riesgo Analítico | Clasificación de Contexto |
 | :--- | :---: | :---: | :---: | :--- |
 | **Jeffrey Epstein** | 1,744 | -0.294 | 516 | Altamente Negativo / Foco Principal |
 | **Ghislaine Maxwell** | 1,033 | -0.103 | 192 | Negativo / Co-organizadora |
@@ -261,9 +252,9 @@ El cruzamiento semántico identificó la densidad de menciones asociadas a tópi
 ## 📌 Conclusiones y Perspectivas Técnicas
 
 * **Automatización del Análisis Legal:** Se logró diseñar y desplegar un pipeline capaz de analizar un expediente judicial masivo en milisegundos, convirtiendo datos puramente no estructurados en dataframes limpios y bases de conocimiento.
-* **Mitigación de Cuellos de Botella Técnicos:** Optimizamos los hilos de CPU migrando el procesamiento pesado hacia una caché CSV estructurada, reduciendo los tiempos de respuesta del dashboard forense de **12 segundos a menos de 0.05 segundos** (latencia ultrabaja).
+* **Mitigación de Cuellos de Botella Técnicos:** Optimizamos los hilos de CPU migrando el procesamiento pesado hacia una caché CSV estructurada, reduciendo los tiempos de respuesta del dashboard analítico de **12 segundos a menos de 0.05 segundos** (latencia ultrabaja).
 * **Integración Conversacional Robusta:** Se logró conectar el Copilot conversacional **Olvera AI** con RAG de alta fidelidad, solventando problemas de rendimiento del DOM del navegador mediante aislamiento y estructuración de payload limpia.
-* **Escalabilidad Global:** Este pipeline forense es aplicable a cualquier conjunto documental desclasificado del mundo (archivos estatales, de derechos humanos o corporativos) acelerando de forma democrática y transparente la búsqueda de la verdad.
+* **Escalabilidad Global:** Este pipeline analítico es aplicable a cualquier conjunto documental desclasificado del mundo (archivos estatales, de derechos humanos o corporativos) acelerando de forma democrática y transparente la búsqueda de la verdad.
 
 ---
 
@@ -271,8 +262,8 @@ El cruzamiento semántico identificó la densidad de menciones asociadas a tópi
 
 ### 1. Clonar el repositorio e instalar dependencias:
 ```bash
-git clone https://github.com/jjho05/epstein-forensic-text-mining.git
-cd epstein-forensic-text-mining
+git clone https://github.com/jjho05/epstein-analytic-text-mining.git
+cd epstein-analytic-text-mining
 pip install -r requirements.txt
 ```
 
