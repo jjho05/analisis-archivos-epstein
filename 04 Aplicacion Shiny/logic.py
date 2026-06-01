@@ -11,7 +11,9 @@ from tavily import TavilyClient
 from dotenv import load_dotenv
 from providers import MODEL_METADATA
 
-load_dotenv()
+# Cargar variables de entorno usando la ruta absoluta de este archivo
+env_path = os.path.join(os.path.dirname(__file__), ".env")
+load_dotenv(dotenv_path=env_path)
 
 
 def resolve_model(model_id: str) -> tuple[str, dict]:
@@ -234,7 +236,13 @@ async def stream_chat_response(
     # 3. Lista de modelos a intentar en caso de fallo (Fallback robusto de Olvera AI)
     models_to_try = [model]
     
-    # Agregar respaldos activos según disponibilidad de API Keys en el entorno
+    # Si es un modelo de Gemini, agregar otros modelos estables de Gemini como primera opción de fallback
+    if model.startswith("gemini/"):
+        for alt_gemini in ["gemini/gemini-2.0-flash", "gemini/gemini-1.5-flash"]:
+            if alt_gemini != model and os.getenv("GEMINI_API_KEY"):
+                models_to_try.append(alt_gemini)
+
+    # Agregar respaldos de otros proveedores según disponibilidad de API Keys en el entorno
     if model != "groq/llama-3.3-70b-versatile" and os.getenv("GROQ_API_KEY"):
         models_to_try.append("groq/llama-3.3-70b-versatile")
     if model != "cerebras/llama3.1-70b" and os.getenv("CEREBRAS_API_KEY"):
@@ -257,9 +265,13 @@ async def stream_chat_response(
                     friendly_name = "Olvera AI (Llama 3.1 70B - Cerebras)"
                 elif "gpt-oss" in current_model:
                     friendly_name = "GPT OSS 120B (OpenRouter)"
+                elif "gemini-2.0-flash" in current_model:
+                    friendly_name = "Google Gemini 2.0 Flash (AI Studio)"
+                elif "gemini-1.5-flash" in current_model:
+                    friendly_name = "Google Gemini 1.5 Flash (AI Studio)"
                 
                 status_msg = (
-                    f"\n\n⚠️ *El motor principal ('{model}') está experimentando alta demanda (503). "
+                    f"\n\n⚠️ *El motor principal ('{model}') está experimentando alta demanda o problemas de acceso (503). "
                     f"Olvera AI ha activado de forma transparente el motor de respaldo: **{friendly_name}**...*\n\n"
                 )
                 yield status_msg
