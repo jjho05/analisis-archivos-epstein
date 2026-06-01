@@ -1777,15 +1777,32 @@ def server(input, output, session):
             for idx in top_indices:
                 score = similarities[idx]
                 if score > 0.05:  # Umbral mínimo de relevancia
-                    # Extraer un snippet relevante
-                    page_text = pages[idx]
-                    snippet = page_text[:500] + "..." if len(page_text) > 500 else page_text
+                    # Limpieza de transcripción cruda (quitar números de línea, confidencial, etc.)
+                    clean_text = pages[idx]
+                    clean_text = re.sub(r'Highly Confidential.*?Page \d+', '', clean_text, flags=re.IGNORECASE)
+                    clean_text = re.sub(r'HIGHLY CONFIDENTIAL AEO', '', clean_text, flags=re.IGNORECASE)
+                    clean_text = re.sub(r'\b\d+\s+', ' ', clean_text)  # Quitar números de línea sueltos
+                    clean_text = clean_text.replace(" Q. ", "\n\n**Abogado/Juez:** ")
+                    clean_text = clean_text.replace(" A. ", "\n**Testigo:** ")
                     
+                    # Tratar de centrar el snippet alrededor de la palabra clave
+                    search_term = query.lower().split()[0] if query else ""
+                    match = re.search(re.escape(search_term), clean_text, re.IGNORECASE)
+                    
+                    if match:
+                        start_idx = max(0, match.start() - 150)
+                        end_idx = min(len(clean_text), match.end() + 450)
+                        snippet = clean_text[start_idx:end_idx]
+                        if start_idx > 0: snippet = "..." + snippet
+                        if end_idx < len(clean_text): snippet = snippet + "..."
+                    else:
+                        snippet = clean_text[:600] + "..." if len(clean_text) > 600 else clean_text
+                        
                     ui_elements.append(
                         ui.div(
-                            ui.div(f"🔥 Relevancia: {score:.2f} | Fragmento Documental", style="color:#a855f7; font-weight:bold; font-size:0.9em; margin-bottom:5px;"),
-                            ui.p(snippet, style="color:#e5e0eb; font-size:0.95em; line-height:1.6;"),
-                            style="background:#161224; border-left:4px solid #a855f7; padding:15px; margin-bottom:15px; border-radius:4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+                            ui.div(f"🔥 Relevancia: {score:.2f} | Fragmento Documental", style="color:#a855f7; font-weight:bold; font-size:0.9em; margin-bottom:10px;"),
+                            ui.markdown(snippet.strip()),
+                            style="background:#161224; border-left:4px solid #a855f7; padding:15px; margin-bottom:15px; border-radius:4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color:#e5e0eb; font-size:0.95em; line-height:1.6;"
                         )
                     )
             
