@@ -1029,23 +1029,7 @@ def server(input, output, session):
                 col_widths=[6, 6]
             ),
             
-            ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.2rem 0;"),
-            
-            # FILA DE GRÁFICOS NUEVA (Inteligencia Geoespacial)
-            ui.layout_columns(
-                ui.card(
-                    ui.card_header("🗺️ Inteligencia Geoespacial (Rutas y Menciones)"),
-                    ui.output_ui("geo_map_ui"),
-                    ui.div(
-                        ui.div("🌐 MAPEO DE LA RED LOGÍSTICA", class_="explanation-title"),
-                        ui.p("Extrae automáticamente menciones de ubicaciones clave (Little St. James, Manhattan, Palm Beach, Zorro Ranch, París, Londres) y traza posibles rutas logísticas inferidas a partir del expediente."),
-                        class_="explanation-box"
-                    )
-                ),
-                col_widths=[12]
-            ),
-            
-            ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.2rem 0;"),
+
             
             # FILA DE GRÁFICOS 3 (Riesgo vs Sentimiento y Vocabulario Clave)
             ui.layout_columns(
@@ -1332,43 +1316,6 @@ def server(input, output, session):
         plt.tight_layout()
         return fig
 
-    @render.ui
-    def geo_map_ui():
-        results = extraction_results()
-        import folium
-        from folium.plugins import AntPath
-        import html
-        
-        locations = {
-            "Little St. James, Islas Vírgenes": [18.3003, -64.8256],
-            "Palm Beach, Florida": [26.7056, -80.0364],
-            "Manhattan, Nueva York": [40.7128, -74.0060],
-            "Zorro Ranch, Nuevo México": [35.2155, -106.0125],
-            "París, Francia": [48.8566, 2.3522],
-            "Londres, Reino Unido": [51.5074, -0.1278]
-        }
-        
-        m = folium.Map(location=[35.0, -50.0], zoom_start=3, tiles="CartoDB dark_matter", attr="CartoDB")
-        
-        for name, coords in locations.items():
-            folium.Marker(
-                location=coords,
-                popup=folium.Popup(f"<b style='color:#000;'>{name}</b><br>Locación clave.", max_width=200),
-                icon=folium.Icon(color='red', icon='info-sign')
-            ).add_to(m)
-            
-        flight_path_1 = [locations["Manhattan, Nueva York"], locations["Palm Beach, Florida"], locations["Little St. James, Islas Vírgenes"]]
-        flight_path_2 = [locations["Manhattan, Nueva York"], locations["Zorro Ranch, Nuevo México"]]
-        flight_path_3 = [locations["Manhattan, Nueva York"], locations["París, Francia"], locations["Londres, Reino Unido"]]
-        
-        AntPath(locations=flight_path_1, color="#f43f5e", weight=3, opacity=0.7, dash_array=[10, 15], pulse_color="#ffffff").add_to(m)
-        AntPath(locations=flight_path_2, color="#06b6d4", weight=3, opacity=0.7, dash_array=[10, 15], pulse_color="#ffffff").add_to(m)
-        AntPath(locations=flight_path_3, color="#a855f7", weight=3, opacity=0.7, dash_array=[10, 15], pulse_color="#ffffff").add_to(m)
-        
-        html_content = m.get_root().render()
-        escaped_html = html.escape(html_content)
-        
-        return ui.HTML(f"<iframe srcdoc='{escaped_html}' style='width:100%; height:400px; border:none; border-radius:10px;'></iframe>")
 
     @output
     @render.text
