@@ -7,12 +7,11 @@ sdk: docker
 app_port: 7860
 pinned: false
 ---
-
-# MINERÍA DE TEXTO ANALÍTICO Y ANÁLISIS DE CO-OCURRENCIA ‍
+# INSTITUTO TECNOLOGICO DE CIUDAD MADERO
 ## Proyecto Final: Análisis de los Expedientes Judiciales Desclasificados del Caso Epstein
 
 > **Programación para Ciencia de Datos**  
-> **Autor:** Jesús Olvera  
+> **Autor:** Jesús Javier Hernández Olvera  
 
 ---
 
