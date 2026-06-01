@@ -69,18 +69,27 @@ Este proyecto integra tecnologías **State-of-the-Art** propias del análisis de
 
 ##  Fase 1: Contexto y Obtención de Datos
 
-### Contexto del Expediente Judicial y Objetivos de la Investigación
-Este proyecto analítico se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil entre **Virginia Giuffre** y **Ghislaine Maxwell** en la Corte Federal del Distrito Sur de Nueva York. 
+### 1.1 Marco Histórico-Jurídico del Expediente Judicial
+Este proyecto analítico se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil bajo el folio *Virginia Giuffre v. Ghislaine Maxwell* en la Corte Federal del Distrito Sur de Nueva York. 
 
-Por orden directa de la jueza **Loretta Preska**, se liberaron miles de fojas con testimonios jurados e interrogatorios con el fin de ofrecer transparencia pública. El objetivo principal de esta investigación es aplicar **procesamiento de lenguaje natural (NLP)** para auditar, clasificar y estructurar esta inmensa base de conocimiento judicial de forma automatizada.
+Por orden directa de la jueza de distrito **Loretta Preska**, se dispuso la apertura pública de miles de fojas procesales, testimonios bajo juramento, deposiciones de testigos y bitácoras del avión privado conocido como *Lolita Express* (Boeing 727). El objetivo principal de esta investigación digital es emplear **técnicas avanzadas de Minería de Texto y Procesamiento de Lenguaje Natural (NLP)** para auditar, estructurar e interpretar esta inmensa base de conocimiento judicial no estructurada, transformando miles de páginas de fojas digitales en un grafo de relaciones reactivo y métricas cuantitativas reproducibles.
 
-### Adquisición del Corpus Digitalizado a través de Kaggle
-Para la ejecución de este pipeline, adquirimos el corpus unificado de forma digital desde el repositorio público de Kaggle: [Epstein Documents Dataset](https://www.kaggle.com/datasets/franciskarajki/epstein-documents).
+### 1.2 Adquisición del Corpus y Estructura Documental
+El corpus unificado de datos se adquirió formalmente a partir de la digitalización y consolidación pública indexada en Kaggle: [Epstein Documents Dataset](https://www.kaggle.com/datasets/franciskarajki/epstein-documents). El corpus consolidado consta de **5,028 páginas** de evidencia digitalizada.
 
-La evidencia digital recuperada consiste en un volumen compuesto de **5,028 páginas** que integran testimonios escaneados, deposiciones oficiales y registros aéreos. El análisis informático de este corpus enfrenta tres retos críticos que el código resuelve de manera eficiente: 
-- La presencia de **ruido analógico** provocado por la digitalización de fojas antiguas y oblicuas.
-- La interrupción de la sintaxis debido a la **censura recurrente** de información delicada (marcada como `[REDACTED]`).
-- La compleja estructura dialógica de interrogatorios con terminología altamente técnico-jurídica.
+Para modelar la estrategia analítica, los documentos se clasificaron formalmente en la siguiente estructura según su naturaleza jurídica:
+
+| Tipo Documental | Descripción del Contenido | Páginas Estimadas | Desafíos Analíticos de Datos |
+| :--- | :--- | :---: | :--- |
+| **Deposiciones Oficiales** | Interrogatorios bajo juramento y careos a Ghislaine Maxwell, Virginia Giuffre y asociados directos. | ~3,200 fojas | Estructura dialógica compleja (Pregunta/Respuesta), alto volumen de censura procesal y evasión. |
+| **Bitácoras de Vuelo** | Manifiestos aéreos y registros oficiales del Boeing 727 (bitácoras del *Lolita Express*). | ~600 fojas | Tablas de datos analógicas escaneadas, abreviaciones tipográficas y nombres manuscritos oblicuos. |
+| **Testimonios de Terceros** | Declaraciones juradas de víctimas, testigos secundarios, agentes federales e investigadores. | ~1,228 fojas | Ruido analógico severo provocado por la digitalización (OCR imperfecto) y marcas de confidencialidad administrativa. |
+
+### 1.3 Los Tres Retos Críticos del Análisis Informático
+El análisis automatizado de este corpus documental se enfrenta a tres desafíos estructurales y lingüísticos severos:
+* **Ruido Analógico de Digitalización:** Gran parte de las fojas son fotocopias o escaneos oblicuos de documentos antiguos. Esto provoca que el texto extraído mediante OCR cuente con rupturas silábicas al final de las líneas (ej. `ex-` y `pediente` en líneas distintas), errores ortográficos de caracteres (ej. `I` por `l`) y ruido tipográfico general.
+* **Censura y Oclusión de Datos (`[REDACTED]`):** La presencia masiva de tachaduras de confidencialidad administrativa impuestas por el tribunal (para proteger identidades o datos sensibles) interrumpe la sintaxis y los flujos gramaticales de las oraciones, ocluyendo el contexto semántico.
+* **Evasividad Verbal Procesal:** Las respuestas de los declarantes en interrogatorios delictivos están diseñadas estratégicamente por abogados para eludir acusaciones o perjurio. Identificar de forma objetiva patrones de evasión (como apelar repetitivamente a la memoria o a enmiendas constitucionales) requiere una auditoría sintáctica rigurosa.
 
 ---
 
