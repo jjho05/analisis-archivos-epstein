@@ -686,7 +686,18 @@ app_ui = ui.page_sidebar(
             )
         ),
         
-        # TAB 5: Olvera AI (AI Chatbot)
+        # TAB 5: Inteligencia Geoespacial
+        ui.nav_panel(
+            "🌍 Mapa Geoespacial",
+            ui.div(
+                ui.h3("Red Logística Internacional (Footprint)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
+                ui.p("Visualización de coordenadas clave extraídas del expediente. Identifica las rutas de vuelo, islas privadas y bases de operaciones utilizadas en la red.", style="color:#bfaec2; margin-bottom:25px;"),
+                ui.output_ui("geospatial_map_ui"),
+                style="padding: 20px;"
+            )
+        ),
+        
+        # TAB 6: Olvera AI (AI Chatbot)
         ui.nav_panel(
             "Olvera AI",
             ui.div(
@@ -1871,6 +1882,15 @@ def server(input, output, session):
             
         except Exception as e:
             return ui.HTML(f"<div style='color:#f43f5e;'>Error en motor semántico: {str(e)}</div>")
+
+    @render.ui
+    def geospatial_map_ui():
+        try:
+            from map_generator import generate_geospatial_map
+            map_html = generate_geospatial_map()
+            return ui.HTML(f"<div style='border-radius:12px; overflow:hidden; border:1px solid rgba(168,85,247,0.5); box-shadow:0 10px 30px rgba(0,0,0,0.5);'>{map_html}</div>")
+        except Exception as e:
+            return ui.HTML(f"<div style='color:#f43f5e;'>Error renderizando mapa: {str(e)}</div>")
 
     @render.download(
         filename=lambda: f"Dossier_Forense_{input.search_query()}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
