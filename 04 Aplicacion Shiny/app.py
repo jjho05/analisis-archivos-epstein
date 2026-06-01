@@ -692,7 +692,23 @@ app_ui = ui.page_sidebar(
             ui.div(
                 ui.h3("Red Logística Internacional (Footprint)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("Visualización de coordenadas clave extraídas del expediente. Identifica las rutas de vuelo, islas privadas y bases de operaciones utilizadas en la red.", style="color:#bfaec2; margin-bottom:25px;"),
-                ui.output_ui("geospatial_map_ui"),
+                ui.layout_columns(
+                    ui.output_ui("geospatial_map_ui"),
+                    ui.div(
+                        ui.h4("🕵️‍♂️ Análisis de Rutas", style="color:#06b6d4; font-weight:bold; margin-bottom:15px;"),
+                        ui.markdown("""
+**Little St. James (USVI):** Identificada en los registros de vuelo como el destino principal y punto ciego legal.
+                        
+**Palm Beach / NY:** Nodos primarios de operación y reclutamiento según las bitácoras del *Lolita Express*.
+                        
+**Zorro Ranch (NM):** Instalación aislada de alta seguridad con infraestructura de aterrizaje privada.
+                        
+**Conexiones Transatlánticas:** Los saltos entre NY, París y Londres documentan el alcance internacional de las operaciones de tráfico con miembros de la élite europea.
+                        """),
+                        style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%;"
+                    ),
+                    col_widths=[8, 4]
+                ),
                 style="padding: 20px;"
             )
         ),
@@ -703,7 +719,24 @@ app_ui = ui.page_sidebar(
             ui.div(
                 ui.h3("Shadow Network (Grafo Corporativo)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("Grafo interactivo de relaciones financieras, empresas fachada (LLCs) y actores clave que facilitaron el flujo de dinero en la organización.", style="color:#bfaec2; margin-bottom:25px;"),
-                ui.output_ui("shadow_network_ui"),
+                ui.layout_columns(
+                    ui.output_ui("shadow_network_ui"),
+                    ui.div(
+                        ui.h4("💸 Anatomía Financiera", style="color:#10b981; font-weight:bold; margin-bottom:15px;"),
+                        ui.markdown("""
+**Cuentas Ciegas (Tier 1):**
+J.P. Morgan y Deutsche Bank proveyeron la infraestructura para flujos masivos de liquidez.
+                        
+**El Escudo Corporativo (Tier 2):**
+Entidades offshore como *Financial Trust Co.* y *Liquid Funding Ltd.* operando bajo la laxa jurisdicción de las Islas Vírgenes para mover capital sin trazabilidad directa.
+                        
+**Ejecutores (Tier 3):**
+Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrás de la creación de las LLCs (Sociedades de Responsabilidad Limitada) para adquirir propiedades e inyectar fondos.
+                        """),
+                        style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(16,185,129,0.3); color:#e5e0eb; height:100%;"
+                    ),
+                    col_widths=[9, 3]
+                ),
                 style="padding: 20px;"
             )
         ),
