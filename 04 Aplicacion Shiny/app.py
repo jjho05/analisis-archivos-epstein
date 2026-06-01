@@ -9,7 +9,7 @@ import os
 from extractor import PDFExtractorEngine, TARGET_PERSONS
 import logic
 import providers
-from report_generator import generate_report, generate_audit_report, generate_dashboard_report, generate_network_report, generate_geo_report
+from report_generator import generate_report
 from datetime import datetime
 
 # --- ESTILADO CSS PREMIUM (Cyber-Noir & High-Fidelity Style) ---
@@ -682,10 +682,6 @@ app_ui = ui.page_sidebar(
                 ui.input_action_button("audit_btn", "Iniciar Auditoría Profunda", class_="btn-danger", style="background:#f43f5e; border:none; padding:10px 20px; font-weight:bold; width: 100%; margin-top: 15px;"),
                 ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
                 ui.output_ui("contradictions_results_ui"),
-                ui.panel_conditional(
-                    "input.audit_btn > 0",
-                    ui.download_button("download_audit_report", "Descargar Reporte de Auditoría", class_="btn-danger", style="margin-top:24px; background:#f43f5e; border:none; height:40px; font-weight:bold; width:100%;")
-                ),
                 style="padding: 20px;"
             )
         ),
@@ -709,7 +705,6 @@ app_ui = ui.page_sidebar(
                         
 **Conexiones Transatlánticas:** Los saltos entre NY, París y Londres documentan el alcance internacional de las operaciones de tráfico con miembros de la élite europea.
                         """),
-                    ui.download_button("download_geo_report", "Descargar Reporte Geoespacial", class_="btn-primary", style="margin-top:20px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;"),
                         style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%;"
                     ),
                     col_widths=[8, 4]
@@ -738,7 +733,6 @@ Entidades offshore como *Financial Trust Co.* y *Liquid Funding Ltd.* operando b
 **Ejecutores (Tier 3):**
 Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrás de la creación de las LLCs (Sociedades de Responsabilidad Limitada) para adquirir propiedades e inyectar fondos.
                         """),
-                        ui.download_button("download_network_report", "Descargar Reporte de Red Financiera", class_="btn-primary", style="margin-top:20px; background:#a855f7; border:none; height:40px; font-weight:bold; width:100%;"),
                         style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(16,185,129,0.3); color:#e5e0eb; height:100%;"
                     ),
                     col_widths=[9, 3]
@@ -884,15 +878,13 @@ Si dos nodos (personas) están conectados, significa que sus nombres fueron docu
     ),
     title=""
 )
+
+
 # --- LÓGICA DEL SERVIDOR (SERVER) ---
 def server(input, output, session):
     
-    chat_messages = reactive.Value([
-        {"role": "system", "content": SYSTEM_PROMPT_OLVERA}
-    ])
-    current_report_data = reactive.Value(None)
-    current_audit_data = reactive.Value(None)
     is_empty = reactive.Value(True)
+    current_report_data = reactive.Value(None)
     chat = ui.Chat(id="chat")
 
     # Obtener el motor de procesamiento para el archivo seleccionado
@@ -1110,10 +1102,6 @@ def server(input, output, session):
                     )
                 ),
                 col_widths=[6, 6]
-            ),
-            ui.div(
-                ui.download_button("download_dashboard_report", "Descargar Reporte del Dashboard", class_="btn-primary", style="margin-top:20px; background:#10b981; border:none; height:40px; font-weight:bold; float:right;"),
-                style="overflow:hidden; padding-bottom:10px;"
             )
         )
 
@@ -1943,65 +1931,6 @@ def server(input, output, session):
         filepath = generate_report(data['query'], data['summary'], data['snippets'], metrics)
         return filepath
 
-    @render.download(
-        filename=lambda: f"Auditoria_{input.audit_target().replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
-    )
-    def download_audit_report():
-        data = current_audit_data.get()
-        if not data:
-            return ""
-        filepath = generate_audit_report(data['target'], data['text'])
-        return filepath
-
-    @render.download(
-        filename=lambda: f"Dashboard_Metricas_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
-    )
-    def download_dashboard_report():
-        import json
-        import os
-        json_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico", "analytic_report_full.json"))
-        metrics_dict = {"Error": "Datos no encontrados"}
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                metrics_dict = {
-                    "Total de Páginas Procesadas": data.get("total_paginas", 0),
-                    "Entidades Detectadas": data.get("total_entidades_unicas", 0),
-                    "Menciones Evasivas (No sé / No recuerdo)": data.get("total_menciones_evasivas", 0),
-                    "Frases Censuradas (Redacted)": data.get("total_frases_censuradas", 0)
-                }
-        except Exception as e:
-            pass
-            
-        filepath = generate_dashboard_report(metrics_dict)
-        return filepath
-
-    @render.download(
-        filename=lambda: f"Inteligencia_Geoespacial_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
-    )
-    def download_geo_report():
-        import os
-        import pandas as pd
-        csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico", "geospatial_data.csv"))
-        df = pd.DataFrame()
-        if os.path.exists(csv_path):
-            df = pd.read_csv(csv_path)
-        filepath = generate_geo_report(df)
-        return filepath
-
-    @render.download(
-        filename=lambda: f"Red_Financiera_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
-    )
-    def download_network_report():
-        import os
-        import pandas as pd
-        csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico", "financial_network_data.csv"))
-        df = pd.DataFrame()
-        if os.path.exists(csv_path):
-            df = pd.read_csv(csv_path)
-        filepath = generate_network_report(df)
-        return filepath
-
     @render.ui
     @reactive.event(input.audit_btn)
     async def contradictions_results_ui():
@@ -2066,9 +1995,6 @@ def server(input, output, session):
             import providers
             model = providers.DEFAULT_MODEL
             response = await logic.call_llm_async(model, system_prompt, f"Analiza contradicciones en este texto:\n\n{context}")
-            
-            # Guardar para posible descarga de reporte
-            current_audit_data.set({"target": target, "text": response})
             
             # Formatear la respuesta usando markdown a HTML básico o dejar que Shiny lo renderice
             return ui.div(
