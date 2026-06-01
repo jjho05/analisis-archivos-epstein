@@ -48,7 +48,7 @@ MODEL_LABELS: Dict[str, str] = {
     "olvera-image-1.0": "Olvera Image 1.0 (Flux)",
 }
 
-DEFAULT_MODEL = "groq/llama-3.3-70b-versatile"
+DEFAULT_MODEL = "gemini/gemini-2.0-flash"
 
 def get_visible_models() -> List[str]:
     return [m for m, meta in MODEL_METADATA.items() if not meta.get("isHidden", False)]
