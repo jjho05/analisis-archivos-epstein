@@ -1474,35 +1474,39 @@ def server(input, output, session):
     async def _handle_user_submit():
         is_empty.set(False)
         ui_messages = list(chat.messages())
-        if len(ui_messages) > 10:
-            ui_messages = ui_messages[-10:]
+        # Limitar historial a 6 mensajes (3 turnos) para reducir tokens y latencia
+        if len(ui_messages) > 6:
+            ui_messages = ui_messages[-6:]
             
-        # Crear copia limpia para enviar al LLM y evitar inyectar 10k caracteres en el globo de la UI
+        # Crear copia limpia de mensajes para enviar al LLM
         llm_messages = []
         for m in ui_messages:
             role = m.role if hasattr(m, 'role') else m.get('role', '')
             content = m.content if hasattr(m, 'content') else m.get('content', '')
             llm_messages.append({"role": role, "content": content})
             
-        # Inyectar el contexto de la transcripción y métricas forenses al mensaje enviado a la IA
+        # Inyectar contexto forense SOLO en el primer mensaje del turno actual (el último del usuario)
+        # Fragmento reducido a 2,500 chars para no saturar el payload
         try:
             with reactive.isolate():
                 results = extraction_results()
-            if results:
+            if results and llm_messages and llm_messages[-1]["role"] == "user":
                 metrics = results["metrics"]
                 meta = results["metadata"]
-                
                 doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
-                ctx = f"\n\n[CONTEXTO DE ANÁLISIS FORENSE - DOCUMENTO: {doc_name}]\n"
-                ctx += f"Páginas escaneadas: {results['pages_processed']} (Documento Completo)\n"
-                ctx += f"Menciones de Censura [REDACTED]: {metrics['redactions_count']} (Índice: {metrics['censorship_index']:.1f})\n"
-                ctx += f"Total de Evasiones Verbales: {metrics['evasiones_count']} (Índice: {metrics['evasiveness_index']:.1f})\n"
-                ctx += f"Prevalencia Temática: {metrics['topic_scores']}\n"
-                ctx += f"Metadatos del PDF: {meta}\n"
-                ctx += f"Fragmento del expediente: {results['text'][:10000]} (fin del fragmento)\n"
                 
-                if llm_messages and llm_messages[-1]["role"] == "user":
-                    llm_messages[-1]["content"] += ctx
+                is_first_message = len([m for m in llm_messages if m["role"] == "user"]) == 1
+                
+                ctx = f"\n\n[CONTEXTO FORENSE — {doc_name}]\n"
+                ctx += f"Páginas: {results['pages_processed']} | Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f}) | Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
+                ctx += f"Tópicos: {metrics['topic_scores']}\n"
+                ctx += f"Metadata: {meta}\n"
+                
+                # Solo inyectar el texto del documento en el primer mensaje del chat
+                if is_first_message:
+                    ctx += f"Fragmento del expediente (primeras 2500 chars):\n{results['text'][:2500]}\n"
+                
+                llm_messages[-1]["content"] += ctx
         except Exception as e:
             print(f"Error inyectando contexto forense al Copilot: {e}")
 
@@ -1524,23 +1528,19 @@ def server(input, output, session):
         is_empty.set(False)
         await chat.append_message({"role": "user", "content": prompt})
         
-        # Enviar inmediatamente con el contexto inyectado
+        # Contexto reducido (fragmento de 2,500 chars) para respuesta rápida
         try:
             with reactive.isolate():
                 results = extraction_results()
             if results:
                 metrics = results["metrics"]
                 meta = results["metadata"]
-                
                 doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
-                ctx = f"\n\n[CONTEXTO DE ANÁLISIS FORENSE - DOCUMENTO: {doc_name}]\n"
-                ctx += f"Páginas escaneadas: {results['pages_processed']} (Documento Completo)\n"
-                ctx += f"Menciones de Censura [REDACTED]: {metrics['redactions_count']} (Índice: {metrics['censorship_index']:.1f})\n"
-                ctx += f"Total de Evasiones Verbales: {metrics['evasions_count']} (Índice: {metrics['evasiveness_index']:.1f})\n"
-                ctx += f"Prevalencia Temática: {metrics['topic_scores']}\n"
-                ctx += f"Metadatos del PDF: {meta}\n"
-                ctx += f"Fragmento del expediente: {results['text'][:10000]} (fin del fragmento)\n"
-                
+                ctx = f"\n\n[CONTEXTO FORENSE — {doc_name}]\n"
+                ctx += f"Páginas: {results['pages_processed']} | Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f}) | Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
+                ctx += f"Tópicos: {metrics['topic_scores']}\n"
+                ctx += f"Metadata: {meta}\n"
+                ctx += f"Fragmento del expediente (primeras 2500 chars):\n{results['text'][:2500]}\n"
                 enriched_prompt = prompt + ctx
             else:
                 enriched_prompt = prompt
@@ -1613,7 +1613,7 @@ def server(input, output, session):
             <div style='border-top:1px solid rgba(168, 85, 247, 0.2);padding:12px 10px 0;margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;'>
                 <span style='font-size:0.78rem;color:#ffffff;font-weight:700;letter-spacing:0.5px;'>OLVERA AI</span>
                 <span style='font-size:0.78rem;color:rgba(168,85,247,0.4);'>|</span>
-                <span style='font-size:0.78rem;color:#bfaec2;'>Gemini 3 Flash &bull; Contexto completo de transcripción y KPIs inyectados reactivamente</span>
+                <span style='font-size:0.78rem;color:#bfaec2;'>Llama 3.3 70B (Groq) &bull; Contexto forense inyectado &bull; Fallback multi-proveedor activo</span>
             </div>
         """)
 

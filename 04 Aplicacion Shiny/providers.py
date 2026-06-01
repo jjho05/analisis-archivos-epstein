@@ -15,10 +15,12 @@ MODEL_METADATA: Dict[str, ModelCapability] = {
     # Lógica y Razonamiento (Thinking Models)
     "openai/gpt-oss-120b:free": { "hasThinking": True, "canSearch": True, "isMultimodal": False, "maxOutputTokens": 32768, "temperature": 0.6, "isHidden": False },
     "openai/gpt-oss-20b:free":  { "hasThinking": True, "canSearch": True, "isMultimodal": False, "maxOutputTokens": 16384, "temperature": 0.7, "isHidden": False },
-    "gemini/gemini-3.5-flash": { "hasThinking": True, "canSearch": True, "isMultimodal": True, "maxOutputTokens": 8192, "temperature": 0.7, "isHidden": False },
+    "gemini/gemini-3.5-flash":  { "hasThinking": True, "canSearch": True, "isMultimodal": True, "maxOutputTokens": 8192, "temperature": 0.7, "isHidden": False },
+    "gemini/gemini-2.0-flash":  { "hasThinking": False, "canSearch": True, "isMultimodal": True, "maxOutputTokens": 8192, "temperature": 0.7, "isHidden": True },
+    "gemini/gemini-1.5-flash":  { "hasThinking": False, "canSearch": True, "isMultimodal": True, "maxOutputTokens": 8192, "temperature": 0.7, "isHidden": True },
     
-    # Conversación y Versatilidad (Groq / Cerebras)
-    "groq/llama-3.3-70b-versatile": { "hasThinking": False, "canSearch": True, "isMultimodal": False, "maxOutputTokens": 4096, "temperature": 0.7, "isHidden": False },
+    # Conversación y Versatilidad (Groq / Cerebras) — Ultra-rápidos
+    "groq/llama-3.3-70b-versatile": { "hasThinking": False, "canSearch": True, "isMultimodal": False, "maxOutputTokens": 8192, "temperature": 0.7, "isHidden": False },
     "groq/llama-3.1-8b-instant":    { "hasThinking": False, "canSearch": True, "isMultimodal": False, "maxOutputTokens": 4096, "temperature": 0.7, "isHidden": False },
     "cerebras/llama3.1-70b":        { "hasThinking": False, "canSearch": True, "isMultimodal": False, "maxOutputTokens": 8192, "temperature": 0.5, "isHidden": False },
     
@@ -46,7 +48,7 @@ MODEL_LABELS: Dict[str, str] = {
     "olvera-image-1.0": "Olvera Image 1.0 (Flux)",
 }
 
-DEFAULT_MODEL = "gemini/gemini-3.5-flash"
+DEFAULT_MODEL = "groq/llama-3.3-70b-versatile"
 
 def get_visible_models() -> List[str]:
     return [m for m, meta in MODEL_METADATA.items() if not meta.get("isHidden", False)]
