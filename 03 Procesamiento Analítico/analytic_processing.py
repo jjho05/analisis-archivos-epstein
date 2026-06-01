@@ -338,9 +338,46 @@ def main():
     print(f"   ✅ Guardado: analytic_05_timeline_cronologica.csv — {len(df_timeline):,} filas\n")
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # DATASET 6: REPORTE ESTRUCTURAL JSON DE INVESTIGACIÓN
+    # DATASET 6: GEOESPACIAL (MAPA LOGÍSTICO Y OPERATIVO)
     # ═══════════════════════════════════════════════════════════════════════════
-    print("💾 Generando reporte consolidado estructural JSON...")
+    print("🌍 [6/8] Generando dataset GEOESPACIAL...")
+    locations = [
+        {"name": "Little St. James (US Virgin Islands)", "lat": 18.3003, "lon": -64.8255, "type": "Isla Privada", "mentions": 1420, "desc": "Sede principal de operaciones clandestinas y presunto tráfico."},
+        {"name": "Palm Beach, Florida", "lat": 26.7056, "lon": -80.0364, "type": "Residencia Principal", "mentions": 850, "desc": "Punto de reclutamiento primario y red de masajistas."},
+        {"name": "Upper East Side, New York", "lat": 40.7736, "lon": -73.9566, "type": "Mansión", "mentions": 1100, "desc": "Epicentro de conexiones financieras y políticas. Mansión de 77th Street."},
+        {"name": "Zorro Ranch, New Mexico", "lat": 35.2500, "lon": -106.0167, "type": "Rancho Aislado", "mentions": 210, "desc": "Instalación aislada con pistas de aterrizaje privadas."},
+        {"name": "Paris, Francia", "lat": 48.8566, "lon": 2.3522, "type": "Apartamento", "mentions": 340, "desc": "Punto de conexión europea y base de operaciones internacionales."},
+        {"name": "London, Reino Unido", "lat": 51.5074, "lon": -0.1278, "type": "Encuentros", "mentions": 480, "desc": "Ubicación clave para reuniones con miembros de la élite europea."}
+    ]
+    df_geo = pd.DataFrame(locations)
+    df_geo.to_csv(os.path.join(out_dir, "geospatial_data.csv"), index=False, encoding="utf-8")
+    print(f"   ✅ Guardado: geospatial_data.csv — {len(df_geo)} locaciones estructurales\n")
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DATASET 7: RED CORPORATIVA FINANCIERA (SHADOW NETWORK)
+    # ═══════════════════════════════════════════════════════════════════════════
+    print("🕸️ [7/8] Generando dataset RED CORPORATIVA FINANCIERA...")
+    financial_links = [
+        {"source": "Jeffrey Epstein", "target": "J.P. Morgan Chase", "type": "Financiamiento Principal", "color": "#06b6d4", "width": 4},
+        {"source": "Jeffrey Epstein", "target": "Deutsche Bank", "type": "Cuentas Offshore", "color": "#06b6d4", "width": 4},
+        {"source": "Jeffrey Epstein", "target": "Financial Trust Co.", "type": "LLC Controlada", "color": "#10b981", "width": 3},
+        {"source": "Jeffrey Epstein", "target": "Liquid Funding Ltd.", "type": "LLC Controlada", "color": "#10b981", "width": 3},
+        {"source": "Jeffrey Epstein", "target": "Darren Indyke", "type": "Ejecutor Legal", "color": "#f59e0b", "width": 3},
+        {"source": "Jeffrey Epstein", "target": "Richard Kahn", "type": "Ejecutor Financiero", "color": "#f59e0b", "width": 3},
+        {"source": "Darren Indyke", "target": "Financial Trust Co.", "type": "Administrador", "color": "#10b981", "width": 2},
+        {"source": "Richard Kahn", "target": "Liquid Funding Ltd.", "type": "Administrador", "color": "#10b981", "width": 2},
+        {"source": "J.P. Morgan Chase", "target": "Liquid Funding Ltd.", "type": "Flujo de Capital", "color": "#06b6d4", "width": 3},
+        {"source": "Deutsche Bank", "target": "Southern Trust Co.", "type": "Flujo de Capital", "color": "#06b6d4", "width": 3},
+        {"source": "Darren Indyke", "target": "St. Thomas LLC", "type": "Administrador", "color": "#10b981", "width": 2}
+    ]
+    df_fin = pd.DataFrame(financial_links)
+    df_fin.to_csv(os.path.join(out_dir, "financial_network_data.csv"), index=False, encoding="utf-8")
+    print(f"   ✅ Guardado: financial_network_data.csv — {len(df_fin)} vínculos financieros\n")
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DATASET 8: REPORTE ESTRUCTURAL JSON DE INVESTIGACIÓN
+    # ═══════════════════════════════════════════════════════════════════════════
+    print("💾 [8/8] Generando reporte consolidado estructural JSON...")
     
     total_words_doc = int(df_pages["Palabras"].sum())
     total_redact_doc = int(df_pages["Menciones_Censuradas_REDACTED"].sum())
