@@ -1,3 +1,12 @@
+---
+title: Epstein Analytics Data Mining
+emoji: ⚖️
+colorFrom: purple
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
 
 # MINERÍA DE TEXTO ANALÍTICO Y ANÁLISIS DE CO-OCURRENCIA ⚖️🕵️‍♂️
 ## Proyecto Final: Análisis de los Expedientes Judiciales Desclasificados del Caso Epstein
