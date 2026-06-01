@@ -231,26 +231,70 @@ async def stream_chat_response(
             else:
                 llm_messages.append({"role": m_role, "content": m_content})
 
-    # 3. Resolver proveedor y autenticación
-    litellm_model, auth_kwargs = resolve_model(model)
+    # 3. Lista de modelos a intentar en caso de fallo (Fallback robusto de Olvera AI)
+    models_to_try = [model]
+    
+    # Agregar respaldos activos según disponibilidad de API Keys en el entorno
+    if model != "groq/llama-3.3-70b-versatile" and os.getenv("GROQ_API_KEY"):
+        models_to_try.append("groq/llama-3.3-70b-versatile")
+    if model != "cerebras/llama3.1-70b" and os.getenv("CEREBRAS_API_KEY"):
+        models_to_try.append("cerebras/llama3.1-70b")
+    if model != "openai/gpt-oss-120b:free" and os.getenv("OPENROUTER_API_KEY"):
+        models_to_try.append("openai/gpt-oss-120b:free")
 
-    # 4. Streaming
-    try:
-        response = await acompletion(
-            model=litellm_model,
-            messages=llm_messages,
-            max_tokens=metadata.get("maxOutputTokens", 4096),
-            temperature=0.2 if search_context else metadata.get("temperature", 0.7),
-            stream=True,
-            **auth_kwargs
-        )
-        async for chunk in response:
-            delta = chunk.choices[0].delta.content
-            if delta:
-                yield delta
+    # 4. Streaming con recuperación de fallos y conmutación por error
+    last_error = None
+    chunks_streamed_global = 0
 
-    except Exception as e:
-        yield f"🔥 Error en el motor de IA: {str(e)}"
+    for idx, current_model in enumerate(models_to_try):
+        try:
+            # Si no es el primer intento, notificar de manera elegante la conmutación al respaldo
+            if idx > 0:
+                friendly_name = current_model
+                if "llama-3.3-70b" in current_model:
+                    friendly_name = "Olvera AI (Llama 3.3 70B - Groq)"
+                elif "llama3.1-70b" in current_model:
+                    friendly_name = "Olvera AI (Llama 3.1 70B - Cerebras)"
+                elif "gpt-oss" in current_model:
+                    friendly_name = "GPT OSS 120B (OpenRouter)"
+                
+                status_msg = (
+                    f"\n\n⚠️ *El motor principal ('{model}') está experimentando alta demanda (503). "
+                    f"Olvera AI ha activado de forma transparente el motor de respaldo: **{friendly_name}**...*\n\n"
+                )
+                yield status_msg
+
+            # Resolver proveedor y autenticación
+            litellm_model, auth_kwargs = resolve_model(current_model)
+            current_metadata = MODEL_METADATA.get(current_model, {"maxOutputTokens": 4096, "temperature": 0.7})
+            
+            response = await acompletion(
+                model=litellm_model,
+                messages=llm_messages,
+                max_tokens=current_metadata.get("maxOutputTokens", 4096),
+                temperature=0.2 if search_context else current_metadata.get("temperature", 0.7),
+                stream=True,
+                **auth_kwargs
+            )
+            
+            async for chunk in response:
+                delta = chunk.choices[0].delta.content
+                if delta:
+                    yield delta
+                    chunks_streamed_global += 1
+            
+            # Si completó con éxito, salir del bucle
+            return
+
+        except Exception as e:
+            print(f"[Fallback System] Error ejecutando '{current_model}': {str(e)}")
+            last_error = e
+            # Continuar con el siguiente modelo de respaldo disponible
+            continue
+
+    # Si todos los intentos fallaron, reportar el último error
+    if last_error:
+        yield f"\n\n🔥 **Error en el motor de IA:** No fue posible conectar con ningún proveedor de IA (incluyendo motores de respaldo). Detalle técnico: {str(last_error)}"
 
 async def transcribe_audio(b64_data: str) -> str:
     import base64
