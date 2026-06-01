@@ -1277,8 +1277,8 @@ def server(input, output, session):
         for node in G.nodes():
             G.nodes[node]['size'] = 10 + (degrees[node] * 3)
             
-        # Crear red interactiva de PyVis
-        net = Network(height="350px", width="100%", bgcolor="#0b090f", font_color="#e5e0eb", select_menu=False)
+        # Crear red interactiva de PyVis (Altura aumentada a 650px para pantalla completa)
+        net = Network(height="650px", width="100%", bgcolor="#0b090f", font_color="#e5e0eb", select_menu=False)
         # Opciones de física para que parezca una red neuronal/criminal
         net.set_options("""
         var options = {
@@ -1325,11 +1325,14 @@ def server(input, output, session):
             
         os.unlink(temp_path)
         
+        # Eliminar el borde blanco/gris feo por defecto de pyvis
+        html_content = html_content.replace('border: 1px solid lightgray', 'border: none')
+        
         # Usamos srcdoc para inyectar el HTML directamente en un iframe sin necesidad de servidor estático
         import html
         escaped_html = html.escape(html_content)
         
-        return ui.HTML(f"<iframe srcdoc='{escaped_html}' style='width:100%; height:350px; border:none; border-radius:10px;'></iframe>")
+        return ui.HTML(f"<iframe srcdoc='{escaped_html}' style='width:100%; height:650px; border:none; border-radius:10px; background:#0b090f;'></iframe>")
 
     @render.plot
     def timeline_chart():
