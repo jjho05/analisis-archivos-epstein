@@ -1258,8 +1258,8 @@ def server(input, output, session):
         filtered = []
         for pair, freq in top_co:
             parts = pair.split(" & ")
-            # Solo filtramos si hay seleccionados, pero el grafo es mejor si mostramos la red completa
-            if not selected or (len(parts) == 2 and (parts[0] in selected or parts[1] in selected)):
+            # Solo filtramos si hay seleccionados; ambos nodos deben estar seleccionados para ver su relación
+            if not selected or (len(parts) == 2 and parts[0] in selected and parts[1] in selected):
                 filtered.append((parts[0], parts[1], freq))
                 
         if not filtered:
@@ -1373,7 +1373,7 @@ def server(input, output, session):
         filtered = []
         for pair, freq in top_co:
             parts = pair.split(" & ")
-            if not selected or (len(parts) == 2 and (parts[0] in selected or parts[1] in selected)):
+            if not selected or (len(parts) == 2 and parts[0] in selected and parts[1] in selected):
                 filtered.append((parts[0], parts[1], freq))
                 
         if not filtered:
