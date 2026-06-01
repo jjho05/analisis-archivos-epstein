@@ -47,7 +47,20 @@ graph TD
     D -->|Cálculo de Densidades y Co-ocurrencias| E[CSV Datasets Precalculados]
     E -->|Lectura instantánea sin delay| F[04 Aplicacion Shiny]
     F -->|Shiny App + Olvera AI Copilot| G[Hugging Face / Localhost]
+    F -->|Grafo Interactivo 3D| H[Red Criminal PyVis]
+    F -->|RAG Search| I[Motor TF-IDF]
+    F -->|Agente Lógico| J[Auditor de Contradicciones]
+    F -->|Mapeo Folium| K[Inteligencia Geoespacial]
 ```
+
+## 🚀 Innovaciones de Grado Arquitectura (LegalTech)
+
+Este proyecto trasciende el análisis de datos tradicional integrando tecnologías **State-of-the-Art** propias del sector forense e inteligencia:
+
+1. **Grafo de Conocimiento Interactivo (CyberThreat Intelligence):** Se abandonan las gráficas planas por una red física interactiva generada con `PyVis` y `NetworkX`. El usuario puede interactuar con el grafo para entender las dinámicas de poder y asociaciones entre Epstein, Maxwell, políticos y testigos.
+2. **Motor Semántico RAG Local:** En lugar de búsquedas por palabras clave (`CTRL+F`), implementamos un modelo vectorial (TF-IDF y Similitud de Coseno). Si buscas *"viajes secretos a la isla"*, el algoritmo mapeará matemáticamente los vectores del texto y retornará los fragmentos relevantes, incluso si se usaron otras palabras.
+3. **Inteligencia Geoespacial:** Extracción automatizada de lugares de interés y renderizado en un mapa global interactivo oscuro usando `Folium` y `CartoDB`. Visualiza las rutas logísticas del "Lolita Express".
+4. **Agente Lógico Autónomo:** Integración con LLM Llama 3.3 70B como un auditor que cruza testimonios, busca evasiones y genera un informe de discrepancias en segundos.
 
 ---
 

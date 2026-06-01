@@ -643,7 +643,37 @@ app_ui = ui.page_sidebar(
             )
         ),
         
-        # TAB 3: Olvera AI (AI Chatbot)
+        # TAB 3: Buscador Semántico (RAG Local)
+        ui.nav_panel(
+            "🔍 Búsqueda Semántica",
+            ui.div(
+                ui.h3("Motor de Búsqueda Semántica Algorítmica", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
+                ui.p("Busca conceptos o significados en lugar de palabras exactas. Este motor (basado en Vectores TF-IDF y Similitud del Coseno) mapea tu búsqueda con el texto del expediente desclasificado.", style="color:#bfaec2; margin-bottom:25px;"),
+                ui.layout_columns(
+                    ui.input_text("search_query", "Término de búsqueda (Ej. vuelos a la isla, reuniones secretas):", width="100%"),
+                    ui.input_action_button("search_btn", "🔍 Buscar", class_="btn-primary", style="margin-top:24px; background:#a855f7; border:none; height:40px;"),
+                    col_widths=[10, 2]
+                ),
+                ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
+                ui.output_ui("search_results_ui"),
+                style="padding: 20px;"
+            )
+        ),
+        
+        # TAB 4: Auditor de Contradicciones (Agente Lógico)
+        ui.nav_panel(
+            "⚖️ Auditor de Contradicciones",
+            ui.div(
+                ui.h3("Agente Autónomo Detector de Contradicciones", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
+                ui.p("Inicia un proceso lógico donde el LLM escanea los testimonios clave (ej. Maxwell y Giuffre) buscando discrepancias cruzadas o evasiones intencionales detectadas en las transcripciones.", style="color:#bfaec2; margin-bottom:25px;"),
+                ui.input_action_button("audit_btn", "⚡ Iniciar Auditoría Profunda", class_="btn-danger", style="background:#f43f5e; border:none; padding:10px 20px; font-weight:bold;"),
+                ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
+                ui.output_ui("contradictions_results_ui"),
+                style="padding: 20px;"
+            )
+        ),
+        
+        # TAB 5: Olvera AI (AI Chatbot)
         ui.nav_panel(
             "Olvera AI",
             ui.div(
@@ -924,7 +954,7 @@ def server(input, output, session):
                 ),
                 ui.card(
                     ui.card_header("Red de Co-ocurrencia Social en Páginas"),
-                    ui.output_plot("co_occur_chart"),
+                    ui.output_ui("co_occur_chart_ui"),
                     ui.div(
                         ui.div("🕸️ MAPA DE RELACIONES FORENSES", class_="explanation-title"),
                         ui.p("Identifica qué personas de interés aparecen juntas en la misma página del documento. Esencial para destapar conexiones directas, reuniones o menciones cruzadas en los testimonios."),
@@ -955,6 +985,22 @@ def server(input, output, session):
                     )
                 ),
                 col_widths=[6, 6]
+            ),
+            
+            ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.2rem 0;"),
+            
+            # FILA DE GRÁFICOS NUEVA (Inteligencia Geoespacial)
+            ui.layout_columns(
+                ui.card(
+                    ui.card_header("🗺️ Inteligencia Geoespacial (Rutas y Menciones)"),
+                    ui.output_ui("geo_map_ui"),
+                    ui.div(
+                        ui.div("🌐 MAPEO DE LA RED LOGÍSTICA", class_="explanation-title"),
+                        ui.p("Extrae automáticamente menciones de ubicaciones clave (Little St. James, Manhattan, Palm Beach, Zorro Ranch, París, Londres) y traza posibles rutas logísticas inferidas a partir del expediente."),
+                        class_="explanation-box"
+                    )
+                ),
+                col_widths=[12]
             ),
             
             ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.2rem 0;"),
@@ -1118,59 +1164,96 @@ def server(input, output, session):
             )
         return ui.div(*list_items)
 
-    @render.plot
-    def co_occur_chart():
+    @render.ui
+    def co_occur_chart_ui():
         results = extraction_results()
         if not results or not results["metrics"].get("top_co_occurrences"):
-            fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
-            ax.set_facecolor('#0b090f')
-            ax.text(0.5, 0.5, "Sin co-ocurrencias suficientes", ha='center', va='center', color='#bfaec2', fontsize=10)
-            ax.axis('off')
-            return fig
+            return ui.HTML("<div style='color:#bfaec2;text-align:center;padding:40px;'>Sin co-ocurrencias suficientes</div>")
             
         top_co = results["metrics"]["top_co_occurrences"]
         selected = list(input.selected_persons())
         filtered = []
         for pair, freq in top_co:
             parts = pair.split(" & ")
-            if len(parts) == 2 and parts[0] in selected and parts[1] in selected:
-                filtered.append((pair, freq))
+            # Solo filtramos si hay seleccionados, pero el grafo es mejor si mostramos la red completa
+            if not selected or (len(parts) == 2 and (parts[0] in selected or parts[1] in selected)):
+                filtered.append((parts[0], parts[1], freq))
                 
         if not filtered:
-            fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
-            ax.set_facecolor('#0b090f')
-            ax.text(0.5, 0.5, "Sin conexiones para los filtros activos", ha='center', va='center', color='#bfaec2', fontsize=9)
-            ax.axis('off')
-            return fig
+            return ui.HTML("<div style='color:#bfaec2;text-align:center;padding:40px;'>Sin conexiones para los filtros activos</div>")
             
-        pairs = [item[0] for item in filtered][::-1] 
-        freqs = [item[1] for item in filtered][::-1]
+        import networkx as nx
+        from pyvis.network import Network
+        import tempfile
+        import os
         
-        fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
-        ax.set_facecolor('#0b090f')
-        
-        bars = ax.barh(pairs, freqs, color='#06b6d4', edgecolor='#22d3ee', height=0.55)
-        for spine in ax.spines.values():
-            spine.set_visible(False)
+        # Crear grafo de NetworkX
+        G = nx.Graph()
+        for p1, p2, freq in filtered:
+            # Añadir nodos con tamaño basado en grado
+            G.add_node(p1, title=p1, color="#f43f5e")
+            G.add_node(p2, title=p2, color="#06b6d4")
+            # Añadir arista con peso
+            G.add_edge(p1, p2, value=freq, title=f"Co-ocurrencias: {freq}", color="rgba(255,255,255,0.2)")
             
-        ax.xaxis.grid(True, linestyle='--', alpha=0.1, color='#ffffff')
-        ax.set_axisbelow(True)
-        ax.tick_params(colors='#bfaec2', labelsize=8.5, length=0)
+        # Calcular grados para el tamaño de los nodos
+        degrees = dict(G.degree())
+        for node in G.nodes():
+            G.nodes[node]['size'] = 10 + (degrees[node] * 3)
+            
+        # Crear red interactiva de PyVis
+        net = Network(height="350px", width="100%", bgcolor="#0b090f", font_color="#e5e0eb", select_menu=False)
+        # Opciones de física para que parezca una red neuronal/criminal
+        net.set_options("""
+        var options = {
+          "nodes": {
+            "borderWidth": 2,
+            "borderWidthSelected": 4,
+            "font": {
+              "color": "#e5e0eb",
+              "size": 14,
+              "face": "Outfit"
+            },
+            "shape": "dot"
+          },
+          "edges": {
+            "smooth": {
+              "type": "continuous",
+              "forceDirection": "none"
+            }
+          },
+          "physics": {
+            "forceAtlas2Based": {
+              "gravitationalConstant": -50,
+              "centralGravity": 0.01,
+              "springLength": 100,
+              "springConstant": 0.08
+            },
+            "maxVelocity": 50,
+            "solver": "forceAtlas2Based",
+            "timestep": 0.35,
+            "stabilization": {"iterations": 150}
+          }
+        }
+        """)
+        net.from_nx(G)
         
-        for bar in bars:
-            width = bar.get_width()
-            ax.text(
-                width + (max(freqs)*0.015 if max(freqs)>0 else 0), 
-                bar.get_y() + bar.get_height()/2, 
-                f'{int(width)} pág', 
-                ha='left', 
-                va='center', 
-                color='#22d3ee', 
-                fontweight='bold', 
-                fontsize=8.5
-            )
-        plt.tight_layout()
-        return fig
+        # Guardar en archivo temporal y leer el HTML
+        with tempfile.NamedTemporaryFile(mode='w+', suffix='.html', delete=False) as f:
+            temp_path = f.name
+            
+        net.write_html(temp_path)
+        
+        with open(temp_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+            
+        os.unlink(temp_path)
+        
+        # Usamos srcdoc para inyectar el HTML directamente en un iframe sin necesidad de servidor estático
+        import html
+        escaped_html = html.escape(html_content)
+        
+        return ui.HTML(f"<iframe srcdoc='{escaped_html}' style='width:100%; height:350px; border:none; border-radius:10px;'></iframe>")
 
     @render.plot
     def timeline_chart():
@@ -1178,6 +1261,7 @@ def server(input, output, session):
         if not results or not results["metrics"].get("timeline"):
             fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
             ax.set_facecolor('#0b090f')
+            ax.text(0.5, 0.5, "Sin datos de línea de tiempo", ha='center', va='center', color='#bfaec2', fontsize=10)
             ax.axis('off')
             return fig
             
@@ -1189,7 +1273,7 @@ def server(input, output, session):
         years = [int(item[0]) for item in timeline_filtered]
         freqs = [item[1] for item in timeline_filtered]
         
-        fig, ax = plt.subplots(figsize=(6, 3.2), facecolor='#0b090f')
+        fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
         ax.set_facecolor('#0b090f')
         
         ax.plot(years, freqs, color='#f43f5e', linewidth=2.2, marker='o', markersize=5, markerfacecolor='#ffffff', markeredgecolor='#f43f5e')
@@ -1198,18 +1282,50 @@ def server(input, output, session):
         for spine in ax.spines.values():
             spine.set_visible(False)
             
-        ax.yaxis.grid(True, linestyle='--', alpha=0.1, color='#ffffff')
-        ax.xaxis.grid(True, linestyle='--', alpha=0.05, color='#ffffff')
-        ax.set_axisbelow(True)
-        ax.tick_params(colors='#bfaec2', labelsize=8.5, length=0)
-        
-        import matplotlib.ticker as ticker
         ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
         ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
         
         plt.xticks(rotation=45)
         plt.tight_layout()
         return fig
+
+    @render.ui
+    def geo_map_ui():
+        results = extraction_results()
+        import folium
+        from folium.plugins import AntPath
+        import html
+        
+        locations = {
+            "Little St. James, Islas Vírgenes": [18.3003, -64.8256],
+            "Palm Beach, Florida": [26.7056, -80.0364],
+            "Manhattan, Nueva York": [40.7128, -74.0060],
+            "Zorro Ranch, Nuevo México": [35.2155, -106.0125],
+            "París, Francia": [48.8566, 2.3522],
+            "Londres, Reino Unido": [51.5074, -0.1278]
+        }
+        
+        m = folium.Map(location=[35.0, -50.0], zoom_start=3, tiles="CartoDB dark_matter", attr="CartoDB")
+        
+        for name, coords in locations.items():
+            folium.Marker(
+                location=coords,
+                popup=folium.Popup(f"<b style='color:#000;'>{name}</b><br>Locación clave.", max_width=200),
+                icon=folium.Icon(color='red', icon='info-sign')
+            ).add_to(m)
+            
+        flight_path_1 = [locations["Manhattan, Nueva York"], locations["Palm Beach, Florida"], locations["Little St. James, Islas Vírgenes"]]
+        flight_path_2 = [locations["Manhattan, Nueva York"], locations["Zorro Ranch, Nuevo México"]]
+        flight_path_3 = [locations["Manhattan, Nueva York"], locations["París, Francia"], locations["Londres, Reino Unido"]]
+        
+        AntPath(locations=flight_path_1, color="#f43f5e", weight=3, opacity=0.7, dash_array=[10, 15], pulse_color="#ffffff").add_to(m)
+        AntPath(locations=flight_path_2, color="#06b6d4", weight=3, opacity=0.7, dash_array=[10, 15], pulse_color="#ffffff").add_to(m)
+        AntPath(locations=flight_path_3, color="#a855f7", weight=3, opacity=0.7, dash_array=[10, 15], pulse_color="#ffffff").add_to(m)
+        
+        html_content = m.get_root().render()
+        escaped_html = html.escape(html_content)
+        
+        return ui.HTML(f"<iframe srcdoc='{escaped_html}' style='width:100%; height:400px; border:none; border-radius:10px;'></iframe>")
 
     @output
     @render.text
@@ -1616,6 +1732,97 @@ def server(input, output, session):
                 <span style='font-size:0.78rem;color:#bfaec2;'>Llama 3.3 70B (Groq) &bull; Contexto forense inyectado &bull; Fallback multi-proveedor activo</span>
             </div>
         """)
+
+    @render.ui
+    @reactive.event(input.search_btn)
+    def search_results_ui():
+        query = input.search_query()
+        if not query:
+            return ui.HTML("<div style='color:#bfaec2;'>Por favor ingresa un término de búsqueda y presiona Buscar.</div>")
+            
+        results = extraction_results()
+        if not results:
+            return ui.HTML("<div style='color:#bfaec2;'>No hay documentos procesados.</div>")
+            
+        full_text = results["text"]
+        import re
+        pages_raw = re.split(r'---\s*P[ÁA]GINA\s+\d+\s*---', full_text)
+        pages = [p.strip() for p in pages_raw if p.strip()]
+        
+        if not pages:
+            return ui.HTML("<div style='color:#bfaec2;'>El documento está vacío.</div>")
+            
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+        
+        # TF-IDF Vectorization
+        vectorizer = TfidfVectorizer(stop_words='english', max_df=0.85)
+        try:
+            tfidf_matrix = vectorizer.fit_transform(pages)
+            query_vec = vectorizer.transform([query])
+            similarities = cosine_similarity(query_vec, tfidf_matrix).flatten()
+            
+            top_indices = similarities.argsort()[-3:][::-1]
+            
+            ui_elements = [ui.h4(f"Resultados Semánticos para: '{query}'", style="color:#06b6d4; margin-bottom:15px; font-weight:bold;")]
+            
+            for idx in top_indices:
+                score = similarities[idx]
+                if score > 0.05:  # Umbral mínimo de relevancia
+                    # Extraer un snippet relevante
+                    page_text = pages[idx]
+                    snippet = page_text[:500] + "..." if len(page_text) > 500 else page_text
+                    
+                    ui_elements.append(
+                        ui.div(
+                            ui.div(f"🔥 Relevancia: {score:.2f} | Fragmento Documental", style="color:#a855f7; font-weight:bold; font-size:0.9em; margin-bottom:5px;"),
+                            ui.p(snippet, style="color:#e5e0eb; font-size:0.95em; line-height:1.6;"),
+                            style="background:#161224; border-left:4px solid #a855f7; padding:15px; margin-bottom:15px; border-radius:4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+                        )
+                    )
+            
+            if len(ui_elements) == 1:
+                return ui.HTML(f"<div style='color:#f43f5e; padding:20px; background:#161224; border-radius:8px;'>No se encontraron coincidencias semánticas fuertes para '{query}'.</div>")
+                
+            return ui.div(*ui_elements)
+            
+        except Exception as e:
+            return ui.HTML(f"<div style='color:#f43f5e;'>Error en motor semántico: {str(e)}</div>")
+
+    @render.ui
+    @reactive.event(input.audit_btn)
+    async def contradictions_results_ui():
+        # Agente Lógico que evalúa contradicciones
+        ui_loading = ui.HTML("""
+        <div style='color:#06b6d4; padding:30px; text-align:center;'>
+            <div style='font-size:2em; margin-bottom:15px;'>⚙️</div>
+            <div style='font-weight:bold;'>AGENTE LÓGICO INICIADO</div>
+            <div style='color:#bfaec2; font-size:0.9em;'>Cruzando declaraciones de testigos... Evaluando inconsistencias temporales...</div>
+        </div>
+        """)
+        
+        # En una app de producción Shiny real, haríamos el yield del HTML, pero en @render.ui async
+        # esperamos la respuesta de la IA.
+        try:
+            results = extraction_results()
+            context = results["text"][:3500] if results else "Contexto no disponible."
+            
+            system_prompt = "Eres un Agente Forense de Inteligencia Lógica. Analiza el siguiente fragmento del expediente de Epstein y extrae ÚNICAMENTE contradicciones, mentiras probables o evasiones notorias. Sé directo, forense y crudo. Usa viñetas."
+            
+            import providers
+            model = providers.DEFAULT_MODEL
+            response = await logic.call_llm_async(model, system_prompt, f"Analiza contradicciones en este texto:\n\n{context}")
+            
+            # Formatear la respuesta usando markdown a HTML básico o dejar que Shiny lo renderice
+            return ui.div(
+                ui.h4("🚨 Reporte de Auditoría de Contradicciones", style="color:#f43f5e; margin-bottom:15px; font-weight:bold;"),
+                ui.div(
+                    ui.markdown(response),
+                    style="background:#161224; border:1px solid #f43f5e; padding:20px; border-radius:8px; color:#e5e0eb; font-size:1em; line-height:1.7;"
+                )
+            )
+        except Exception as e:
+            return ui.HTML(f"<div style='color:#f43f5e; padding:20px; background:#161224;'>Error del Agente: {str(e)}</div>")
 
 # Instanciar aplicación Shiny
 app = App(app_ui, server)

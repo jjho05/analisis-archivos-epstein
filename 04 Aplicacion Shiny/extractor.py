@@ -151,7 +151,7 @@ class PDFExtractorEngine:
                             pair_key = f"{pair[0]} & {pair[1]}"
                             co_occurrences[pair_key] = count
                 
-                sorted_co_occur = sorted(co_occurrences.items(), key=lambda x: x[1], reverse=True)[:5]
+                sorted_co_occur = sorted(co_occurrences.items(), key=lambda x: x[1], reverse=True)[:50]
                 
                 # Detalles de evasiones
                 csv_evasions = os.path.join(proc_dir, "forensic_03_evasiones_instancias.csv")
@@ -387,7 +387,7 @@ class PDFExtractorEngine:
                     pair_key = f"{present_targets[i]} & {present_targets[j]}"
                     co_occurrences[pair_key] = co_occurrences.get(pair_key, 0) + 1
                     
-        sorted_co_occur = sorted(co_occurrences.items(), key=lambda x: x[1], reverse=True)[:5]
+        sorted_co_occur = sorted(co_occurrences.items(), key=lambda x: x[1], reverse=True)[:50]
         
         # Frecuencia de palabras generales (excluyendo stopwords)
         filtered_words = [w for w in words if w not in stopwords and len(w) > 2]

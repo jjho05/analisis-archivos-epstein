@@ -7,3 +7,7 @@ litellm
 tavily-python
 python-dotenv
 httpx
+pyvis
+networkx
+folium
+scikit-learn
