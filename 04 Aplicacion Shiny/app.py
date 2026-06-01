@@ -689,13 +689,19 @@ app_ui = ui.page_sidebar(
                         12,
                         ui.div(
                             ui.output_ui("welcome_ui"),
-                            style="margin-bottom: 20px;"
+                            style="margin-bottom: 20px; flex-shrink: 0;"
                         )
                     )
                 ),
-                ui.chat_ui("chat"),
-                ui.output_ui("chat_toolbar_ui"),
-                style="padding: 20px; max-width: 900px; margin: 0 auto;"
+                ui.div(
+                    ui.chat_ui("chat"),
+                    style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column;"
+                ),
+                ui.div(
+                    ui.output_ui("chat_toolbar_ui"),
+                    style="flex-shrink: 0; margin-top: 15px;"
+                ),
+                style="padding: 20px; max-width: 900px; margin: 0 auto; height: 80vh; display: flex; flex-direction: column;"
             )
         ),
         id="main_nav_tabs"
@@ -1634,6 +1640,13 @@ def server(input, output, session):
         except Exception as e:
             print(f"Error inyectando contexto analítico al Copilot: {e}")
 
+        # Inyectar instrucción de sistema (comportamiento del analista)
+        system_msg = {
+            "role": "system", 
+            "content": "Eres Olvera AI, un analista de inteligencia experto. Responde siempre analizando profundamente los datos. Redacta en párrafos continuos, fluidos y profesionales. PROHIBIDO escupir listas de viñetas, bullet-points o formatos robóticos predefinidos. Interpreta qué significa la evidencia."
+        }
+        llm_messages.insert(0, system_msg)
+
         async_gen = logic.stream_chat_response(
             messages=llm_messages,
             model=providers.DEFAULT_MODEL,
@@ -1672,7 +1685,11 @@ def server(input, output, session):
             print(f"Error inyectando contexto de sugerencia analítico: {e}")
             enriched_prompt = prompt
             
-        messages = [{"role": "user", "content": enriched_prompt}]
+        system_msg = {
+            "role": "system", 
+            "content": "Eres Olvera AI, un analista de inteligencia experto. Responde siempre analizando profundamente los datos. Redacta en párrafos continuos, fluidos y profesionales. PROHIBIDO escupir listas de viñetas, bullet-points o formatos robóticos predefinidos. Interpreta qué significa la evidencia."
+        }
+        messages = [system_msg, {"role": "user", "content": enriched_prompt}]
         async_gen = logic.stream_chat_response(
             messages=messages,
             model=providers.DEFAULT_MODEL,
