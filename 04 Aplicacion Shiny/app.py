@@ -655,7 +655,11 @@ app_ui = ui.page_sidebar(
                 ui.layout_columns(
                     ui.input_text("search_query", "📝 ¿Qué intentas encontrar en el expediente? (Ej. Encuentros en la isla, logística de vuelos secretos):", width="100%"),
                     ui.input_action_button("search_btn", "🔍 Buscar", class_="btn-primary", style="margin-top:24px; background:#a855f7; border:none; height:40px;"),
-                    col_widths=[10, 2]
+                    ui.panel_conditional(
+                        "input.search_btn > 0",
+                        ui.download_button("download_dossier", "📄 Exportar Dossier", class_="btn-primary", style="margin-top:24px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;")
+                    ),
+                    col_widths=[8, 2, 2]
                 ),
                 ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
                 ui.output_ui("search_results_ui"),
@@ -1858,14 +1862,8 @@ def server(input, output, session):
                     style="background:rgba(6, 182, 212, 0.1); border:1px solid #06b6d4; padding:20px; border-radius:8px; margin-bottom:15px; color:#e5e0eb; font-size:1.05em; line-height:1.6;"
                 )
                 
-                btn_dossier = ui.div(
-                    ui.download_button("download_dossier", "📄 Exportar Dossier Oficial (PDF)", class_="btn-primary", style="background:#a855f7; border:none; padding:10px 20px; font-weight:bold; color:white; width: 100%; border-radius:6px; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);"),
-                    style="margin-bottom: 25px;"
-                )
-                
-                # Insertar la explicación y el botón justo después del título
+                # Insertar la explicación justo después del título
                 ui_elements.insert(1, explanation_box)
-                ui_elements.insert(2, btn_dossier)
             except Exception as e:
                 print(f"Error en AI explanation: {e}")
                 
