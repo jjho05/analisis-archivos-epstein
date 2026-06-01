@@ -1915,7 +1915,7 @@ def server(input, output, session):
             return ui.HTML(f"<div style='color:#f43f5e;'>Error renderizando red: {str(e)}</div>")
 
     @render.download(
-        filename=lambda: f"Reporte_Evidencia_{input.search_query()}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+        filename=lambda: f"Reporte_Evidencia_{input.search_query().replace(' ', '_').replace('/', '_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
     )
     def download_report():
         data = current_report_data.get()
