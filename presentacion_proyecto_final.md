@@ -184,19 +184,17 @@ style: |
 
 <!-- _class: portada -->
 
-# PROYECTO FINAL: MINERÍA DE TEXTO FORENSE Y ANÁLISIS DE CO-OCURRENCIA
+# PROYECTO FINAL
 ## Análisis de los Expedientes Judiciales Desclasificados del Caso Epstein
 
-**Lic. Ing. Jesús Olvera**
-Centro de Cómputo y Sistemas Complejos (CCSC)
+**Jesús Olvera**
 Programación para Ciencia de Datos
 
 ---
 
 <!-- _class: compact -->
 
-# ESTRUCTURA DE LA PRESENTACIÓN
-## Fases de la Investigación Forense Digital
+# INDICE
 
 * **Fase 1: Contexto y Obtención de Datos** — Evidencia judicial analizada y origen del corpus a través de Kaggle.
 * **Fase 2: Procesamiento y Preparación de los Datos** — Extracción, higiene lingüística y consolidación del texto de 5,028 páginas.
