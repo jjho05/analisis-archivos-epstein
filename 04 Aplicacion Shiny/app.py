@@ -667,7 +667,13 @@ app_ui = ui.page_sidebar(
             ui.div(
                 ui.h3("Agente Autónomo Detector de Contradicciones", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
                 ui.p("Inicia un proceso lógico donde el LLM escanea los testimonios clave (ej. Maxwell y Giuffre) buscando discrepancias cruzadas o evasiones intencionales detectadas en las transcripciones.", style="color:#bfaec2; margin-bottom:25px;"),
-                ui.input_action_button("audit_btn", "⚡ Iniciar Auditoría Profunda", class_="btn-danger", style="background:#f43f5e; border:none; padding:10px 20px; font-weight:bold;"),
+                ui.layout_columns(
+                    ui.input_select("audit_focus", "Enfoque de Auditoría:", ["General", "Contradicciones de Abuso", "Rutas y Logística (Aviones)", "Discrepancias Financieras"]),
+                    ui.input_select("audit_target", "Persona Objetivo:", ["Todos", "Jeffrey Epstein", "Ghislaine Maxwell", "Virginia Giuffre", "Prince Andrew"]),
+                    ui.input_select("audit_strictness", "Nivel de Severidad:", ["Estándar", "Implacable (Crítico)", "Leve (Solo hechos obvios)"]),
+                    col_widths=[4, 4, 4]
+                ),
+                ui.input_action_button("audit_btn", "⚡ Iniciar Auditoría Profunda", class_="btn-danger", style="background:#f43f5e; border:none; padding:10px 20px; font-weight:bold; width: 100%; margin-top: 15px;"),
                 ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
                 ui.output_ui("contradictions_results_ui"),
                 style="padding: 20px;"
@@ -1809,7 +1815,19 @@ def server(input, output, session):
             results = extraction_results()
             context = results["text"][:3500] if results else "Contexto no disponible."
             
-            system_prompt = "Eres un Agente Analítico de Inteligencia Lógica. Analiza el siguiente fragmento del expediente de Epstein y extrae ÚNICAMENTE contradicciones, mentiras probables o evasiones notorias. Sé directo, analítico y crudo. Usa viñetas."
+            focus = input.audit_focus()
+            target = input.audit_target()
+            strictness = input.audit_strictness()
+            
+            system_prompt = (
+                f"Eres un Agente Analítico de Inteligencia Lógica. Nivel de severidad: {strictness}. "
+                f"Analiza el siguiente fragmento del expediente de Epstein y extrae ÚNICAMENTE contradicciones, mentiras probables o evasiones notorias. "
+                f"Enfócate principalmente en: {focus}. "
+            )
+            if target != "Todos":
+                system_prompt += f"Audita de manera rigurosa a: {target}. "
+            
+            system_prompt += "Sé directo, analítico y crudo. Usa viñetas breves."
             
             import providers
             model = providers.DEFAULT_MODEL
