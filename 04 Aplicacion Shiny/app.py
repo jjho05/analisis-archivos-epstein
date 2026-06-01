@@ -704,20 +704,7 @@ app_ui = ui.page_sidebar(
                 ui.p("Visualización de coordenadas clave extraídas del expediente. Identifica las rutas de vuelo, islas privadas y bases de operaciones utilizadas en la red.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
                     ui.output_ui("geospatial_map_ui"),
-                    ui.div(
-                        ui.h4("‍ Análisis de Rutas", style="color:#06b6d4; font-weight:bold; margin-bottom:15px;"),
-                        ui.markdown("""
-**Little St. James (USVI):** Identificada en los registros de vuelo como el destino principal y punto ciego legal.
-                        
-**Palm Beach / NY:** Nodos primarios de operación y reclutamiento según las bitácoras del *Lolita Express*.
-                        
-**Zorro Ranch (NM):** Instalación aislada de alta seguridad con infraestructura de aterrizaje privada.
-                        
-**Conexiones Transatlánticas:** Los saltos entre NY, París y Londres documentan el alcance internacional de las operaciones de tráfico con miembros de la élite europea.
-                        """),
-                        ui.download_button("download_geo_report", "Descargar Reporte Geoespacial", class_="btn-primary", style="margin-top:16px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;"),
-                        style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%;"
-                    ),
+                    ui.output_ui("geo_sidebar_ui"),
                     col_widths=[8, 4]
                 ),
                 style="padding: 20px;"
@@ -732,21 +719,7 @@ app_ui = ui.page_sidebar(
                 ui.p("Grafo interactivo de relaciones financieras, empresas fachada (LLCs) y actores clave que facilitaron el flujo de dinero en la organización.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
                     ui.output_ui("shadow_network_ui"),
-                    ui.div(
-                        ui.h4("Anatomía Financiera", style="color:#10b981; font-weight:bold; margin-bottom:15px;"),
-                        ui.markdown("""
-**Cuentas Ciegas (Tier 1):**
-J.P. Morgan y Deutsche Bank proveyeron la infraestructura para flujos masivos de liquidez.
-                        
-**El Escudo Corporativo (Tier 2):**
-Entidades offshore como *Financial Trust Co.* y *Liquid Funding Ltd.* operando bajo la laxa jurisdicción de las Islas Vírgenes para mover capital sin trazabilidad directa.
-                        
-**Ejecutores (Tier 3):**
-Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrás de la creación de las LLCs (Sociedades de Responsabilidad Limitada) para adquirir propiedades e inyectar fondos.
-                        """),
-                        ui.download_button("download_network_report", "Descargar Reporte de Red Financiera", class_="btn-primary", style="margin-top:16px; background:#a855f7; border:none; height:40px; font-weight:bold; width:100%;"),
-                        style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(16,185,129,0.3); color:#e5e0eb; height:100%;"
-                    ),
+                    ui.output_ui("financial_sidebar_ui"),
                     col_widths=[9, 3]
                 ),
                 style="padding: 20px;"
@@ -906,6 +879,8 @@ def server(input, output, session):
     is_empty = reactive.Value(True)
     current_report_data = reactive.Value(None)
     current_audit_data = reactive.Value(None)
+    current_network_analysis = reactive.Value(None)
+    current_geo_analysis = reactive.Value(None)
     chat = ui.Chat(id="chat")
 
     # Obtener el motor de procesamiento para el archivo seleccionado
@@ -2158,7 +2133,8 @@ def server(input, output, session):
             os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Anal\u00edtico", "geospatial_data.csv")
         )
         df = pd.read_csv(csv_path) if os.path.exists(csv_path) else pd.DataFrame()
-        return generate_geo_report(df)
+        analysis = current_geo_analysis.get()
+        return generate_geo_report(df, ai_analysis=analysis)
 
     # --- DESCARGA: REPORTE DE RED FINANCIERA ---
     @render.download(
@@ -2170,7 +2146,160 @@ def server(input, output, session):
             os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Anal\u00edtico", "financial_network_data.csv")
         )
         df = pd.read_csv(csv_path) if os.path.exists(csv_path) else pd.DataFrame()
-        return generate_network_report(df)
+        analysis = current_network_analysis.get()
+        return generate_network_report(df, ai_analysis=analysis)
+
+    # --- REACTIVOS DE ANÁLISIS CON IA (GEO Y FINANCIERO) ---
+    @render.ui
+    def financial_sidebar_ui():
+        analysis = current_network_analysis.get()
+        if not analysis:
+            return ui.div(
+                ui.h4("Anatomía Financiera", style="color:#10b981; font-weight:bold; margin-bottom:15px;"),
+                ui.markdown("""
+**Cuentas Ciegas (Tier 1):**
+J.P. Morgan y Deutsche Bank proveyeron la infraestructura para flujos masivos de liquidez.
+                        
+**El Escudo Corporativo (Tier 2):**
+Entidades offshore como *Financial Trust Co.* y *Liquid Funding Ltd.* operando bajo la laxa jurisdicción de las Islas Vírgenes para mover capital sin trazabilidad directa.
+                        
+**Ejecutores (Tier 3):**
+Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrás de la creación de las LLCs (Sociedades de Responsabilidad Limitada) para adquirir propiedades e inyectar fondos.
+                """),
+                ui.hr(style="border-color: rgba(16, 185, 129, 0.3); margin: 1rem 0;"),
+                ui.input_action_button("financial_ai_btn", "Generar Análisis de Red con IA", class_="btn-success", style="background:#10b981; border:none; padding:10px; font-weight:bold; width:100%; color:#ffffff;"),
+                ui.div(style="height: 10px;"),
+                ui.download_button("download_network_report", "Descargar Reporte Simple", class_="btn-primary", style="background:rgba(168,85,247,0.3); border:1px solid #a855f7; height:40px; font-weight:bold; width:100%;"),
+                style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(16,185,129,0.3); color:#e5e0eb; height:100%; display: flex; flex-direction: column;"
+            )
+        else:
+            return ui.div(
+                ui.h4("Análisis Forense con IA", style="color:#06b6d4; font-weight:bold; margin-bottom:15px;"),
+                ui.div(
+                    ui.markdown(analysis),
+                    style="max-height: 380px; overflow-y: auto; font-size: 0.9em; margin-bottom: 15px; padding-right: 5px; line-height:1.5;"
+                ),
+                ui.hr(style="border-color: rgba(6, 182, 212, 0.3); margin: 1rem 0;"),
+                ui.download_button("download_network_report", "Descargar Reporte Completo (PDF)", class_="btn-primary", style="background:#a855f7; border:none; height:45px; font-weight:bold; width:100%;"),
+                ui.div(style="height: 10px;"),
+                ui.input_action_button("financial_reset_btn", "Restablecer", class_="btn-secondary", style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); padding:6px; font-size:0.8rem; width:100%; color:#e5e0eb;"),
+                style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%; display: flex; flex-direction: column;"
+            )
+
+    @reactive.effect
+    @reactive.event(input.financial_ai_btn)
+    async def _generate_financial_analysis():
+        import pandas as pd
+        csv_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico", "financial_network_data.csv")
+        )
+        data_summary = ""
+        if os.path.exists(csv_path):
+            df = pd.read_csv(csv_path)
+            vínculos = []
+            for _, r in df.iterrows():
+                vínculos.append(f"- {r.get('source')} está vinculado con {r.get('target')} vía: {r.get('type')}")
+            data_summary = "\n".join(vínculos)
+            
+        import providers
+        import logic
+        model = providers.DEFAULT_MODEL
+        system_prompt = (
+            "Eres un analista de inteligencia financiera forense. Escribe un análisis exhaustivo y profesional "
+            "(máximo 3 párrafos cortos) de la red de corporaciones fachada offshore y cuentas bancarias "
+            "del caso Epstein a partir de los datos provistos. Conecta el rol de los ejecutores "
+            "legales/financieros (Darren Indyke, Richard Kahn) y fundaciones de fachada con los grandes "
+            "bancos (JPMorgan, Deutsche Bank). Sé directo, sobrio y analítico. No uses emojis ni introducciones genéricas."
+        )
+        
+        prompt = f"Datos relacionales de la red:\n{data_summary}\n\nEscribe el informe analítico de inteligencia corporativa."
+        
+        try:
+            current_network_analysis.set("Generando informe analítico con inteligencia artificial... Por favor espera.")
+            ai_text = await logic.call_llm_async(model, system_prompt, prompt)
+            current_network_analysis.set(ai_text)
+        except Exception as e:
+            current_network_analysis.set(f"Error al generar análisis con IA: {str(e)}")
+
+    @reactive.effect
+    @reactive.event(input.financial_reset_btn)
+    def _reset_financial_analysis():
+        current_network_analysis.set(None)
+
+    @render.ui
+    def geo_sidebar_ui():
+        analysis = current_geo_analysis.get()
+        if not analysis:
+            return ui.div(
+                ui.h4("Análisis de Rutas", style="color:#06b6d4; font-weight:bold; margin-bottom:15px;"),
+                ui.markdown("""
+**Little St. James (USVI):** Identificada en los registros de vuelo como el destino principal y punto ciego legal.
+                        
+**Palm Beach / NY:** Nodos primarios de operación y reclutamiento según las bitácoras del *Lolita Express*.
+                        
+**Zorro Ranch (NM):** Instalación aislada de alta seguridad con infraestructura de aterrizaje privada.
+                        
+**Conexiones Transatlánticas:** Los saltos entre NY, París y Londres documentan el alcance internacional de las operaciones de tráfico con miembros de la élite europea.
+                """),
+                ui.hr(style="border-color: rgba(6, 182, 212, 0.3); margin: 1rem 0;"),
+                ui.input_action_button("geo_ai_btn", "Generar Análisis de Cobertura con IA", class_="btn-success", style="background:#06b6d4; border:none; padding:10px; font-weight:bold; width:100%; color:#ffffff;"),
+                ui.div(style="height: 10px;"),
+                ui.download_button("download_geo_report", "Descargar Reporte Simple", class_="btn-primary", style="background:rgba(168,85,247,0.3); border:1px solid #a855f7; height:40px; font-weight:bold; width:100%;"),
+                style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%; display: flex; flex-direction: column;"
+            )
+        else:
+            return ui.div(
+                ui.h4("Análisis de Cobertura con IA", style="color:#06b6d4; font-weight:bold; margin-bottom:15px;"),
+                ui.div(
+                    ui.markdown(analysis),
+                    style="max-height: 380px; overflow-y: auto; font-size: 0.9em; margin-bottom: 15px; padding-right: 5px; line-height:1.5;"
+                ),
+                ui.hr(style="border-color: rgba(6, 182, 212, 0.3); margin: 1rem 0;"),
+                ui.download_button("download_geo_report", "Descargar Reporte Completo (PDF)", class_="btn-primary", style="background:#a855f7; border:none; height:45px; font-weight:bold; width:100%;"),
+                ui.div(style="height: 10px;"),
+                ui.input_action_button("geo_reset_btn", "Restablecer", class_="btn-secondary", style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); padding:6px; font-size:0.8rem; width:100%; color:#e5e0eb;"),
+                style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%; display: flex; flex-direction: column;"
+            )
+
+    @reactive.effect
+    @reactive.event(input.geo_ai_btn)
+    async def _generate_geo_analysis():
+        import pandas as pd
+        csv_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Analítico", "geospatial_data.csv")
+        )
+        data_summary = ""
+        if os.path.exists(csv_path):
+            df = pd.read_csv(csv_path)
+            puntos = []
+            for _, r in df.iterrows():
+                puntos.append(f"- {r.get('name')} (Tipo: {r.get('type')}) - {r.get('desc')} - Menciones: {r.get('mentions')}")
+            data_summary = "\n".join(puntos)
+            
+        import providers
+        import logic
+        model = providers.DEFAULT_MODEL
+        system_prompt = (
+            "Eres un analista de geointeligencia y logística. Escribe un reporte de análisis de cobertura "
+            "(máximo 3 párrafos cortos) de la red internacional de locaciones y operaciones aéreas "
+            "del caso Epstein a partir de los datos. Discute la importancia geográfica de la isla "
+            "Little St. James (Islas Vírgenes), el rancho Zorro Ranch (Nuevo México), y las residencias de "
+            "NY y Palm Beach. Sé directo, sobrio y analítico. Sin emojis ni saludos."
+        )
+        
+        prompt = f"Datos de locaciones geográficas:\n{data_summary}\n\nEscribe el informe de geointeligencia logística."
+        
+        try:
+            current_geo_analysis.set("Generando análisis de geointeligencia con IA... Por favor espera.")
+            ai_text = await logic.call_llm_async(model, system_prompt, prompt)
+            current_geo_analysis.set(ai_text)
+        except Exception as e:
+            current_geo_analysis.set(f"Error al generar análisis con IA: {str(e)}")
+
+    @reactive.effect
+    @reactive.event(input.geo_reset_btn)
+    def _reset_geo_analysis():
+        current_geo_analysis.set(None)
 
     @render.ui
     @reactive.event(input.audit_btn)

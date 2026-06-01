@@ -151,7 +151,7 @@ def generate_dashboard_report(metrics_dict, output_dir="www/reports"):
     pdf.output(filepath)
     return filepath
 
-def generate_network_report(df_network, output_dir="www/reports"):
+def generate_network_report(df_network, ai_analysis=None, output_dir="www/reports"):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     pdf = ReportPDF()
@@ -161,6 +161,13 @@ def generate_network_report(df_network, output_dir="www/reports"):
     pdf.chapter_title("ESTRUCTURA DE RED CORPORATIVA FINANCIERA", color=(168, 85, 247))
     pdf.ln(5)
     
+    if ai_analysis:
+        pdf.chapter_title("ANÁLISIS DE INTELIGENCIA DE LA IA", color=(6, 182, 212))
+        pdf.chapter_body(ai_analysis)
+        pdf.ln(5)
+        pdf.chapter_title("DETALLE DE TRANSACCIONES Y VÍNCULOS", color=(168, 85, 247))
+        pdf.ln(2)
+        
     pdf.set_font("helvetica", "B", 10)
     pdf.set_fill_color(220, 220, 220)
     pdf.cell(60, 8, "Entidad Origen", border=1, fill=True)
@@ -181,7 +188,7 @@ def generate_network_report(df_network, output_dir="www/reports"):
     pdf.output(filepath)
     return filepath
 
-def generate_geo_report(df_geo, output_dir="www/reports"):
+def generate_geo_report(df_geo, ai_analysis=None, output_dir="www/reports"):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     pdf = ReportPDF()
@@ -191,6 +198,13 @@ def generate_geo_report(df_geo, output_dir="www/reports"):
     pdf.chapter_title("INTELIGENCIA GEOESPACIAL: LOCACIONES CLAVE", color=(16, 185, 129))
     pdf.ln(5)
     
+    if ai_analysis:
+        pdf.chapter_title("ANÁLISIS DE COBERTURA GEOESPACIAL CON IA", color=(6, 182, 212))
+        pdf.chapter_body(ai_analysis)
+        pdf.ln(5)
+        pdf.chapter_title("REGISTRO DE LOCACIONES CLAVE", color=(16, 185, 129))
+        pdf.ln(2)
+        
     pdf.set_font("helvetica", "B", 10)
     pdf.set_fill_color(220, 220, 220)
     pdf.cell(60, 8, "Locación", border=1, fill=True)
