@@ -770,6 +770,13 @@ Si dos nodos (personas) están conectados, significa que sus nombres fueron docu
 
 **Nodos (Personas):** El tamaño representa su peso total en los documentos.
 **Aristas (Líneas):** El grosor indica la frecuencia de aparición simultánea (co-ocurrencia).
+
+**Código de Colores:**
+- **Rojo:** Núcleo de la investigación (Epstein, Maxwell).
+- **Celeste:** Víctimas, testigos y denunciantes clave (Virginia Giuffre, etc.).
+- **Dorado:** Políticos y figuras públicas de alto perfil (Clinton, Trump, etc.).
+- **Morado:** Prominentes asociados e individuos de interés legal/social.
+- **Gris:** Otras entidades o vínculos secundarios.
                         """),
                         style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(192,132,252,0.3); color:#e5e0eb; height:100%;"
                     ),
@@ -1278,10 +1285,31 @@ def server(input, output, session):
         
         # Crear grafo de NetworkX
         G = nx.Graph()
+        
+        # Clasificación semántica de actores para colores consistentes y significativos
+        node_colors = {
+            "Jeffrey Epstein": "#f43f5e",
+            "Ghislaine Maxwell": "#f43f5e",
+            "Virginia Giuffre": "#06b6d4",
+            "Annie Farmer": "#06b6d4",
+            "Johanna Sjoberg": "#06b6d4",
+            "Bill Clinton": "#eab308",
+            "Donald Trump": "#eab308",
+            "Al Gore": "#eab308",
+            "Prince Andrew": "#eab308",
+            "Stephen Hawking": "#a855f7",
+            "David Copperfield": "#a855f7",
+            "Alan Dershowitz": "#a855f7",
+            "Kevin Spacey": "#a855f7",
+            "Leslie Wexner": "#a855f7",
+            "Jean-Luc Brunel": "#a855f7",
+        }
+        
         for p1, p2, freq in filtered:
-            # Añadir nodos con tamaño basado en grado
-            G.add_node(p1, title=p1, color="#f43f5e")
-            G.add_node(p2, title=p2, color="#06b6d4")
+            c1 = node_colors.get(p1, "#9ca3af")
+            c2 = node_colors.get(p2, "#9ca3af")
+            G.add_node(p1, title=p1, color=c1)
+            G.add_node(p2, title=p2, color=c2)
             # Añadir arista con peso
             G.add_edge(p1, p2, value=freq, title=f"Co-ocurrencias: {freq}", color="rgba(255,255,255,0.2)")
             
@@ -1292,7 +1320,7 @@ def server(input, output, session):
             
         # Crear red interactiva de PyVis (Altura aumentada a 650px para pantalla completa)
         net = Network(height="650px", width="100%", bgcolor="#0b090f", font_color="#e5e0eb", select_menu=False)
-        # Opciones de física para que parezca una red neuronal/criminal
+        # Opciones de física para que parezca una red neuronal/criminal espaciosa y legible
         net.set_options("""
         var options = {
           "nodes": {
@@ -1313,10 +1341,10 @@ def server(input, output, session):
           },
           "physics": {
             "forceAtlas2Based": {
-              "gravitationalConstant": -50,
-              "centralGravity": 0.01,
-              "springLength": 100,
-              "springConstant": 0.08
+              "gravitationalConstant": -180,
+              "centralGravity": 0.015,
+              "springLength": 160,
+              "springConstant": 0.05
             },
             "maxVelocity": 50,
             "solver": "forceAtlas2Based",
