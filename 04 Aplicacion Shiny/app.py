@@ -1122,6 +1122,17 @@ def server(input, output, session):
                     )
                 ),
                 col_widths=[6, 6]
+            ),
+            
+            ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
+            ui.div(
+                ui.download_button(
+                    "download_dashboard_report", 
+                    "Descargar Reporte Ejecutivo del Dashboard (PDF)", 
+                    class_="btn-primary", 
+                    style="background:#10b981; border:none; height:45px; font-weight:bold; font-size:1rem; width:100%; max-width:400px; display:inline-block;"
+                ),
+                style="text-align: center; padding-bottom: 20px;"
             )
         )
 
