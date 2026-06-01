@@ -697,7 +697,18 @@ app_ui = ui.page_sidebar(
             )
         ),
         
-        # TAB 6: Olvera AI (AI Chatbot)
+        # TAB 6: Mapeo Financiero (Shadow Network)
+        ui.nav_panel(
+            "🕸️ Red Financiera",
+            ui.div(
+                ui.h3("Shadow Network (Grafo Corporativo)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
+                ui.p("Grafo interactivo de relaciones financieras, empresas fachada (LLCs) y actores clave que facilitaron el flujo de dinero en la organización.", style="color:#bfaec2; margin-bottom:25px;"),
+                ui.output_ui("shadow_network_ui"),
+                style="padding: 20px;"
+            )
+        ),
+        
+        # TAB 7: Olvera AI (AI Chatbot)
         ui.nav_panel(
             "Olvera AI",
             ui.div(
@@ -1891,6 +1902,21 @@ def server(input, output, session):
             return ui.HTML(f"<div style='border-radius:12px; overflow:hidden; border:1px solid rgba(168,85,247,0.5); box-shadow:0 10px 30px rgba(0,0,0,0.5);'>{map_html}</div>")
         except Exception as e:
             return ui.HTML(f"<div style='color:#f43f5e;'>Error renderizando mapa: {str(e)}</div>")
+
+    @render.ui
+    def shadow_network_ui():
+        try:
+            from network_generator import generate_shadow_network
+            html_path = generate_shadow_network()
+            src_path = html_path.replace("www/", "")
+            return ui.tags.iframe(
+                src=src_path,
+                width="100%",
+                height="650px",
+                style="border:none; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); background:#0b090f;"
+            )
+        except Exception as e:
+            return ui.HTML(f"<div style='color:#f43f5e;'>Error renderizando red: {str(e)}</div>")
 
     @render.download(
         filename=lambda: f"Reporte_Evidencia_{input.search_query()}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
