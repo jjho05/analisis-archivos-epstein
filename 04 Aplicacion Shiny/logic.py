@@ -325,3 +325,14 @@ async def transcribe_audio(b64_data: str) -> str:
     except Exception as e:
         print(f"Error en transcripción: {e}")
         return ""
+
+async def call_llm_async(model: str, system_prompt: str, user_prompt: str) -> str:
+    """Invoca al LLM y retorna la respuesta completa como string (sin streaming)."""
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt}
+    ]
+    chunks = []
+    async for chunk in stream_chat_response(messages, model):
+        chunks.append(chunk)
+    return "".join(chunks)
