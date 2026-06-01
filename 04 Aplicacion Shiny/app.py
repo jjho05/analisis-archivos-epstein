@@ -1970,11 +1970,20 @@ def server(input, output, session):
             
         full_text = results["text"]
         import re
-        pages_raw = re.split(r'---\s*P[ÁA]GINA\s+\d+\s*---', full_text)
-        pages = [p.strip() for p in pages_raw if p.strip()]
-        
-        if not pages:
-            return ui.HTML("<div style='color:#bfaec2;'>El documento está vacío.</div>")
+        # Extraer páginas conservando su numeración original para geolocalización de citas
+        parts = re.split(r'---\s*P[ÁA]GINA\s+(\d+)\s*---', full_text)
+        pages_list = []
+        for i in range(1, len(parts), 2):
+            if i + 1 < len(parts):
+                page_num = parts[i]
+                page_text = parts[i+1].strip()
+                if page_text:
+                    pages_list.append({"page": page_num, "text": page_text})
+                    
+        if not pages_list:
+            return ui.HTML("<div style='color:#bfaec2;'>El documento está vacío o no tiene la estructura de páginas esperada.</div>")
+            
+        pages = [p["text"] for p in pages_list]
             
         from sklearn.feature_extraction.text import TfidfVectorizer
         from sklearn.metrics.pairwise import cosine_similarity
@@ -1994,6 +2003,7 @@ def server(input, output, session):
             for idx in top_indices:
                 score = similarities[idx]
                 if score > 0.05:  # Umbral mínimo de relevancia
+                    page_num = pages_list[idx]["page"]
                     # Limpieza de transcripción cruda (quitar confidencialidad sin borrar el texto)
                     clean_text = pages[idx]
                     clean_text = re.sub(r'Highly Confidential', '', clean_text, flags=re.IGNORECASE)
@@ -2022,9 +2032,13 @@ def server(input, output, session):
                     collected_snippets.append(snippet)
                     ui_elements.append(
                         ui.div(
-                            ui.div(f"Relevancia: {score:.2f}  Fragmento Documental", style="color:#a855f7; font-weight:bold; font-size:0.9em; margin-bottom:10px;"),
+                            ui.div(
+                                ui.HTML(f'<span style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.8rem;">{score*100:.1f}% de Similitud Semántica</span>'),
+                                ui.HTML(f'<span style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.4); padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; margin-left: 8px;">Página {page_num}</span>'),
+                                style="margin-bottom: 12px; display: flex; align-items: center;"
+                            ),
                             ui.markdown(snippet.strip()),
-                            style="background:#161224; border-left:4px solid #a855f7; padding:15px; margin-bottom:15px; border-radius:4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color:#e5e0eb; font-size:0.95em; line-height:1.6;"
+                            style="background:#161224; border-left:4px solid #a855f7; padding:20px; margin-bottom:15px; border-radius:8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); color:#e5e0eb; font-size:0.95em; line-height:1.6;"
                         )
                     )
             
