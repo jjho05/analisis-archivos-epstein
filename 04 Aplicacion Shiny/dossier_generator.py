@@ -12,12 +12,12 @@ class DossierPDF(FPDF):
         self.set_font("helvetica", "B", 20)
         self.set_text_color(168, 85, 247) # Púrpura brillante
         self.set_y(10)
-        self.cell(0, 10, "DOSSIER EJECUTIVO DE INTELIGENCIA", border=0, align="L", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 10, "REPORTE DE ANÁLISIS DE EVIDENCIA", border=0, align="L", new_x="LMARGIN", new_y="NEXT")
         
         # Subtítulo
         self.set_font("helvetica", "I", 11)
         self.set_text_color(229, 224, 235)
-        self.cell(0, 6, "Sistema Analítico Desclasificado - Proyecto Final", border=0, align="L", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 6, "Sistema Analítico Desclasificado", border=0, align="L", new_x="LMARGIN", new_y="NEXT")
         
         # Línea separadora
         self.set_draw_color(6, 182, 212) # Cyan
@@ -29,7 +29,7 @@ class DossierPDF(FPDF):
         self.set_y(-15)
         self.set_font("helvetica", "I", 8)
         self.set_text_color(128, 128, 128)
-        self.cell(0, 10, f"Documento Generado por IA Analítica | Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Página {self.page_no()}/{{nb}}", align="C")
+        self.cell(0, 10, f"Documento Forense Generado Automáticamente | Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Página {self.page_no()}/{{nb}}", align="C")
 
     def chapter_title(self, title, color=(6, 182, 212)):
         self.set_font("helvetica", "B", 14)
@@ -81,11 +81,11 @@ def generate_dossier(target_person, ai_summary, snippets, metrics_dict, output_d
     pdf.ln(5)
     
     # Sección 2: Resumen Ejecutivo
-    pdf.chapter_title("2. SÍNTESIS EJECUTIVA DE LA INTELIGENCIA ARTIFICIAL", color=(168, 85, 247))
+    pdf.chapter_title("2. SÍNTESIS DE LA INVESTIGACIÓN", color=(168, 85, 247))
     pdf.chapter_body(ai_summary)
     
     # Sección 3: Fragmentos Evidenciales
-    pdf.chapter_title("3. EXTRACTOS JUDICIALES CRUDOS (EVIDENCIA)")
+    pdf.chapter_title("3. EXTRACTOS JUDICIALES CRUDOS (EVIDENCIA DIRECTA)")
     
     for idx, snip in enumerate(snippets):
         pdf.set_font("helvetica", "B", 10)

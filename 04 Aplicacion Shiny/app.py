@@ -657,7 +657,7 @@ app_ui = ui.page_sidebar(
                     ui.input_action_button("search_btn", "🔍 Buscar", class_="btn-primary", style="margin-top:24px; background:#a855f7; border:none; height:40px;"),
                     ui.panel_conditional(
                         "input.search_btn > 0",
-                        ui.download_button("download_dossier", "📄 Exportar Dossier", class_="btn-primary", style="margin-top:24px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;")
+                        ui.download_button("download_report", "📄 Descargar Reporte de Evidencia", class_="btn-primary", style="margin-top:24px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;")
                     ),
                     col_widths=[8, 2, 2]
                 ),
@@ -1893,9 +1893,9 @@ def server(input, output, session):
             return ui.HTML(f"<div style='color:#f43f5e;'>Error renderizando mapa: {str(e)}</div>")
 
     @render.download(
-        filename=lambda: f"Dossier_Forense_{input.search_query()}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+        filename=lambda: f"Reporte_Evidencia_{input.search_query()}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
     )
-    def download_dossier():
+    def download_report():
         data = current_dossier_data.get()
         if not data:
             return ""
