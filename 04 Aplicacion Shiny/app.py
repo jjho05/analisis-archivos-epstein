@@ -892,6 +892,7 @@ def server(input, output, session):
     ])
     current_report_data = reactive.Value(None)
     current_audit_data = reactive.Value(None)
+    is_empty = reactive.Value(True)
     chat = ui.Chat(id="chat")
 
     # Obtener el motor de procesamiento para el archivo seleccionado
