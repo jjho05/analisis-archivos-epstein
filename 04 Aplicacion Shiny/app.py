@@ -634,10 +634,6 @@ app_ui = ui.page_sidebar(
         ui.nav_panel(
             "Dashboard Analítico",
             ui.div(
-                ui.div(
-                    ui.download_button("download_dashboard_report", "Descargar Dossier del Dashboard", class_="btn-primary", style="margin-bottom:15px; background:#10b981; border:none; height:40px; font-weight:bold;"),
-                    style="text-align: right;"
-                ),
                 ui.output_ui("analytic_dashboard_ui")
             )
         ),
@@ -713,7 +709,7 @@ app_ui = ui.page_sidebar(
                         
 **Conexiones Transatlánticas:** Los saltos entre NY, París y Londres documentan el alcance internacional de las operaciones de tráfico con miembros de la élite europea.
                         """),
-                        ui.download_button("download_geo_report", "Descargar Inteligencia Geoespacial", class_="btn-primary", style="margin-top:20px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;"),
+                    ui.download_button("download_geo_report", "Descargar Reporte Geoespacial", class_="btn-primary", style="margin-top:20px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;"),
                         style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%;"
                     ),
                     col_widths=[8, 4]
@@ -742,7 +738,7 @@ Entidades offshore como *Financial Trust Co.* y *Liquid Funding Ltd.* operando b
 **Ejecutores (Tier 3):**
 Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrás de la creación de las LLCs (Sociedades de Responsabilidad Limitada) para adquirir propiedades e inyectar fondos.
                         """),
-                        ui.download_button("download_network_report", "Descargar Red Financiera", class_="btn-primary", style="margin-top:20px; background:#a855f7; border:none; height:40px; font-weight:bold; width:100%;"),
+                        ui.download_button("download_network_report", "Descargar Reporte de Red Financiera", class_="btn-primary", style="margin-top:20px; background:#a855f7; border:none; height:40px; font-weight:bold; width:100%;"),
                         style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(16,185,129,0.3); color:#e5e0eb; height:100%;"
                     ),
                     col_widths=[9, 3]
@@ -1113,6 +1109,10 @@ def server(input, output, session):
                     )
                 ),
                 col_widths=[6, 6]
+            ),
+            ui.div(
+                ui.download_button("download_dashboard_report", "Descargar Reporte del Dashboard", class_="btn-primary", style="margin-top:20px; background:#10b981; border:none; height:40px; font-weight:bold; float:right;"),
+                style="overflow:hidden; padding-bottom:10px;"
             )
         )
 
