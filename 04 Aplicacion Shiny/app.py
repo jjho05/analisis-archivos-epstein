@@ -1813,11 +1813,40 @@ def server(input, output, session):
         # esperamos la respuesta de la IA.
         try:
             results = extraction_results()
-            context = results["text"][:3500] if results else "Contexto no disponible."
-            
             focus = input.audit_focus()
             target = input.audit_target()
             strictness = input.audit_strictness()
+            
+            context = "Contexto no disponible."
+            if results and results.get("text"):
+                full_text = results["text"]
+                import re
+                pages_raw = re.split(r'---\s*P[ÁA]GINA\s+\d+\s*---', full_text)
+                pages = [p.strip() for p in pages_raw if p.strip()]
+                
+                if pages:
+                    search_query = f"{focus} {target if target != 'Todos' else ''}"
+                    from sklearn.feature_extraction.text import TfidfVectorizer
+                    from sklearn.metrics.pairwise import cosine_similarity
+                    
+                    try:
+                        vectorizer = TfidfVectorizer(stop_words='english', max_df=0.85)
+                        tfidf_matrix = vectorizer.fit_transform(pages)
+                        query_vec = vectorizer.transform([search_query])
+                        similarities = cosine_similarity(query_vec, tfidf_matrix).flatten()
+                        
+                        top_indices = similarities.argsort()[-5:][::-1] # 5 páginas más relevantes
+                        relevant_pages = [pages[idx] for idx in top_indices if similarities[idx] > 0.01]
+                        
+                        if relevant_pages:
+                            # Limitar el contexto a unos ~12,000 caracteres para evitar limites de token
+                            context_raw = "\n\n...[SALTO DE PÁGINA]...\n\n".join(relevant_pages)
+                            context = context_raw[:12000]
+                        else:
+                            context = "No se encontraron fragmentos relevantes para auditar con esos parámetros."
+                    except Exception as e:
+                        print(f"Error de vectorización en auditor: {e}")
+                        context = pages[0][:4000]
             
             system_prompt = (
                 f"Eres un Agente Analítico de Inteligencia Lógica. Nivel de severidad: {strictness}. "
