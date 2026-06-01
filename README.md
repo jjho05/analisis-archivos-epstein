@@ -43,16 +43,16 @@ El pipeline está diseñado bajo un enfoque modular y altamente optimizado en 4 
 
 ```mermaid
 graph TD
-    A[01 Datasets Usados] -->Epstein_documents.pdf B[02 Preprocesamiento]
-    B -->preprocessing.py C[consolidated_cleaned_text.txt 7.6MB]
-    C -->analytic_processing.py D[03 Procesamiento Analítico]
-    D -->Cálculo de Densidades y Co-ocurrencias E[CSV Datasets Precalculados]
-    E -->Lectura instantánea sin delay F[04 Aplicacion Shiny]
-    F -->Shiny App + Olvera AI Copilot G[Hugging Face / Localhost]
-    F -->Grafo Interactivo 3D H[Red Criminal PyVis]
-    F -->RAG Search I[Motor TF-IDF]
-    F -->Agente Lógico J[Auditor de Contradicciones]
-    F -->Mapeo Folium K[Inteligencia Geoespacial]
+    A[01 Datasets Usados] -->|Epstein_documents.pdf| B[02 Preprocesamiento]
+    B -->|preprocessing.py| C[consolidated_cleaned_text.txt 7.6MB]
+    C -->|analytic_processing.py| D[03 Procesamiento Analítico]
+    D -->|Cálculo de Densidades y Co-ocurrencias| E[CSV Datasets Precalculados]
+    E -->|Lectura instantánea sin delay| F[04 Aplicacion Shiny]
+    F -->|Shiny App + Olvera AI Copilot| G[Hugging Face / Localhost]
+    F -->|Grafo Interactivo 3D| H[Red Criminal PyVis]
+    F -->|RAG Search| I[Motor TF-IDF]
+    F -->|Agente Lógico| J[Auditor de Contradicciones]
+    F -->|Mapeo Folium| K[Inteligencia Geoespacial]
 ```
 
 ##  Innovaciones de Grado Arquitectura
