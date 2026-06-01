@@ -782,6 +782,7 @@ Si dos nodos (personas) están conectados, significa que sus nombres fueron docu
                     ),
                     col_widths=[8, 4]
                 ),
+                ui.output_ui("co_occur_metrics_ui"),
                 style="padding: 20px;"
             )
         ),
@@ -1385,6 +1386,123 @@ def server(input, output, session):
         escaped_html = html.escape(html_content)
         
         return ui.HTML(f"<iframe srcdoc='{escaped_html}' style='width:100%; height:650px; border:none; border-radius:10px; background:#0b090f;'></iframe>")
+
+    @render.ui
+    def co_occur_metrics_ui():
+        results = extraction_results()
+        if not results or not results["metrics"].get("top_co_occurrences"):
+            return ui.div()
+            
+        top_co = results["metrics"]["top_co_occurrences"]
+        selected = list(input.selected_persons())
+        filtered = []
+        for pair, freq in top_co:
+            parts = pair.split(" & ")
+            if not selected or (len(parts) == 2 and (parts[0] in selected or parts[1] in selected)):
+                filtered.append((parts[0], parts[1], freq))
+                
+        if not filtered:
+            return ui.HTML("<div style='color:#bfaec2;text-align:center;padding:20px;'>Sin datos suficientes para calcular métricas</div>")
+            
+        import networkx as nx
+        import pandas as pd
+        
+        G = nx.Graph()
+        for p1, p2, freq in filtered:
+            G.add_node(p1)
+            G.add_node(p2)
+            G.add_edge(p1, p2, weight=freq)
+            
+        if len(G.nodes) == 0:
+            return ui.HTML("<div style='color:#bfaec2;text-align:center;padding:20px;'>Grafo vacío</div>")
+            
+        # Calcular métricas de NetworkX
+        deg_raw = dict(G.degree())
+        deg_cent = nx.degree_centrality(G)
+        try:
+            between_cent = nx.betweenness_centrality(G, weight='weight')
+        except Exception:
+            between_cent = nx.betweenness_centrality(G)
+        clustering_coef = nx.clustering(G)
+        
+        # Consolidar en un DataFrame
+        metrics_data = []
+        for node in G.nodes():
+            metrics_data.append({
+                "Personaje": node,
+                "Conexiones": deg_raw.get(node, 0),
+                "Centralidad_Grado": deg_cent.get(node, 0.0),
+                "Centralidad_Intermediacion": between_cent.get(node, 0.0),
+                "Coeficiente_Agrupacion": clustering_coef.get(node, 0.0)
+            })
+            
+        df_metrics = pd.DataFrame(metrics_data)
+        # Ordenar por intermediación y conexiones descendente
+        df_metrics = df_metrics.sort_values(by=["Centralidad_Intermediacion", "Conexiones"], ascending=False).reset_index(drop=True)
+        
+        # Generar filas de la tabla HTML
+        table_rows = []
+        for idx, row in df_metrics.iterrows():
+            # Asignar color semántico coincidente con el grafo
+            node_colors = {
+                "Jeffrey Epstein": "#f43f5e",
+                "Ghislaine Maxwell": "#f43f5e",
+                "Virginia Giuffre": "#06b6d4",
+                "Annie Farmer": "#06b6d4",
+                "Johanna Sjoberg": "#06b6d4",
+                "Bill Clinton": "#eab308",
+                "Donald Trump": "#eab308",
+                "Al Gore": "#eab308",
+                "Prince Andrew": "#eab308",
+                "Stephen Hawking": "#a855f7",
+                "David Copperfield": "#a855f7",
+                "Alan Dershowitz": "#a855f7",
+                "Kevin Spacey": "#a855f7",
+                "Leslie Wexner": "#a855f7",
+                "Jean-Luc Brunel": "#a855f7",
+            }
+            color = node_colors.get(row['Personaje'], "#9ca3af")
+            
+            table_rows.append(f"""
+                <tr style="border-bottom: 1px solid rgba(168, 85, 247, 0.15); transition: background-color 0.2s;">
+                    <td style="padding: 12px 15px; font-weight: bold; color: {color};">{row['Personaje']}</td>
+                    <td style="padding: 12px 15px; text-align: center; color: #ffffff;">{row['Conexiones']}</td>
+                    <td style="padding: 12px 15px; text-align: center; color: #e5e0eb;">{row['Centralidad_Grado']:.3f}</td>
+                    <td style="padding: 12px 15px; text-align: center; color: #e5e0eb; font-weight: bold;">{row['Centralidad_Intermediacion']:.3f}</td>
+                    <td style="padding: 12px 15px; text-align: center; color: #bfaec2;">{row['Coeficiente_Agrupacion']:.3f}</td>
+                </tr>
+            """)
+            
+        table_content = "".join(table_rows)
+        
+        html_markup = f"""
+        <div style="background: rgba(15, 11, 27, 0.85); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px; padding: 24px; color: #e5e0eb; margin-top: 15px;">
+            <h4 style="color: #c084fc; font-weight: bold; margin-bottom: 8px;">Métricas Avanzadas de Teoría de Grafos (Cálculo en Tiempo Real)</h4>
+            <p style="color: #bfaec2; font-size: 0.85rem; margin-bottom: 20px; line-height: 1.4;">
+                Estas métricas matemáticas describen cuantitativamente el rol estructural de cada actor en la red. 
+                <strong>Centralidad de Grado:</strong> Fracción de nodos a los que está conectado. 
+                <strong>Centralidad de Intermediación (Betweenness):</strong> Frecuencia con la que el actor actúa como puente en el camino más corto entre otros dos actores (indica control e influencia de flujos). 
+                <strong>Coeficiente de Agrupación (Clustering):</strong> Mide qué tan conectados están los vecinos de este actor entre sí (cohesión interna).
+            </p>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #a855f7; color: #a855f7; font-weight: bold;">
+                            <th style="padding: 12px 15px; text-align: left;">Personaje</th>
+                            <th style="padding: 12px 15px; text-align: center;">Conexiones Directas</th>
+                            <th style="padding: 12px 15px; text-align: center;">Centralidad de Grado</th>
+                            <th style="padding: 12px 15px; text-align: center;">Centralidad de Intermediación</th>
+                            <th style="padding: 12px 15px; text-align: center;">Coeficiente de Agrupación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {table_content}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        """
+        return ui.HTML(html_markup)
 
     @render.plot
     def timeline_chart():
