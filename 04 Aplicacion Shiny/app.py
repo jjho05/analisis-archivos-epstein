@@ -875,6 +875,28 @@ def server(input, output, session):
             
             ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.2rem 0;"),
             
+            # FILA "STREAMING" (Filtros Reactivos Estilo Pingüinos)
+            ui.layout_columns(
+                ui.div(
+                    ui.div(ui.output_text("out_conteo_streaming", inline=True), class_="kpi-value", style="font-size: 3.5rem; color: #34d399; font-weight: 900; line-height: 1; margin-bottom: 10px;"),
+                    ui.div("Total Menciones Filtradas", class_="kpi-title"),
+                    ui.div("Reactivo en Tiempo Real", style="font-size: 0.7rem; color: #7f8c8d; margin-top: 5px;"),
+                    class_="kpi-card", style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(52, 211, 153, 0.05); border-color: rgba(52, 211, 153, 0.3); padding: 30px;"
+                ),
+                ui.card(
+                    ui.card_header("Proporción de Red Filtrada (Donut Reactivo)"),
+                    ui.output_plot("plot_anillo_streaming"),
+                    ui.div(
+                        ui.div("🍩 STREAMING DE PROPORCIONES", class_="explanation-title"),
+                        ui.p("Gráfica de anillo interactiva que reacciona instantáneamente a los sliders y checkboxes del panel lateral."),
+                        class_="explanation-box"
+                    )
+                ),
+                col_widths=[4, 8]
+            ),
+            
+            ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.2rem 0;"),
+            
             # FILA DE GRÁFICOS 1 (Top 10 Personas y Co-ocurrencias)
             ui.layout_columns(
                 ui.card(
@@ -1172,6 +1194,66 @@ def server(input, output, session):
         ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
         
         plt.xticks(rotation=45)
+        plt.tight_layout()
+        return fig
+
+    @output
+    @render.text
+    def out_conteo_streaming():
+        results = extraction_results()
+        if not results or not results["metrics"].get("top_persons"):
+            return "0"
+        
+        top_persons = results["metrics"]["top_persons"]
+        selected = list(input.selected_persons())
+        min_m = input.min_mentions()
+        filtered = [item for item in top_persons if item[0] in selected and item[1] >= min_m]
+        
+        total_menciones = sum([item[1] for item in filtered])
+        return f"{total_menciones:,}"
+
+    @output
+    @render.plot
+    def plot_anillo_streaming():
+        results = extraction_results()
+        if not results or not results["metrics"].get("top_persons"):
+            fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
+            ax.set_facecolor('#0b090f')
+            ax.axis('off')
+            return fig
+            
+        top_persons = results["metrics"]["top_persons"]
+        selected = list(input.selected_persons())
+        min_m = input.min_mentions()
+        filtered = [item for item in top_persons if item[0] in selected and item[1] >= min_m]
+        
+        if not filtered:
+            fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
+            ax.set_facecolor('#0b090f')
+            ax.text(0.5, 0.5, "Sin resultados para los filtros", ha='center', va='center', color='#bfaec2', fontsize=9)
+            ax.axis('off')
+            return fig
+            
+        labels = [item[0] for item in filtered]
+        sizes = [item[1] for item in filtered]
+        
+        # Generar colores dinámicos
+        import matplotlib.cm as cm
+        import numpy as np
+        colors = cm.plasma(np.linspace(0.2, 0.9, len(labels)))
+        
+        fig, ax = plt.subplots(figsize=(5, 3.2), facecolor='#0b090f')
+        ax.set_facecolor('#0b090f')
+        
+        wedges, texts, autotexts = ax.pie(
+            sizes, labels=labels, colors=colors, autopct='%1.1f%%', 
+            startangle=90, textprops=dict(color='#bfaec2', size=8.5),
+            wedgeprops=dict(width=0.45, edgecolor='#0b090f', linewidth=2)
+        )
+        
+        plt.setp(autotexts, size=9, weight="bold", color="#ffffff")
+        plt.setp(texts, size=8.5)
+        
         plt.tight_layout()
         return fig
 
