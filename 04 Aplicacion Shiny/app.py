@@ -1958,5 +1958,6 @@ def server(input, output, session):
         except Exception as e:
             return ui.HTML(f"<div style='color:#f43f5e; padding:20px; background:#161224;'>Error del Agente: {str(e)}</div>")
 
+import os
 # Instanciar aplicación Shiny
-app = App(app_ui, server)
+app = App(app_ui, server, static_assets={"/": os.path.join(os.path.dirname(__file__), "www")})
