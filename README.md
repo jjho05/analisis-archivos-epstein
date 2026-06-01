@@ -179,6 +179,13 @@ for match in re.finditer(pat, page, re.IGNORECASE):
     context = re.sub(r'\s+', ' ', page[start:end]).strip()
 ```
 
+### Generación de Datasets Estructurados Auxiliares (CSV)
+Además de los archivos generados por NLP, la fase analítica simula un *Pipeline de Data Engineering* completo mediante la consolidación de dos conjuntos de datos clave en formato `.csv` ubicados en el directorio `03 Procesamiento Analítico`:
+- **`geospatial_data.csv`**: Agrega menciones y categoriza las ubicaciones más significativas del caso (ej. *Little St. James*, *Palm Beach*).
+- **`financial_network_data.csv`**: Estructura relaciones entidad-institución para modelar los flujos de capital entre actores y corporaciones offshore.
+
+Estos CSVs estructurados permiten desacoplar los datos en crudo de la visualización, permitiendo a la **Fase 4 (UI)** consumir la data limpia vía `pandas` sin bloqueos de procesamiento.
+
 ---
 
 ## 💻 Fase 4: Desarrollo del Dashboard e Inteligencia Artificial
