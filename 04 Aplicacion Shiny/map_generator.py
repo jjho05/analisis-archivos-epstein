@@ -1,16 +1,14 @@
 import folium
 from folium.plugins import MarkerCluster, HeatMap
 
+import os
+import pandas as pd
+
 def generate_geospatial_map():
-    # Coordenadas exactas de locaciones clave del caso
-    locations = [
-        {"name": "Little St. James (US Virgin Islands)", "lat": 18.3003, "lon": -64.8255, "type": "Isla Privada", "mentions": 1420, "desc": "Sede principal de operaciones clandestinas y presunto tráfico."},
-        {"name": "Palm Beach, Florida", "lat": 26.7056, "lon": -80.0364, "type": "Residencia Principal", "mentions": 850, "desc": "Punto de reclutamiento primario y red de masajistas."},
-        {"name": "Upper East Side, New York", "lat": 40.7736, "lon": -73.9566, "type": "Mansión", "mentions": 1100, "desc": "Epicentro de conexiones financieras y políticas. Mansión de 77th Street."},
-        {"name": "Zorro Ranch, New Mexico", "lat": 35.2500, "lon": -106.0167, "type": "Rancho Aislado", "mentions": 210, "desc": "Instalación aislada con pistas de aterrizaje privadas."},
-        {"name": "Paris, Francia", "lat": 48.8566, "lon": 2.3522, "type": "Apartamento", "mentions": 340, "desc": "Punto de conexión europea y base de operaciones internacionales."},
-        {"name": "London, Reino Unido", "lat": 51.5074, "lon": -0.1278, "type": "Encuentros", "mentions": 480, "desc": "Ubicación clave para reuniones con miembros de la élite europea."}
-    ]
+    # Leer datos geoespaciales desde el CSV estructurado
+    csv_path = os.path.join(os.path.dirname(__file__), "geospatial_data.csv")
+    df = pd.read_csv(csv_path)
+    locations = df.to_dict('records')
 
     # Crear el mapa base con estilo oscuro forense
     m = folium.Map(location=[35.0, -50.0], zoom_start=3, tiles="CartoDB dark_matter")

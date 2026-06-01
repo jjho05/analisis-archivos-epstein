@@ -1,0 +1,12 @@
+source,target,type,color,width
+Jeffrey Epstein,J.P. Morgan Chase,Financiamiento Principal,#06b6d4,4
+Jeffrey Epstein,Deutsche Bank,Cuentas Offshore,#06b6d4,4
+Jeffrey Epstein,Financial Trust Co.,LLC Controlada,#10b981,3
+Jeffrey Epstein,Liquid Funding Ltd.,LLC Controlada,#10b981,3
+Jeffrey Epstein,Darren Indyke,Ejecutor Legal,#f59e0b,3
+Jeffrey Epstein,Richard Kahn,Ejecutor Financiero,#f59e0b,3
+Darren Indyke,Financial Trust Co.,Administrador,#10b981,2
+Richard Kahn,Liquid Funding Ltd.,Administrador,#10b981,2
+J.P. Morgan Chase,Liquid Funding Ltd.,Flujo de Capital,#06b6d4,3
+Deutsche Bank,Southern Trust Co.,Flujo de Capital,#06b6d4,3
+Darren Indyke,St. Thomas LLC,Administrador,#10b981,2
