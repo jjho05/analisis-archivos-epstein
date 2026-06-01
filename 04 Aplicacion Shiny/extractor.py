@@ -396,7 +396,7 @@ class PDFExtractorEngine:
             word_freq[w] = word_freq.get(w, 0) + 1
         sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)[:10]
 
-        # 7. ANÁLISIS DE SENTIMIENTO Y RIESGO FORENSE POR PERSONA
+        # 7. ANÁLISIS DE SENTIMIENTO Y RIESGO ANALÍTICO POR PERSONA
         negative_lexicon = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking', 'forced', 'illegal', 'crime', 'complicit', 'rape', 'sex', 'underage', 'minor', 'coerced', 'conspiracy', 'fraud', 'prison', 'arrested', 'charged', 'suspicious'}
         positive_lexicon = {'innocent', 'consent', 'cleared', 'dismissed', 'approved', 'free', 'legal', 'agreed', 'friend', 'support', 'cooperate', 'lawful', 'voluntary', 'truth', 'protect'}
         

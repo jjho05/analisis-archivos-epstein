@@ -100,7 +100,7 @@ def sentiment_score(pos: int, neg: int) -> tuple:
 
 def main():
     print("=" * 70)
-    print("⚖️  PROCESAMIENTO FORENSE AVANZADO — GENERACIÓN DE DATASETS RICOS (PASO 3)")
+    print("⚖️  PROCESAMIENTO ANALÍTICO AVANZADO — GENERACIÓN DE DATASETS RICOS (PASO 3)")
     print("=" * 70)
 
     dataset_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "01 Datasets Usados"))
@@ -189,8 +189,8 @@ def main():
             print(f"   [+] Procesadas {i:,}/{total_pages:,} páginas ({i/total_pages:.0%})")
 
     df_pages = pd.DataFrame(page_rows)
-    df_pages.to_csv(os.path.join(out_dir, "forensic_01_paginas_granular.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: forensic_01_paginas_granular.csv — {len(df_pages):,} filas\n")
+    df_pages.to_csv(os.path.join(out_dir, "analytic_01_paginas_granular.csv"), index=False, encoding="utf-8")
+    print(f"   ✅ Guardado: analytic_01_paginas_granular.csv — {len(df_pages):,} filas\n")
 
     # ═══════════════════════════════════════════════════════════════════════════
     # DATASET 2: ANÁLISIS DE SENTIMIENTO Y RIESGO POR PERSONA
@@ -248,14 +248,14 @@ def main():
             "Indicador_Negativo": neg_total,
             "Indice_Sentimiento": score,
             "Clasificacion_Sentimiento": category,
-            "Indice_Riesgo_Forense": risk_total,
+            "Indice_Riesgo_Analítico": risk_total,
             "Evasiones_en_Paginas_con_Persona": evasion_on_pages,
             "Co_ocurrencias_con_Personas": "; ".join(cooccurrence_partners[:5])
         })
 
     df_persons = pd.DataFrame(person_rows).sort_values("Total_Menciones", ascending=False)
-    df_persons.to_csv(os.path.join(out_dir, "forensic_02_personas_sentimiento.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: forensic_02_personas_sentimiento.csv — {len(df_persons)} personas\n")
+    df_persons.to_csv(os.path.join(out_dir, "analytic_02_personas_sentimiento.csv"), index=False, encoding="utf-8")
+    print(f"   ✅ Guardado: analytic_02_personas_sentimiento.csv — {len(df_persons)} personas\n")
 
     # ═══════════════════════════════════════════════════════════════════════════
     # DATASET 3: REGISTRO DE EVASIONES VERBALES (instancia por instancia)
@@ -280,8 +280,8 @@ def main():
                 })
 
     df_evasions = pd.DataFrame(evasion_rows)
-    df_evasions.to_csv(os.path.join(out_dir, "forensic_03_evasiones_instancias.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: forensic_03_evasiones_instancias.csv — {len(df_evasions):,} filas\n")
+    df_evasions.to_csv(os.path.join(out_dir, "analytic_03_evasiones_instancias.csv"), index=False, encoding="utf-8")
+    print(f"   ✅ Guardado: analytic_03_evasiones_instancias.csv — {len(df_evasions):,} filas\n")
 
     # ═══════════════════════════════════════════════════════════════════════════
     # DATASET 4: MAPA DE REDACCIONES / CENSURA ([REDACTED] por página)
@@ -306,8 +306,8 @@ def main():
                 })
 
     df_redactions = pd.DataFrame(redaction_rows)
-    df_redactions.to_csv(os.path.join(out_dir, "forensic_04_censura_redacted.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: forensic_04_censura_redacted.csv — {len(df_redactions):,} filas\n")
+    df_redactions.to_csv(os.path.join(out_dir, "analytic_04_censura_redacted.csv"), index=False, encoding="utf-8")
+    print(f"   ✅ Guardado: analytic_04_censura_redacted.csv — {len(df_redactions):,} filas\n")
 
     # ═══════════════════════════════════════════════════════════════════════════
     # DATASET 5: LÍNEA DE TIEMPO — AÑO × PÁGINA × PERSONA
@@ -334,8 +334,8 @@ def main():
             })
 
     df_timeline = pd.DataFrame(timeline_rows).sort_values(["Año", "Pagina"])
-    df_timeline.to_csv(os.path.join(out_dir, "forensic_05_timeline_cronologica.csv"), index=False, encoding="utf-8")
-    print(f"   ✅ Guardado: forensic_05_timeline_cronologica.csv — {len(df_timeline):,} filas\n")
+    df_timeline.to_csv(os.path.join(out_dir, "analytic_05_timeline_cronologica.csv"), index=False, encoding="utf-8")
+    print(f"   ✅ Guardado: analytic_05_timeline_cronologica.csv — {len(df_timeline):,} filas\n")
 
     # ═══════════════════════════════════════════════════════════════════════════
     # DATASET 6: REPORTE ESTRUCTURAL JSON DE INVESTIGACIÓN
@@ -369,10 +369,10 @@ def main():
         "personas_analizadas": df_persons.to_dict(orient="records")
     }
     
-    json_path = os.path.join(out_dir, "forensic_report_full.json")
+    json_path = os.path.join(out_dir, "analytic_report_full.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report_json, f, indent=4, ensure_ascii=False)
-    print(f"   ✅ Guardado: forensic_report_full.json — Reporte Maestro\n")
+    print(f"   ✅ Guardado: analytic_report_full.json — Reporte Maestro\n")
 
     # ═══════════════════════════════════════════════════════════════════════════
     # REPORTE RESUMEN EN CONSOLA
@@ -382,16 +382,16 @@ def main():
     print("=" * 70)
     print(f"{'Dataset':<45} {'Filas':>8}")
     print("-" * 55)
-    print(f"{'forensic_01_paginas_granular.csv':<45} {len(df_pages):>8,}")
-    print(f"{'forensic_02_personas_sentimiento.csv':<45} {len(df_persons):>8,}")
-    print(f"{'forensic_03_evasiones_instancias.csv':<45} {len(df_evasions):>8,}")
-    print(f"{'forensic_04_censura_redacted.csv':<45} {len(df_redactions):>8,}")
-    print(f"{'forensic_05_timeline_cronologica.csv':<45} {len(df_timeline):>8,}")
+    print(f"{'analytic_01_paginas_granular.csv':<45} {len(df_pages):>8,}")
+    print(f"{'analytic_02_personas_sentimiento.csv':<45} {len(df_persons):>8,}")
+    print(f"{'analytic_03_evasiones_instancias.csv':<45} {len(df_evasions):>8,}")
+    print(f"{'analytic_04_censura_redacted.csv':<45} {len(df_redactions):>8,}")
+    print(f"{'analytic_05_timeline_cronologica.csv':<45} {len(df_timeline):>8,}")
     print("-" * 55)
     total_rows = len(df_pages) + len(df_persons) + len(df_evasions) + len(df_redactions) + len(df_timeline)
     print(f"{'TOTAL DE FILAS EN TODOS LOS DATASETS':<45} {total_rows:>8,}")
     print("=" * 70)
-    print("✅ PIPELINE DE EXPORTACIÓN FORENSE AVANZADO COMPLETADO")
+    print("✅ PIPELINE DE EXPORTACIÓN ANALÍTICO AVANZADO COMPLETADO")
     print("=" * 70)
 
 if __name__ == "__main__":

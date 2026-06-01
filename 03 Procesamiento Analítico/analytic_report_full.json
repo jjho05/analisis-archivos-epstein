@@ -28,7 +28,7 @@
             "Indicador_Negativo": 931,
             "Indice_Sentimiento": -0.294,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 516,
+            "Indice_Riesgo_Analítico": 516,
             "Evasiones_en_Paginas_con_Persona": 325,
             "Co_ocurrencias_con_Personas": "Ghislaine Maxwell(200); Virginia Giuffre(41); Prince Andrew(61); Bill Clinton(30); Donald Trump(3)"
         },
@@ -41,7 +41,7 @@
             "Indicador_Negativo": 408,
             "Indice_Sentimiento": -0.103,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 192,
+            "Indice_Riesgo_Analítico": 192,
             "Evasiones_en_Paginas_con_Persona": 78,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(200); Virginia Giuffre(73); Prince Andrew(36); Bill Clinton(22); Alan Dershowitz(36)"
         },
@@ -54,7 +54,7 @@
             "Indicador_Negativo": 117,
             "Indice_Sentimiento": 0.266,
             "Clasificacion_Sentimiento": "Neutral / Procedimental",
-            "Indice_Riesgo_Forense": 42,
+            "Indice_Riesgo_Analítico": 42,
             "Evasiones_en_Paginas_con_Persona": 22,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(41); Ghislaine Maxwell(73); Prince Andrew(14); Bill Clinton(5); Alan Dershowitz(7)"
         },
@@ -67,7 +67,7 @@
             "Indicador_Negativo": 180,
             "Indice_Sentimiento": -0.254,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 94,
+            "Indice_Riesgo_Analítico": 94,
             "Evasiones_en_Paginas_con_Persona": 83,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(61); Ghislaine Maxwell(36); Virginia Giuffre(14); Bill Clinton(13); Donald Trump(2)"
         },
@@ -80,7 +80,7 @@
             "Indicador_Negativo": 187,
             "Indice_Sentimiento": -0.234,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 77,
+            "Indice_Riesgo_Analítico": 77,
             "Evasiones_en_Paginas_con_Persona": 40,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(59); Ghislaine Maxwell(36); Virginia Giuffre(7); Prince Andrew(26); Bill Clinton(15)"
         },
@@ -93,7 +93,7 @@
             "Indicador_Negativo": 63,
             "Indice_Sentimiento": -0.135,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 45,
+            "Indice_Riesgo_Analítico": 45,
             "Evasiones_en_Paginas_con_Persona": 19,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(30); Ghislaine Maxwell(22); Virginia Giuffre(5); Prince Andrew(13); Donald Trump(4)"
         },
@@ -106,7 +106,7 @@
             "Indicador_Negativo": 49,
             "Indice_Sentimiento": 0.117,
             "Clasificacion_Sentimiento": "Neutral / Procedimental",
-            "Indice_Riesgo_Forense": 33,
+            "Indice_Riesgo_Analítico": 33,
             "Evasiones_en_Paginas_con_Persona": 13,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(21); Ghislaine Maxwell(28); Virginia Giuffre(3); Prince Andrew(8); Annie Farmer(5)"
         },
@@ -119,7 +119,7 @@
             "Indicador_Negativo": 29,
             "Indice_Sentimiento": -0.289,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 14,
+            "Indice_Riesgo_Analítico": 14,
             "Evasiones_en_Paginas_con_Persona": 7,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(11); Ghislaine Maxwell(3); Virginia Giuffre(1); Prince Andrew(3); Johanna Sjoberg(5)"
         },
@@ -132,7 +132,7 @@
             "Indicador_Negativo": 11,
             "Indice_Sentimiento": -0.294,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 10,
+            "Indice_Riesgo_Analítico": 10,
             "Evasiones_en_Paginas_con_Persona": 4,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(4); Ghislaine Maxwell(1); Prince Andrew(4); Bill Clinton(5); Alan Dershowitz(4)"
         },
@@ -145,7 +145,7 @@
             "Indicador_Negativo": 15,
             "Indice_Sentimiento": -0.304,
             "Clasificacion_Sentimiento": "Altamente Negativo",
-            "Indice_Riesgo_Forense": 10,
+            "Indice_Riesgo_Analítico": 10,
             "Evasiones_en_Paginas_con_Persona": 10,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(4); Ghislaine Maxwell(1); Prince Andrew(2); Alan Dershowitz(2); Kevin Spacey(2)"
         },
@@ -158,7 +158,7 @@
             "Indicador_Negativo": 8,
             "Indice_Sentimiento": -0.067,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 5,
+            "Indice_Riesgo_Analítico": 5,
             "Evasiones_en_Paginas_con_Persona": 4,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(3); Prince Andrew(2); Bill Clinton(4); Alan Dershowitz(3)"
         },
@@ -171,7 +171,7 @@
             "Indicador_Negativo": 4,
             "Indice_Sentimiento": 0.0,
             "Clasificacion_Sentimiento": "Neutral / Procedimental",
-            "Indice_Riesgo_Forense": 2,
+            "Indice_Riesgo_Analítico": 2,
             "Evasiones_en_Paginas_con_Persona": 3,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(3); Prince Andrew(1); Alan Dershowitz(2); Al Gore(2); David Copperfield(2)"
         },
@@ -184,7 +184,7 @@
             "Indicador_Negativo": 8,
             "Indice_Sentimiento": -0.143,
             "Clasificacion_Sentimiento": "Negativo",
-            "Indice_Riesgo_Forense": 3,
+            "Indice_Riesgo_Analítico": 3,
             "Evasiones_en_Paginas_con_Persona": 3,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(3); Ghislaine Maxwell(2); Prince Andrew(2)"
         },
@@ -197,7 +197,7 @@
             "Indicador_Negativo": 8,
             "Indice_Sentimiento": -0.778,
             "Clasificacion_Sentimiento": "Altamente Negativo",
-            "Indice_Riesgo_Forense": 4,
+            "Indice_Riesgo_Analítico": 4,
             "Evasiones_en_Paginas_con_Persona": 5,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(3); Ghislaine Maxwell(3)"
         },
@@ -210,7 +210,7 @@
             "Indicador_Negativo": 2,
             "Indice_Sentimiento": -0.333,
             "Clasificacion_Sentimiento": "Altamente Negativo",
-            "Indice_Riesgo_Forense": 1,
+            "Indice_Riesgo_Analítico": 1,
             "Evasiones_en_Paginas_con_Persona": 0,
             "Co_ocurrencias_con_Personas": "Jeffrey Epstein(4); Ghislaine Maxwell(1); Prince Andrew(1); Bill Clinton(3); Alan Dershowitz(1)"
         }

@@ -581,7 +581,7 @@ app_ui = ui.page_sidebar(
         ),
         
         ui.div(
-            ui.p("💡 AUDITORÍA FORENSE:", style="font-weight: bold; color: #ffffff; font-size: 0.85em; letter-spacing: 0.5px;"),
+            ui.p("💡 AUDITORÍA ANALÍTICO:", style="font-weight: bold; color: #ffffff; font-size: 0.85em; letter-spacing: 0.5px;"),
             ui.p("Este sistema realiza minería de texto y análisis de co-ocurrencia sobre testimonios judiciales desclasificados. Emplea procesamiento de lenguaje natural y visualizaciones de grado de investigación para mapear redes de interés en el caso Epstein.", style="font-size: 0.82em; color: #ebdff5; line-height: 1.5;"),
             style="background: rgba(168, 85, 247, 0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.2); margin-bottom: 20px;"
         ),
@@ -845,7 +845,7 @@ def server(input, output, session):
             f.write(results["text"])
         return path
 
-    # RENDERIZADO DEL TAB 1: DASHBOARD FORENSE
+    # RENDERIZADO DEL TAB 1: DASHBOARD ANALÍTICO
     @render.ui
     def analytic_dashboard_ui():
         try:
@@ -956,7 +956,7 @@ def server(input, output, session):
                     ui.card_header("Red de Co-ocurrencia Social en Páginas"),
                     ui.output_ui("co_occur_chart_ui"),
                     ui.div(
-                        ui.div("🕸️ MAPA DE RELACIONES FORENSES", class_="explanation-title"),
+                        ui.div("🕸️ MAPA DE RELACIONES ANALÍTICOS", class_="explanation-title"),
                         ui.p("Identifica qué personas de interés aparecen juntas en la misma página del documento. Esencial para destapar conexiones directas, reuniones o menciones cruzadas en los testimonios."),
                         class_="explanation-box"
                     )
@@ -1061,7 +1061,7 @@ def server(input, output, session):
                 ),
                 ui.download_button(
                     "download_btn", 
-                    "📥 DESCARGAR TRANSCRIPCIÓN FORENSE (.TXT)", 
+                    "📥 DESCARGAR TRANSCRIPCIÓN ANALÍTICO (.TXT)", 
                     class_="btn-primary btn-download w-100",
                     style="margin-top: 0.8rem;"
                 ),
@@ -1077,7 +1077,7 @@ def server(input, output, session):
                 ui.card_header("📅 Frecuencia Temporal (Años Mencionados)"),
                 ui.output_plot("timeline_chart"),
                 ui.div(
-                    ui.div("📅 HISTOGRAMA CRONOLÓGICO FORENSE", class_="explanation-title"),
+                    ui.div("📅 HISTOGRAMA CRONOLÓGICO ANALÍTICO", class_="explanation-title"),
                     ui.p("Rastrea la presencia de años lógicos específicos dentro de los testimonios o deposiciones judiciales. Ayuda a identificar en qué años se concentran los abusos o vuelos reportados en este expediente judicial."),
                     class_="explanation-box"
                 )
@@ -1613,7 +1613,7 @@ def server(input, output, session):
                 
                 is_first_message = len([m for m in llm_messages if m["role"] == "user"]) == 1
                 
-                ctx = f"\n\n[CONTEXTO FORENSE — {doc_name}]\n"
+                ctx = f"\n\n[CONTEXTO ANALÍTICO — {doc_name}]\n"
                 ctx += f"Páginas: {results['pages_processed']} | Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f}) | Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
                 ctx += f"Tópicos: {metrics['topic_scores']}\n"
                 ctx += f"Metadata: {meta}\n"
@@ -1652,7 +1652,7 @@ def server(input, output, session):
                 metrics = results["metrics"]
                 meta = results["metadata"]
                 doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
-                ctx = f"\n\n[CONTEXTO FORENSE — {doc_name}]\n"
+                ctx = f"\n\n[CONTEXTO ANALÍTICO — {doc_name}]\n"
                 ctx += f"Páginas: {results['pages_processed']} | Censura [REDACTED]: {metrics['redactions_count']} (idx: {metrics['censorship_index']:.1f}) | Evasiones: {metrics.get('evasiones_count', metrics.get('evasions_count', 0))} (idx: {metrics['evasiveness_index']:.1f})\n"
                 ctx += f"Tópicos: {metrics['topic_scores']}\n"
                 ctx += f"Metadata: {meta}\n"

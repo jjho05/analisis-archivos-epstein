@@ -34,7 +34,7 @@ def normalize_legal_text(text: str) -> str:
 
 def main():
     print("=" * 70)
-    print("🛡️  INICIANDO PIPELINE DE PREPROCESAMIENTO FORENSE (PASO 2) 🛡️")
+    print("🛡️  INICIANDO PIPELINE DE PREPROCESAMIENTO ANALÍTICO (PASO 2) 🛡️")
     print("=" * 70)
     
     dataset_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "01 Datasets Usados"))

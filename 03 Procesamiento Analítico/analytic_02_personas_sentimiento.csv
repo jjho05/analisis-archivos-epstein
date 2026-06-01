@@ -1,4 +1,4 @@
-Persona,Total_Menciones,Paginas_con_Mencion,Cobertura_Pct,Indicador_Positivo,Indicador_Negativo,Indice_Sentimiento,Clasificacion_Sentimiento,Indice_Riesgo_Forense,Evasiones_en_Paginas_con_Persona,Co_ocurrencias_con_Personas
+Persona,Total_Menciones,Paginas_con_Mencion,Cobertura_Pct,Indicador_Positivo,Indicador_Negativo,Indice_Sentimiento,Clasificacion_Sentimiento,Indice_Riesgo_Analítico,Evasiones_en_Paginas_con_Persona,Co_ocurrencias_con_Personas
 Jeffrey Epstein,1744,936,18.62,508,931,-0.294,Negativo,516,325,Ghislaine Maxwell(200); Virginia Giuffre(41); Prince Andrew(61); Bill Clinton(30); Donald Trump(3)
 Ghislaine Maxwell,1033,621,12.35,332,408,-0.103,Negativo,192,78,Jeffrey Epstein(200); Virginia Giuffre(73); Prince Andrew(36); Bill Clinton(22); Alan Dershowitz(36)
 Virginia Giuffre,528,296,5.89,202,117,0.266,Neutral / Procedimental,42,22,Jeffrey Epstein(41); Ghislaine Maxwell(73); Prince Andrew(14); Bill Clinton(5); Alan Dershowitz(7)
