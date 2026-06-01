@@ -1286,6 +1286,7 @@ def server(input, output, session):
         ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
         ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
         
+        ax.tick_params(colors='#e5e0eb', labelsize=9)
         plt.xticks(rotation=45)
         plt.tight_layout()
         return fig
