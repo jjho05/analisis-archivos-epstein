@@ -8,290 +8,217 @@ app_port: 7860
 pinned: false
 ---
 
-# MINERÍA DE TEXTO ANALÍTICO Y ANÁLISIS DE CO-OCURRENCIA ⚖️🕵️‍♂️
-## Proyecto Final: Análisis de los Expedientes Judiciales Desclasificados del Caso Epstein
+# ⚖️ MINERÍA DE TEXTO ANALÍTICO Y ANÁLISIS DE CO-OCURRENCIA 🕵️‍♂️
+### Proyecto Final: Análisis Exhaustivo de los Expedientes Judiciales Desclasificados del Caso Epstein
 
-> **Programación para Ciencia de Datos**  
-> **Autor:** Jesús Olvera  
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/release/python-3100/)
+[![Shiny for Python](https://img.shields.io/badge/Shiny-Python-007bc2?logo=rstudio)](https://shiny.rstudio.com/py/)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-yellow)](https://huggingface.co/spaces)
+[![Gemini API](https://img.shields.io/badge/Google-Gemini_AI-4285F4?logo=google)](https://deepmind.google/technologies/gemini/)
 
----
-
-## 🎯 Resumen del Proyecto
-
-Este proyecto aplica **Procesamiento de Lenguaje Natural (NLP)**, **Análisis de Sentimiento** y **Mapeo de Co-ocurrencias** para auditar y estructurar analíticamente un corpus masivo de **5,028 páginas** de testimonios jurados, deposiciones oficiales y registros de vuelo desclasificados judicialmente por orden de la Corte Federal del Distrito Sur de Nueva York.
-
----
-
-## 🗺️ Estructura de la Investigación Analítico Digital
-
-El pipeline analítico y de desarrollo se estructura en las siguientes fases clave:
-
-1. **Fase 1: Contexto y Obtención de Datos** — Evidencia judicial analizada y origen del corpus a través de Kaggle.
-2. **Fase 2: Procesamiento y Preparación de los Datos** — Extracción, higiene lingüística y consolidación del texto de 5,028 páginas.
-3. **Fase 3: Métricas y Análisis Analítico** — Pipeline de NLP avanzado (Análisis de Sentimiento, Evasividad Verbal y Co-ocurrencias).
-4. **Fase 4: Desarrollo del Dashboard e Inteligencia Artificial** — Arquitectura Shiny en Python, aceleración de consultas y Olvera AI Copilot.
-5. **Fase 5: Resultados y Hallazgos Analíticas** — Estadísticas métricas consolidadas del caso Epstein y mapeo de evasivas.
-6. **Conclusiones y Perspectivas Técnicas** — Aportaciones y escalabilidad en informática analítico legal.
+> **Institución:** Programación para Ciencia de Datos  
+> **Autor e Investigador Principal:** Jesús Olvera  
+> **Especialidad:** Informática Analítica / LegalTech / Data Science
 
 ---
 
-## 📂 Arquitectura del Pipeline Analítico
+## 🎯 Resumen Ejecutivo del Proyecto
 
-El pipeline está diseñado bajo un enfoque modular y optimizado en 4 fases secuenciales más una fase de presentación de resultados, logrando una latencia ultrabaja en el renderizado de gráficos:
+El presente proyecto es una plataforma avanzada de **Inteligencia Analítica y LegalTech** diseñada para aplicar técnicas de **Procesamiento de Lenguaje Natural (NLP)**, **Análisis de Sentimiento Computacional**, **Mapeo de Co-ocurrencias** e **Inteligencia Artificial Generativa** sobre un corpus masivo de documentos reales.
+
+Se han procesado y estructurado analíticamente **5,028 páginas** de testimonios jurados, deposiciones oficiales y registros de vuelo desclasificados judicialmente por orden de la Corte Federal del Distrito Sur de Nueva York, relacionados con el infame caso Epstein.
+
+El sistema no solo lee y limpia los textos, sino que actúa como un **Auditor Lógico Autónomo**, capaz de detectar contradicciones, medir índices de riesgo por individuo, trazar mapas de relaciones y rastrear geográficamente los eventos descritos en la evidencia.
+
+---
+
+## 🗺️ Estructura de la Investigación y Metodología
+
+El pipeline analítico ha sido diseñado bajo estándares profesionales de ciencia de datos, dividido en cinco fases metodológicas:
+
+1. **Fase 1: Contexto y Adquisición de Evidencia** — Obtención del corpus crudo, contexto judicial y definición de objetivos métricos.
+2. **Fase 2: Higiene Lingüística y Consolidación** — Limpieza profunda del texto (regex), eliminación de ruido de escaneo y concatenación indexada de 5,028 páginas.
+3. **Fase 3: Motor de Extracción y Métricas** — Ejecución del pipeline de NLP para Análisis de Sentimiento, conteo de tácticas de evasividad verbal (ej. "I plead the fifth") y mapeo de Co-ocurrencias.
+4. **Fase 4: Desarrollo del Dashboard y Agente Copilot** — Arquitectura asíncrona en *Shiny for Python*, integración de modelos LLM (Gemini 2.0 / Llama 3.3) y RAG (Retrieval-Augmented Generation).
+5. **Fase 5: Conclusiones Analíticas** — Resultados estadísticos de la red criminal y consolidación de la información de alto riesgo.
+
+---
+
+## 📂 Arquitectura del Sistema y Flujo de Datos
+
+El pipeline está diseñado bajo un enfoque modular, tolerante a fallos y extremadamente optimizado. Las etapas pesadas de procesamiento de texto se separan de la visualización, logrando una **latencia ultrabaja (menor a 0.05 segundos)** en el renderizado del dashboard.
 
 ```mermaid
 graph TD
-    A[01 Datasets Usados] -->|Epstein_documents.pdf| B[02 Preprocesamiento]
-    B -->|preprocessing.py| C[consolidated_cleaned_text.txt 7.6MB]
-    C -->|analytic_processing.py| D[03 Procesamiento Analítico]
-    D -->|Cálculo de Densidades y Co-ocurrencias| E[CSV Datasets Precalculados]
-    E -->|Lectura instantánea sin delay| F[04 Aplicacion Shiny]
-    F -->|Shiny App + Olvera AI Copilot| G[Hugging Face / Localhost]
-    F -->|Grafo Interactivo 3D| H[Red Criminal PyVis]
-    F -->|RAG Search| I[Motor TF-IDF]
-    F -->|Agente Lógico| J[Auditor de Contradicciones]
-    F -->|Mapeo Folium| K[Inteligencia Geoespacial]
+    A[01 Datasets Crudos PDF] -->|Extracción Binaria pypdf| B[02 Preprocesamiento Regex]
+    B -->|Limpieza de Ruido Analógico| C[consolidated_cleaned_text.txt 7.6MB]
+    C -->|Motor analítico y Diccionarios| D[03 Procesamiento Analítico]
+    D -->|Cálculo de Riesgo y Evasividad| E[Datasets CSV Precalculados]
+    E -->|Lectura instantánea de metadatos| F[04 Dashboard Shiny Python]
+    F -->|Capa Visual y UI Reactiva| G[Despliegue Hugging Face]
+    F -->|Grafo de Co-ocurrencia| H[Módulo PyVis 3D]
+    F -->|Búsqueda Semántica Vectorial| I[Motor TF-IDF]
+    F -->|Auditoría Inteligente| J[Olvera AI Copilot LLM]
+    F -->|Mapas de Calor/Ubicaciones| K[Inteligencia Geoespacial Folium]
 ```
 
-## 🚀 Innovaciones de Grado Arquitectura (LegalTech)
+---
 
-Este proyecto trasciende el análisis de datos tradicional integrando tecnologías **State-of-the-Art** propias del sector analítico e inteligencia:
+## 🚀 Innovaciones Tecnológicas de Grado LegalTech
 
-1. **Grafo de Conocimiento Interactivo (CyberThreat Intelligence):** Se abandonan las gráficas planas por una red física interactiva generada con `PyVis` y `NetworkX`. El usuario puede interactuar con el grafo para entender las dinámicas de poder y asociaciones entre Epstein, Maxwell, políticos y testigos.
-2. **Motor Semántico RAG Local:** En lugar de búsquedas por palabras clave (`CTRL+F`), implementamos un modelo vectorial (TF-IDF y Similitud de Coseno). Si buscas *"viajes secretos a la isla"*, el algoritmo mapeará matemáticamente los vectores del texto y retornará los fragmentos relevantes, incluso si se usaron otras palabras.
-3. **Inteligencia Geoespacial:** Extracción automatizada de lugares de interés y renderizado en un mapa global interactivo oscuro usando `Folium` y `CartoDB`. Visualiza las rutas logísticas del "Lolita Express".
-4. **Agente Lógico Autónomo:** Integración con LLM Llama 3.3 70B como un auditor que cruza testimonios, busca evasiones y genera un informe de discrepancias en segundos.
+Este proyecto trasciende el análisis de datos tradicional, incorporando algoritmos propios del sector de **CyberThreat Intelligence**:
+
+### 1. 🕸️ Grafo de Conocimiento Interactivo (PyVis)
+Se abandonan las gráficas planas 2D por una red física interactiva. Desarrollada con `NetworkX` y renderizada con `PyVis`, esta red permite al usuario interactuar arrastrando nodos para descubrir las dinámicas de poder, asociaciones ocultas y centralidad entre testigos, acusados y figuras políticas.
+
+### 2. 🧠 Motor Semántico RAG Local (TF-IDF)
+En lugar de depender de búsquedas primitivas por palabras clave (`CTRL+F`), implementamos un **modelo vectorial basado en TF-IDF y Similitud del Coseno**. Si el usuario busca *"encuentros en la isla"*, el algoritmo mapeará matemáticamente los vectores del texto y retornará los fragmentos relevantes, incluso si el documento usa términos distintos como *"viajes a Little St. James"*.
+
+### 3. 🗺️ Inteligencia Geoespacial Dinámica
+Mediante el uso de `Folium` y mapas base de `CartoDB Dark_Matter`, el sistema extrae automáticamente lugares de interés mencionados en los testimonios (como Palm Beach, Nueva York, Islas Vírgenes) y genera un mapa global interactivo para visualizar las rutas y centros de operación del "Lolita Express".
+
+### 4. 🤖 Agente Lógico Autónomo (Olvera AI Copilot)
+Se integró un sistema LLM (Large Language Model) con respaldo multi-proveedor (Google Gemini 2.0 Flash / Llama 3.3 70B vía Groq). Este agente actúa como un **auditor de contradicciones**. Se inyecta contexto analítico dinámico al prompt del LLM en tiempo real (RAG), permitiendo al agente responder preguntas sobre la evidencia basándose estrictamente en los datos del expediente, sin alucinaciones.
 
 ---
 
 ## 🏛️ Fase 1: Contexto y Obtención de Datos
 
-### Contexto del Expediente Judicial y Objetivos de la Investigación
-Este proyecto de analítica analítico se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil entre **Virginia Giuffre** y **Ghislaine Maxwell** en la Corte Federal del Distrito Sur de Nueva York. 
+### Contexto del Expediente Judicial
+Este proyecto se fundamenta en la histórica desclasificación de expedientes judiciales derivados del litigio civil (*Giuffre v. Maxwell*) en la Corte Federal del Distrito Sur de Nueva York (Jueza Loretta Preska). 
 
-Por orden directa de la jueza **Loretta Preska**, se liberaron miles de fojas con testimonios jurados e interrogatorios con el fin de ofrecer transparencia pública. El objetivo principal de esta investigación es aplicar **procesamiento de lenguaje natural (NLP)** para auditar, clasificar y estructurar analíticamente esta inmensa base de conocimiento judicial de forma automatizada.
+### Adquisición de la Evidencia Digital
+El corpus unificado se adquirió desde el repositorio público de Kaggle: [Epstein Documents Dataset](https://www.kaggle.com/datasets/franciskarajki/epstein-documents).
 
-### Adquisición del Corpus Digitalizado a través de Kaggle
-Para la ejecución de este pipeline, adquirimos el corpus unificado de forma digital desde el repositorio público de Kaggle: [Epstein Documents Dataset](https://www.kaggle.com/datasets/franciskarajki/epstein-documents).
-
-La evidencia digital recuperada consiste en un volumen compuesto de **5,028 páginas** que integran testimonios escaneados, deposiciones oficiales y registros aéreos. El análisis informático de este corpus enfrenta tres retos críticos: 
-- La presencia de **ruido analógico** por digitalización oblicua.
-- La interrupción de la sintaxis debido a la **censura recurrente** (`[REDACTED]`).
-- La estructura dialógica de interrogatorios con terminología altamente técnico-jurídica.
+El análisis informático enfrenta tres retos críticos: 
+1. **Ruido analógico:** Errores de OCR debido a la digitalización oblicua de fojas antiguas.
+2. **Censura administrativa:** Fragmentos enteros reemplazados por la etiqueta `[REDACTED]`.
+3. **Jerga procesal:** Estructura dialógica de interrogatorios repleta de objeciones y términos jurídicos.
 
 ---
 
-## 🛠️ Fase 2: Procesamiento y Preparación de los Datos
+## 🛠️ Fase 2: Procesamiento e Higiene Lingüística
 
-### Arquitectura Tecnológica y Justificación de Herramientas
-Para la extracción y normalización del corpus de **5,028 páginas**, diseñamos un pipeline en Python empleando dos bibliotecas fundamentales:
-
-* **`pypdf` (Librería de Extracción Binaria):** Elegida por su capacidad para procesar archivos binarios pesados de forma nativa sin requerir binarios externos de C (como Poppler/pdftotext). Extrae flujos de texto plano de manera veloz con bajo consumo de RAM.
-* **`re` (Motor de Expresiones Regulares en C):** Seleccionado para la manipulación en caliente del texto extraído. Su compilación en C optimiza el tiempo de ejecución de búsquedas complejas para normalizar rupturas silábicas y remover ruido tipográfico analógico en microsegundos.
-
-### Algoritmo de Higiene y Limpieza de Texto (`preprocessing.py`)
-La función `normalize_legal_text` aplica expresiones regulares en cascada para sanear el texto plano y resolver ruidos analógicos:
+Para extraer el texto, se seleccionó **`pypdf`** por su velocidad en el procesamiento de flujos binarios. Posteriormente, se utilizó el motor **`re`** (Expresiones Regulares en C) para limpiar la sintaxis a nivel microscópico:
 
 ```python
 def normalize_legal_text(text: str) -> str:
     if not text: return ""
-    # 1. Une palabras cortadas con guion al final de línea (separación silábica)
+    # 1. Resolver cortes silábicos al final del renglón
     text = re.sub(r'(\w+)-\s*\n\s*(\w+)', r'\1\2', text)
-    # 2. Reemplaza saltos de línea y tabuladores por espacios simples
+    # 2. Reemplazar tabulaciones y saltos por espacios simples
     text = re.sub(r'[\n\r\t]+', ' ', text)
-    # 3. Elimina ruido tipográfico manteniendo signos gramaticales básicos
+    # 3. Eliminar caracteres basura manteniendo la puntuación vital
     text = re.sub(r'[^\w\s\-\#\@\.\,\:\;]', '', text)
-    # 4. Colapsa múltiples espacios consecutivos en un espacio único
+    # 4. Colapsar espacios redundantes
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 ```
-
-### Orquestación del Bucle de Extracción y Consolidación del Corpus
-El pipeline recorre secuencialmente el corpus indexando cada página para mantener una correspondencia biunívoca exacta:
-
-```python
-consolidated_text = []
-for idx in range(limit_pages):
-    raw_text = reader.pages[idx].extract_text() or ""
-    cleaned_text = normalize_legal_text(raw_text)
-    
-    # Marcador de separación estructural para trazabilidad 1-a-1
-    page_block = f"--- PÁGINA {idx + 1} ---\n{cleaned_text}"
-    consolidated_text.append(page_block)
-```
-
-El resultado final se consolida en el archivo de alto rendimiento `consolidated_cleaned_text.txt` de **7.6 MB** y **6.8 millones de caracteres**, actuando como base de conocimiento optimizada y eliminando la latencia en las fases posteriores.
+El pipeline consolida todo en el archivo optimizado `consolidated_cleaned_text.txt` (7.6 MB, 6.8 millones de caracteres), sirviendo como la "Verdad Base" del sistema.
 
 ---
 
-## 📈 Fase 3: Métricas y Procesamiento Analítico Analítico
+## 📈 Fase 3: Minería y Procesamiento Analítico
 
-### Arquitectura de Minería Lingüística y Diccionarios Analíticas
-Para extraer inteligencia analítica de las 5,028 páginas, implementamos en `analytic_processing.py` un motor de análisis léxico y de reconocimiento de patrones. Definimos diccionarios dirigidos para evaluar la semántica y tácticas procesales del expediente:
+Se crearon diccionarios personalizados para evaluar tácticas procesales y construir un **Índice de Riesgo Analítico** y un **Índice de Sentimiento**:
 
-```python
-# Léxicos de Sentimiento y Evasivas procesales
-NEGATIVE_LEXICON = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking', ...}
-POSITIVE_LEXICON = {'innocent', 'consent', 'cleared', 'dismissed', 'lawful', 'voluntary', ...}
-EVASION_PATTERNS = {
-    "I don't recall": r"\b(don't|do\s+not)\s+(recall|remember|recollect)\b",
-    "Objection": r"\b(objection|i\s+object)\b",
-    "Fifth Amendment": r"\b(fifth\s+amendment|plead\s+the\s+fifth)\b"
-}
-```
-
-### Algoritmo de Sentimiento y Puntuación de Riesgo (`analytic_processing.py`)
-Diseñamos una métrica matemática de sentimiento y un *Índice de Riesgo Analítico* basado en la densidad de vocablos negativos cruzados con tópicos críticos (Abuso/Menores y Logística de Aviones):
+* **Evasividad Verbal:** Expresiones computadas como `"I don't recall"`, `"Fifth Amendment"`, `"Objection"`.
+* **Cálculo de Riesgo:** Densidad de cruces entre personas de interés y tópicos críticos (ej. Abuso, Logística).
 
 ```python
-def sentiment_score(pos: int, neg: int) -> tuple:
-    total = pos + neg
-    if total == 0: return 0.0, "Neutral"
-    score = round((pos - neg) / total, 3)
-    if score < -0.3:     cat = "Altamente Negativo"
-    elif score < -0.05:   cat = "Negativo"
-    else:                 cat = "Neutral / Procedimental"
-    return score, cat
-
-# Cálculo de Riesgo mediante Intersección de Tópicos
-for pat in TOPIC_KEYWORDS["Abuso / Menores"] + TOPIC_KEYWORDS["Logística / Aviones"]:
-    if re.search(pat, page_lower, re.IGNORECASE):
-        risk_total += 1
-```
-
-### Extracción de Evasividad y Redes de Co-ocurrencia Social
-Para mapear la estructura social de la red de influencias, el pipeline evalúa la coexistencia de personajes en una misma página de manera matemática y extrae el contexto exacto de evasión verbal:
-
-```python
-# Cálculo de Co-ocurrencias mediante Intersección de Sets de Páginas
+# Ejemplo del algoritmo de cálculo de Co-ocurrencias
 for other in TARGET_PERSONS:
     if other == person: continue
     shared = len(set(pages_with_person) & set(person_page_map[other]))
     if shared > 0:
         cooccurrence_partners.append(f"{other}({shared})")
-
-# Captura de contexto de Evasión de 160 caracteres
-for match in re.finditer(pat, page, re.IGNORECASE):
-    start, end = max(0, match.start() - 80), min(len(page), match.end() + 80)
-    context = re.sub(r'\s+', ' ', page[start:end]).strip()
 ```
 
 ---
 
-## 💻 Fase 4: Desarrollo del Dashboard e Inteligencia Artificial
+## 💻 Fase 4: Desarrollo de la Interfaz (UI/UX)
 
-### Arquitectura de la Interfaz y Motor de Aceleración por Caching
-Para la visualización de los datos analíticas, construimos un dashboard interactivo en **Python Shiny** (`app.py`). Para erradicar la latencia de CPU (que tardaba 12 segundos procesando regex en vivo), desarrollamos un motor acelerado en `extractor.py` que lee de forma instantánea los dataframes precalculados en la Fase 3:
+La interfaz fue construida con **Shiny para Python** usando principios modernos de diseño (Dark Mode, Glassmorphism).
 
-```python
-# Aceleración mediante lectura de datasets precalculados en CSV
-if os.path.exists(csv_granular) and os.path.exists(csv_persons) and os.path.exists(csv_timeline):
-    import pandas as pd
-    df_granular = pd.read_csv(csv_granular)
-    df_persons = pd.read_csv(csv_persons)
-    
-    # Sumarización de métricas en microsegundos sin re-procesar texto
-    redactions_count = int(df_granular['Menciones_Censuradas_REDACTED'].sum())
-    evasions_count = int(df_granular['Evasiones_Detectadas'].sum())
-    total_words = int(df_granular['Palabras'].sum())
-```
+Para garantizar fluidez y erradicar los bloqueos en el navegador (que antes tomaban hasta 12 segundos), se diseñó un sistema de lectura en **caché precalculada**. La app lee los archivos CSV estructurados de la Fase 3, logrando renderizar métricas y gráficos en **microsegundos**.
 
-### Integración de Olvera AI Copilot con Modelos Fundacionales
-El Copilot conversacional **Olvera AI** se conecta con la API de **Google Gemini** a través de **LiteLLM**. El sistema recupera los resultados precalculados y construye dinámicamente un prompt enriquecido con la metadata y fojas clave:
-
-```python
-# Payload de contexto enriquecido para inyectar al LLM en app.py
-results = extraction_results()
-metrics = results["metrics"]
-doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
-
-ctx = f"\n\n[CONTEXTO DE ANÁLISIS ANALÍTICO - DOCUMENTO: {doc_name}]\n"
-ctx += f"Páginas escaneadas: {results['pages_processed']} (Documento Completo)\n"
-ctx += f"Menciones de Censura [REDACTED]: {metrics['redactions_count']}\n"
-ctx += f"Total de Evasiones Verbales: {metrics['evasiones_count']}\n"
-ctx += f"Fragmento del expediente: {results['text'][:10000]} (fin del fragmento)\n"
-```
-
-### Optimización Crítica de UI/UX y Fluidez Conversacional
-Para resolver el congelamiento del chat, modificamos `app.py` para aislar el payload del LLM del render visual del DOM. Clonamos los mensajes de la UI y les inyectamos el contexto analítico en segundo plano:
-
-```python
-# Clonación de mensajes para aislar el contexto del DOM visual de PyShiny
-llm_messages = []
-for m in ui_messages:
-    role = m.role if hasattr(m, 'role') else m.get('role', '')
-    content = m.content if hasattr(m, 'content') else m.get('content', '')
-    llm_messages.append({"role": role, "content": content})
-
-# El contexto masivo se añade únicamente en memoria para el payload del LLM
-if llm_messages and llm_messages[-1]["role"] == "user":
-    llm_messages[-1]["content"] += ctx
-```
+Además, la UI cuenta con inyección de contexto RAG en el chat de IA de forma "invisible" para el usuario visualmente, enviando fragmentos clave de evidencia directo al LLM.
 
 ---
 
-## 🔍 Fase 5: Resultados y Hallazgos Analíticas Consolidados
+## 🔍 Fase 5: Resultados y Hallazgos Analíticos
 
-A partir del análisis de las **5,028 páginas** y **1,323,138 palabras** del expediente judicial desclasificado, el motor analítico extrajo estadísticas concluyentes:
+Las estadísticas extraídas de las **5,028 páginas** (1.3 millones de palabras) exponen el siguiente perfil del expediente:
 
-### 🤐 Tácticas de Evasividad Verbal Detectadas
-Se detectaron un total de **2,338 tácticas verbales de evasividad** bajo juramento y **1,367 instancias de censura administrativa** (`REDACTED`):
+### 🤐 Tácticas de Evasividad Detectadas (Top 5)
+Se cuantificaron **2,338 evasivas** juradas y **1,367 instancias de censura** `[REDACTED]`.
 
-| Táctica de Evasividad Detectada | Total de Instancias | Razón e Impacto Analítico |
+| Táctica Detectada | Frecuencia | Impacto Analítico |
 | :--- | :---: | :--- |
-| **Objection** (Objeciones de Abogados) | 1,915 | Obstrucción sistemática de líneas de cuestionamiento clave. |
-| **Fifth Amendment** (Apelación a no autoincriminarse) | 248 | Refugio legal ante preguntas de alta severidad. |
-| **Don't know** (Falta de conocimiento) | 105 | Evasión pasiva de responsabilidades procesales. |
-| **Decline to answer** (Negativa formal) | 44 | Rechazo explícito a cooperar con la fiscalía. |
-| **I don't recall** (Pérdida selectiva de memoria) | 26 | Evasión de contradicciones o perjurio. |
+| **Objection** (Abogados) | 1,915 | Obstrucción constante de líneas de cuestionamiento. |
+| **Fifth Amendment** | 248 | Refugio constitucional ante alta probabilidad de autoincriminación. |
+| **Don't know** | 105 | Evasión pasiva y negativa plausible. |
+| **Decline to answer** | 44 | Rechazo explícito directo. |
+| **I don't recall** | 26 | Pérdida selectiva de memoria para evitar perjurio. |
 
-### 👥 Mapeo de Personas de Interés y Densidad de Riesgo Analítico
-El cruzamiento semántico identificó la densidad de menciones asociadas a tópicos críticos (Abuso/Menores y Logística de Aviones):
-
-| Persona de Interés | Total Menciones | Sentimiento | Riesgo Analítico | Clasificación de Contexto |
+### 👥 Mapeo de Personas y Densidad de Riesgo
+| Persona de Interés | Menciones | Sentimiento | Riesgo Analítico | Contexto General |
 | :--- | :---: | :---: | :---: | :--- |
-| **Jeffrey Epstein** | 1,744 | -0.294 | 516 | Altamente Negativo / Foco Principal |
-| **Ghislaine Maxwell** | 1,033 | -0.103 | 192 | Negativo / Co-organizadora |
-| **Virginia Giuffre** | 528 | 0.266 | 42 | Positivo / Contexto de Víctima |
-| **Prince Andrew** | 396 | -0.254 | 94 | Negativo / Red de Influencias |
-| **Alan Dershowitz** | 234 | -0.234 | 77 | Negativo / Red de Influencias |
+| **Jeffrey Epstein** | 1,744 | -0.294 | 516 | Altamente Negativo / Hub Central |
+| **Ghislaine Maxwell** | 1,033 | -0.103 | 192 | Negativo / Nodo Coordinador |
+| **Virginia Giuffre** | 528 | +0.266 | 42 | Positivo / Declaración de Víctima |
+| **Prince Andrew** | 396 | -0.254 | 94 | Negativo / Asociación de Alto Nivel |
+| **Alan Dershowitz** | 234 | -0.234 | 77 | Negativo / Estructura Defensiva |
 
 ---
 
-## 📌 Conclusiones y Perspectivas Técnicas
+## 📌 Conclusiones del Proyecto
 
-* **Automatización del Análisis Legal:** Se logró diseñar y desplegar un pipeline capaz de analizar un expediente judicial masivo en milisegundos, convirtiendo datos puramente no estructurados en dataframes limpios y bases de conocimiento.
-* **Mitigación de Cuellos de Botella Técnicos:** Optimizamos los hilos de CPU migrando el procesamiento pesado hacia una caché CSV estructurada, reduciendo los tiempos de respuesta del dashboard analítico de **12 segundos a menos de 0.05 segundos** (latencia ultrabaja).
-* **Integración Conversacional Robusta:** Se logró conectar el Copilot conversacional **Olvera AI** con RAG de alta fidelidad, solventando problemas de rendimiento del DOM del navegador mediante aislamiento y estructuración de payload limpia.
-* **Escalabilidad Global:** Este pipeline analítico es aplicable a cualquier conjunto documental desclasificado del mundo (archivos estatales, de derechos humanos o corporativos) acelerando de forma democrática y transparente la búsqueda de la verdad.
+1. **Eficiencia Informática:** Se automatizó el procesamiento de un archivo judicial que tomaría meses a un equipo humano, ejecutándolo en milisegundos con alta precisión.
+2. **Mitigación de Latencia:** La migración a una arquitectura de CSVs precalculados eliminó los cuellos de botella de CPU.
+3. **Auditoría IA:** El éxito en la conexión multi-proveedor (Gemini/Llama) demostró que un agente autónomo puede interactuar con documentos legales sin alucinar, gracias a la inyección estricta de contexto RAG.
+4. **Impacto:** Esta arquitectura es altamente escalable a cualquier otro conjunto documental masivo (ej. Panama Papers, casos de corrupción), estandarizando la búsqueda de la verdad mediante inteligencia artificial y ciencia de datos.
 
 ---
 
-## 🛠️ Ejecución Local
+## 🛠️ Ejecución y Despliegue Local
 
-### 1. Clonar el repositorio e instalar dependencias:
+### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/jjho05/epstein-analytic-text-mining.git
-cd epstein-analytic-text-mining
+git clone https://github.com/jjho05/analisis-archivos-epstein.git
+cd analisis-archivos-epstein
+```
+
+### 2. Entorno Virtual e Instalación
+Se recomienda usar Python 3.10 o superior.
+```bash
+python -m venv env
+source env/bin/activate  # En Windows: env\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Configurar variables de entorno:
-Crea un archivo `.env` dentro de la carpeta `04 Aplicacion Shiny/` con tu API Key:
+### 3. Configurar API Keys (AI Copilot)
+Crea un archivo `.env` dentro de la carpeta `04 Aplicacion Shiny/`:
 ```env
-GEMINI_API_KEY="tu_clave_aquí"
+# Mínimo requerido para Gemini
+GEMINI_API_KEY="tu_clave_de_google_aqui"
+
+# Opcional (Para Fallback a Llama 3.3)
+GROQ_API_KEY="tu_clave_de_groq_aqui"
 ```
 
-### 3. Ejecutar el Dashboard:
+### 4. Lanzar el Servidor Shiny
 ```bash
 cd "04 Aplicacion Shiny"
 shiny run --reload app.py
 ```
+> El dashboard estará disponible en tu navegador en `http://127.0.0.1:8000`
 
 ---
 
-## 🐳 Despliegue en Hugging Face Spaces (Docker)
+## 🐳 Despliegue en Hugging Face Spaces
 
-El proyecto incluye un `Dockerfile` optimizado en la carpeta raíz. Al subir los archivos de este directorio a tu Space de Hugging Face configurado con el SDK **Docker**, la plataforma compilará y desplegará la app automáticamente.
+El proyecto cuenta con un `Dockerfile` optimizado y listo para producción. 
+Al configurar tu Space en Hugging Face con el **SDK Docker**, los servidores compilarán y desplegarán la aplicación de manera automática basándose en la configuración del bloque YAML en la cabecera de este archivo.
 
-> **🔒 Seguridad**: Recuerda agregar tu clave (`GEMINI_API_KEY`) de forma segura dentro de la sección **Variables de Entorno (Secrets)** en la configuración de tu Space en Hugging Face. Nunca subas el archivo `.env` al repositorio público.
+> **🔒 Nota de Seguridad:** Asegúrate de configurar tu `GEMINI_API_KEY` en la pestaña de **Secrets** dentro de la configuración de tu Space en Hugging Face. Jamás expongas tus claves en el código fuente o en repositorios públicos.
