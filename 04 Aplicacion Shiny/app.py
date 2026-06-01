@@ -9,7 +9,13 @@ import os
 from extractor import PDFExtractorEngine, TARGET_PERSONS
 import logic
 import providers
-from report_generator import generate_report
+from report_generator import (
+    generate_report,
+    generate_audit_report,
+    generate_dashboard_report,
+    generate_network_report,
+    generate_geo_report,
+)
 from datetime import datetime
 
 # --- ESTILADO CSS PREMIUM (Cyber-Noir & High-Fidelity Style) ---
@@ -682,6 +688,10 @@ app_ui = ui.page_sidebar(
                 ui.input_action_button("audit_btn", "Iniciar Auditoría Profunda", class_="btn-danger", style="background:#f43f5e; border:none; padding:10px 20px; font-weight:bold; width: 100%; margin-top: 15px;"),
                 ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
                 ui.output_ui("contradictions_results_ui"),
+                ui.panel_conditional(
+                    "input.audit_btn > 0",
+                    ui.download_button("download_audit_report", "Descargar Reporte de Auditoría", class_="btn-primary", style="margin-top:16px; background:#f43f5e; border:none; height:40px; font-weight:bold; width:100%;")
+                ),
                 style="padding: 20px;"
             )
         ),
@@ -705,6 +715,7 @@ app_ui = ui.page_sidebar(
                         
 **Conexiones Transatlánticas:** Los saltos entre NY, París y Londres documentan el alcance internacional de las operaciones de tráfico con miembros de la élite europea.
                         """),
+                        ui.download_button("download_geo_report", "Descargar Reporte Geoespacial", class_="btn-primary", style="margin-top:16px; background:#06b6d4; border:none; height:40px; font-weight:bold; width:100%;"),
                         style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(6,182,212,0.3); color:#e5e0eb; height:100%;"
                     ),
                     col_widths=[8, 4]
@@ -733,6 +744,7 @@ Entidades offshore como *Financial Trust Co.* y *Liquid Funding Ltd.* operando b
 **Ejecutores (Tier 3):**
 Darren Indyke (Abogado) y Richard Kahn (Contador). Fueron los arquitectos detrás de la creación de las LLCs (Sociedades de Responsabilidad Limitada) para adquirir propiedades e inyectar fondos.
                         """),
+                        ui.download_button("download_network_report", "Descargar Reporte de Red Financiera", class_="btn-primary", style="margin-top:16px; background:#a855f7; border:none; height:40px; font-weight:bold; width:100%;"),
                         style="background:rgba(15, 11, 27, 0.85); padding:20px; border-radius:12px; border:1px solid rgba(16,185,129,0.3); color:#e5e0eb; height:100%;"
                     ),
                     col_widths=[9, 3]
@@ -885,6 +897,7 @@ def server(input, output, session):
     
     is_empty = reactive.Value(True)
     current_report_data = reactive.Value(None)
+    current_audit_data = reactive.Value(None)
     chat = ui.Chat(id="chat")
 
     # Obtener el motor de procesamiento para el archivo seleccionado
@@ -1930,6 +1943,63 @@ def server(input, output, session):
         
         filepath = generate_report(data['query'], data['summary'], data['snippets'], metrics)
         return filepath
+
+    # --- DESCARGA: REPORTE DE AUDITORÍA ---
+    @render.download(
+        filename=lambda: f"Auditoria_{input.audit_target().replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+    )
+    def download_audit_report():
+        data = current_audit_data.get()
+        if not data:
+            return ""
+        return generate_audit_report(data['target'], data['text'])
+
+    # --- DESCARGA: REPORTE DEL DASHBOARD ---
+    @render.download(
+        filename=lambda: f"Reporte_Dashboard_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+    )
+    def download_dashboard_report():
+        import json
+        json_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Anal\u00edtico", "analytic_report_full.json")
+        )
+        metrics_dict = {"Estado": "Datos no encontrados"}
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                metrics_dict = {
+                    "Total de P\u00e1ginas Procesadas": str(data.get("total_paginas", 0)),
+                    "Entidades Detectadas": str(data.get("total_entidades_unicas", 0)),
+                    "Menciones Evasivas": str(data.get("total_menciones_evasivas", 0)),
+                    "Frases Censuradas (Redacted)": str(data.get("total_frases_censuradas", 0)),
+                }
+        except Exception:
+            pass
+        return generate_dashboard_report(metrics_dict)
+
+    # --- DESCARGA: REPORTE GEOESPACIAL ---
+    @render.download(
+        filename=lambda: f"Reporte_Geoespacial_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+    )
+    def download_geo_report():
+        import pandas as pd
+        csv_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Anal\u00edtico", "geospatial_data.csv")
+        )
+        df = pd.read_csv(csv_path) if os.path.exists(csv_path) else pd.DataFrame()
+        return generate_geo_report(df)
+
+    # --- DESCARGA: REPORTE DE RED FINANCIERA ---
+    @render.download(
+        filename=lambda: f"Reporte_Red_Financiera_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+    )
+    def download_network_report():
+        import pandas as pd
+        csv_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "03 Procesamiento Anal\u00edtico", "financial_network_data.csv")
+        )
+        df = pd.read_csv(csv_path) if os.path.exists(csv_path) else pd.DataFrame()
+        return generate_network_report(df)
 
     @render.ui
     @reactive.event(input.audit_btn)
