@@ -875,7 +875,7 @@ def server(input, output, session):
             
             ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.2rem 0;"),
             
-            # FILA "STREAMING" (Filtros Reactivos Estilo Pingüinos)
+            # FILA "STREAMING" (Filtros Reactivos)
             ui.layout_columns(
                 ui.div(
                     ui.div(ui.output_text("out_conteo_streaming", inline=True), class_="kpi-value", style="font-size: 3.5rem; color: #34d399; font-weight: 900; line-height: 1; margin-bottom: 10px;"),
