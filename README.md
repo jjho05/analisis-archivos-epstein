@@ -23,37 +23,6 @@ El objetivo central es automatizar la revisión de miles de fojas, transformando
 
 ---
 
-##  Estructura de la Investigación Analítico Digital
-
-El pipeline analítico y de desarrollo se estructura de manera lógica y progresiva en las siguientes fases clave:
-
-1. **Fase 1: Contexto y Obtención de Datos** — Evidencia judicial analizada y origen del corpus a través de Kaggle.
-2. **Fase 2: Procesamiento y Preparación de los Datos** — Extracción del texto en crudo, higiene lingüística mediante expresiones regulares (regex) y consolidación del texto completo de 5,028 páginas.
-3. **Fase 3: Métricas y Análisis Analítico** — Ejecución del pipeline de NLP avanzado para realizar Análisis de Sentimiento, conteo de Evasividad Verbal y generación de las redes de Co-ocurrencias.
-4. **Fase 4: Desarrollo del Dashboard e Inteligencia Artificial** — Construcción de la interfaz interactiva usando la arquitectura **Shiny en Python** (garantizando un rendimiento superior), aceleración de consultas mediante caché de datos y el asistente Olvera AI Copilot integrado.
-5. **Fase 5: Resultados y Hallazgos Analíticas** — Estadísticas métricas consolidadas del caso Epstein y el mapeo final de evasivas en la corte.
-6. **Conclusiones y Perspectivas Técnicas** — Aportaciones del proyecto y su potencial de escalabilidad en informática analítica.
-
----
-
-##  Arquitectura del Pipeline Analítico
-
-El pipeline está diseñado bajo un enfoque modular y altamente optimizado en 4 fases secuenciales, separando el procesamiento pesado de la vista final para lograr una latencia ultrabaja (menor a 0.05 segundos) en el renderizado de gráficos y métricas:
-
-```mermaid
-graph TD
-    A[01 Datasets Usados] -->|Epstein_documents.pdf| B[02 Preprocesamiento]
-    B -->|preprocessing.py| C[consolidated_cleaned_text.txt 7.6MB]
-    C -->|analytic_processing.py| D[03 Procesamiento Analítico]
-    D -->|Cálculo de Densidades y Co-ocurrencias| E[CSV Datasets Precalculados]
-    E -->|Lectura instantánea sin delay| F[04 Aplicacion Shiny]
-    F -->|Shiny App + Olvera AI Copilot| G[Hugging Face / Localhost]
-    F -->|Grafo Interactivo 3D| H[Red Criminal PyVis]
-    F -->|RAG Search| I[Motor TF-IDF]
-    F -->|Agente Lógico| J[Auditor de Contradicciones]
-    F -->|Mapeo Folium| K[Inteligencia Geoespacial]
-```
-
 ##  Fase 1: Contexto y Obtención de Datos
 
 ### 1.1 Antecedentes del Expediente Judicial
@@ -174,6 +143,40 @@ Para asegurar que la aplicación web funcione al instante sin demoras, el proces
 5.  **`analytic_05_timeline_cronologica.csv`**: Agrupa la cantidad de menciones de eventos clave y personajes año por año, permitiendo graficar la evolución del caso en el tiempo.
 6.  **`geospatial_data.csv`**: Contiene las coordenadas geográficas, nombres y resúmenes de los lugares clave mencionados en los testimonios (islas, ranchos, mansiones).
 7.  **`financial_network_data.csv`**: Estructura las relaciones y transacciones de dinero entre las fundaciones, abogados, empresas fachada y bancos implicados.
+
+---
+
+## Arquitectura Técnica del Sistema de Procesamiento de Datos
+
+Para lograr una latencia ultrabaja (menor a 0.05 segundos) y evitar la sobrecarga de memoria del servidor durante la interacción del usuario, el sistema está estructurado bajo una arquitectura de flujo de datos desacoplada en tres etapas secuenciales:
+
+```mermaid
+graph TD
+    subgraph Etapa 1: Ingesta e Higiene Léxica
+        A[Epstein_documents.pdf 5,028 páginas] -->|Extracción con pypdf| B[Texto Judicial en Crudo]
+        B -->|Normalización con preprocessing.py| C[consolidated_cleaned_text.txt 7.6 MB]
+    end
+
+    subgraph Etapa 2: Procesamiento y Caché Analítica
+        C -->|Análisis con analytic_processing.py| D[Extracción de Métricas y Redes]
+        D -->|Indexación de Entidades| E[Archivos CSV y JSON Precalculados]
+    end
+
+    subgraph Etapa 3: Consumo y Presentación Reactiva
+        E -->|Carga acelerada instantánea| F[Aplicación Shiny for Python app.py]
+        F -->|Grafo Social NetworkX / PyVis| G[Red de Co-ocurrencias e Influencia]
+        F -->|Búsqueda Semántica Local| H[Motor de Recuperación TF-IDF]
+        F -->|Careo Conversacional LiteLLM| I[Olvera AI Chat & Auditor]
+        F -->|Mapeo Folium / Leaflet| J[Mapa Geoespacial de Rutas]
+        F -->|Exportación ReportLab| K[Generador de Reportes PDF]
+    end
+```
+
+### Descripción del Flujo del Pipeline de Datos
+
+1. **Etapa 1: Ingesta e Higiene Léxica**: El expediente en formato PDF de 5,028 páginas es procesado secuencialmente por el extractor para eliminar el ruido de digitalización (OCR). El texto limpio resultante se unifica en un archivo plano de 7.6 megabytes con etiquetas de paginación estructuradas, sirviendo de base textual única.
+2. **Etapa 2: Procesamiento y Caché Analítica**: Se ejecuta un proceso analítico independiente que escanea el texto plano normalizado. Este proceso identifica menciones de personajes, calcula índices de sentimiento y riesgo, extrae los fragmentos con tácticas de evasiva verbal y censura, y genera las matrices de relaciones geográficas, financieras y sociales. Toda esta información se almacena en formatos CSV y JSON de carga rápida en disco.
+3. **Etapa 3: Consumo y Presentación**: La aplicación Shiny for Python carga los datos precalculados en milisegundos en lugar de procesar el archivo PDF completo en tiempo de ejecución. Esto permite que los gráficos interactivos, mapas cartográficos y visualizaciones de redes respondan instantáneamente a los filtros del usuario. Además, se conecta localmente con algoritmos de similitud de coseno para búsquedas de contexto y mediante API seguras con modelos de lenguaje conversacionales (RAG).
 
 ---
 
@@ -348,3 +351,11 @@ GEMINI_API_KEY="tu_clave_aquí"
 cd "04 Aplicacion Shiny"
 shiny run --reload app.py
 ```
+
+---
+
+## Agradecimientos
+
+Se extiende un sincero agradecimiento a los docentes, asesores y evaluadores de la materia de Programación para Ciencia de Datos del Instituto Tecnológico de Ciudad Madero por proveer las bases metodológicas, la orientación técnica y el espacio académico que hicieron posible el diseño y la materialización de este sistema de minería analítica.
+
+Muchas gracias por su atención y acompañamiento en este proyecto.
