@@ -18,9 +18,9 @@ pinned: false
 
 ## Resumen del Proyecto
 
-En este proyecto aplicamos **Procesamiento de Lenguaje Natural (NLP)**, **Análisis de Sentimiento** y **Mapeo de Co-ocurrencias** para auditar y estructurar de forma analítica un corpus masivo de **5,028 páginas** de declaraciones juradas, testimonios oficiales y registros de vuelo desclasificados por orden de la Corte Federal de Nueva York.
+En este trabajo creamos una aplicación web interactiva que permite explorar de forma automática las **5,028 páginas** de documentos desclasificados sobre el caso de **Jeffrey Epstein**. 
 
-Nuestro objetivo principal fue automatizar la revisión de miles de fojas, transformando un expediente de texto desestructurado en una plataforma interactiva. A través de técnicas avanzadas de ciencia de datos y modelos de lenguaje, desarrollamos un sistema que limpia el ruido de digitalización, identifica contradicciones en los testimonios, calcula la postura de las personas implicadas y presenta todos estos hallazgos en un dashboard interactivo de alta velocidad.
+El objetivo principal de nuestro proyecto es facilitar la lectura de este expediente gigante para que cualquier persona pueda entenderlo sin tener que leer miles de hojas a mano. Para lograrlo, programamos un sistema que limpia las hojas borrosas del escáner, cuenta cuántas veces se menciona a cada persona, detecta cuándo los testigos responden con evasivas (como decir "no recuerdo") y permite hacer búsquedas inteligentes por el significado de las oraciones en lugar de usar palabras exactas. Todos los resultados, mapas y conexiones se muestran de manera clara y visual en nuestra aplicación interactiva.
 
 ---
 
