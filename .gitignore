@@ -23,3 +23,6 @@ temp_extracted.txt
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Presentación local
+presentacion_proyecto_final.md
