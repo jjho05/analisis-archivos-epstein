@@ -68,27 +68,27 @@ Este proyecto integra tecnologías **State-of-the-Art** propias del análisis de
 
 ##  Fase 1: Contexto y Obtención de Datos
 
-### 1.1 Marco Histórico-Jurídico del Expediente Judicial
-Este proyecto analítico se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil bajo el folio *Virginia Giuffre v. Ghislaine Maxwell* en la Corte Federal del Distrito Sur de Nueva York. 
+### 1.1 Antecedentes del Expediente Judicial
+Este proyecto de análisis se basa en la liberación masiva de documentos judiciales relacionados con el caso del financiero estadounidense **Jeffrey Epstein**. Estos textos provienen de una demanda civil entre **Virginia Giuffre** y **Ghislaine Maxwell** llevada a cabo en la Corte Federal de Nueva York. 
 
-Por orden directa de la jueza de distrito **Loretta Preska**, se dispuso la apertura pública de miles de fojas procesales, testimonios bajo juramento, deposiciones de testigos y bitácoras del avión privado conocido como *Lolita Express* (Boeing 727). El objetivo principal de esta investigación digital es emplear **técnicas avanzadas de Minería de Texto y Procesamiento de Lenguaje Natural (NLP)** para auditar, estructurar e interpretar esta inmensa base de conocimiento judicial no estructurada, transformando miles de páginas de fojas digitales en un grafo de relaciones reactivo y métricas cuantitativas reproducibles.
+Por orden de la jueza **Loretta Preska**, se hicieron públicos miles de documentos del caso: declaraciones escritas bajo juramento, testimonios de testigos y los registros de vuelo del avión privado conocido como *Lolita Express* (Boeing 727). El objetivo principal de este trabajo es utilizar **herramientas de análisis de texto e Inteligencia Artificial** para organizar, estructurar y entender toda esta información, convirtiendo miles de hojas sueltas en un mapa de conexiones interactivo y estadísticas claras.
 
-### 1.2 Adquisición del Corpus y Estructura Documental
-El corpus unificado de datos se adquirió formalmente a partir de la digitalización y consolidación pública indexada en Kaggle: [Epstein Documents Dataset](https://www.kaggle.com/datasets/franciskarajki/epstein-documents). El corpus consolidado consta de **5,028 páginas** de evidencia digitalizada.
+### 1.2 Obtención de los Documentos y Estructura
+El conjunto completo de documentos se descargó desde la plataforma pública Kaggle: [Epstein Documents Dataset](https://www.kaggle.com/datasets/franciskarajki/epstein-documents). En total, son **5,028 páginas** de información digitalizada.
 
-Para modelar la estrategia analítica, los documentos se clasificaron formalmente en la siguiente estructura según su naturaleza jurídica:
+Para facilitar el análisis, clasificamos los textos en tres grupos principales según su tipo:
 
-| Tipo Documental | Descripción del Contenido | Páginas Estimadas | Desafíos Analíticos de Datos |
+| Tipo de Documento | ¿De qué trata? | Páginas del archivo | Dificultad para el análisis automático |
 | :--- | :--- | :---: | :--- |
-| **Deposiciones Oficiales** | Interrogatorios bajo juramento y careos a Ghislaine Maxwell, Virginia Giuffre y asociados directos. | ~3,200 fojas | Estructura dialógica compleja (Pregunta/Respuesta), alto volumen de censura procesal y evasión. |
-| **Bitácoras de Vuelo** | Manifiestos aéreos y registros oficiales del Boeing 727 (bitácoras del *Lolita Express*). | ~600 fojas | Tablas de datos analógicas escaneadas, abreviaciones tipográficas y nombres manuscritos oblicuos. |
-| **Testimonios de Terceros** | Declaraciones juradas de víctimas, testigos secundarios, agentes federales e investigadores. | ~1,228 fojas | Ruido analógico severo provocado por la digitalización (OCR imperfecto) y marcas de confidencialidad administrativa. |
+| **Interrogatorios Oficiales** | Preguntas y respuestas bajo juramento realizadas a Ghislaine Maxwell, Virginia Giuffre y personas cercanas. | ~3,200 páginas | Conversaciones largas y confusas, con muchas frases censuradas y respuestas evasivas. |
+| **Registros de Vuelo** | Lista de pasajeros y destinos oficiales del avión privado de Epstein. | ~600 páginas | Tablas antiguas escaneadas, nombres escritos a mano difíciles de leer y abreviaturas extrañas. |
+| **Declaraciones de Testigos** | Testimonios de víctimas, policías, investigadores y personas relacionadas al caso. | ~1,228 páginas | Hojas muy borrosas por la calidad del escáner (errores al convertir la imagen a texto) y sellos de confidencialidad. |
 
-### 1.3 Los Tres Retos Críticos del Análisis Informático
-El análisis automatizado de este corpus documental se enfrenta a tres desafíos estructurales y lingüísticos severos:
-* **Ruido Analógico de Digitalización:** Gran parte de las fojas son fotocopias o escaneos oblicuos de documentos antiguos. Esto provoca que el texto extraído mediante OCR cuente con rupturas silábicas al final de las líneas (ej. `ex-` y `pediente` en líneas distintas), errores ortográficos de caracteres (ej. `I` por `l`) y ruido tipográfico general.
-* **Censura y Oclusión de Datos (`[REDACTED]`):** La presencia masiva de tachaduras de confidencialidad administrativa impuestas por el tribunal (para proteger identidades o datos sensibles) interrumpe la sintaxis y los flujos gramaticales de las oraciones, ocluyendo el contexto semántico.
-* **Evasividad Verbal Procesal:** Las respuestas de los declarantes en interrogatorios delictivos están diseñadas estratégicamente por abogados para eludir acusaciones o perjurio. Identificar de forma objetiva patrones de evasión (como apelar repetitivamente a la memoria o a enmiendas constitucionales) requiere una auditoría sintáctica rigurosa.
+### 1.3 Los Tres Problemas Principales al Analizar el Texto
+Para que un programa de computadora pueda leer y entender este expediente de forma automática, tuvimos que solucionar tres grandes retos:
+* **Calidad de Escaneo Deficiente (Texto Borroso):** Como muchos documentos son fotocopias viejas o están escaneados de lado, la conversión de imagen a texto (OCR) generó errores comunes. Por ejemplo, palabras cortadas a la mitad con guiones (como `ex-` y `pediente` en renglones diferentes), o letras confundidas (como una letra `I` en lugar de una `l` minúscula).
+* **Información Censurada (`[REDACTED]`):** El tribunal tachó con líneas negras muchos nombres, direcciones e información confidencial. Estas interrupciones rompen la estructura de las oraciones y dificultan que el programa entienda el contexto completo.
+* **Respuestas Evasivas de los Acusados:** En los juicios, los acusados y sus abogados usan estrategias verbales para no incriminarse. El programa debe ser capaz de detectar cuándo alguien repite patrones evasivos como decir "no me acuerdo", pedir objeciones o acogerse a la Quinta Enmienda constitucional para no responder.
 
 ---
 
