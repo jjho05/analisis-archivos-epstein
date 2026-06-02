@@ -140,9 +140,9 @@ EVASION_PATTERNS = {
 ```
 
 ### 3.2 Medición de Sentimiento y Nivel de Riesgo
-Se programó una fórmula sencilla que cuenta las palabras positivas y negativas de cada página para obtener un puntaje. Si el puntaje es menor a -0.05 la página es negativa, y si es menor a -0.3 es altamente negativa. 
+Se utiliza una fórmula sencilla que cuenta las palabras positivas y negativas de cada página para obtener un puntaje. Si el puntaje es menor a -0.05 la página es negativa, y si es menor a -0.3 es altamente negativa. 
 
-Además, se creó un **Índice de Riesgo** que suma puntos cada vez que un personaje es nombrado en la misma hoja donde aparecen temas graves (como abuso de menores o vuelos sospechosos).
+Además, se calcula un **Índice de Riesgo** que suma puntos cada vez que un personaje es nombrado en la misma hoja donde aparecen temas graves (como abuso de menores o vuelos sospechosos).
 
 ```python
 def sentiment_score(pos: int, neg: int) -> tuple:
@@ -194,7 +194,7 @@ El sistema organiza la información analizada en 5 herramientas interactivas:
    * **Chat Inteligente:** Permite hacer preguntas directas en lenguaje natural sobre el expediente y recibir respuestas basadas estrictamente en la documentación judicial.
 
 ### 4.2 Integración de Modelos de Inteligencia Artificial (LiteLLM)
-Para el chat conversacional (*Olvera AI*) y el *Auditor de Contradicciones*, se implementó una conexión flexible con modelos de lenguaje avanzados (como Gemini de Google o Llama de Meta a través de Groq) utilizando la librería **LiteLLM**:
+Para el chat conversacional (*Olvera AI*) y el *Auditor de Contradicciones*, se emplea una conexión flexible con modelos de lenguaje avanzados (como Gemini de Google o Llama de Meta a través de Groq) utilizando la librería **LiteLLM**:
 * **Uso Seguro de API Keys:** La clave de acceso (`GEMINI_API_KEY`) se lee directamente desde variables de entorno seguras, evitando que la clave quede expuesta públicamente en el código.
 * **Sistema de Respaldo Automático (Fallback):** Si el servidor principal de un proveedor experimenta lentitud o fallas, el programa cambia automáticamente a otro proveedor de respaldo de forma transparente para el usuario, garantizando que el asistente conversacional siga funcionando.
 
@@ -204,7 +204,7 @@ El sistema incluye un módulo en `report_generator.py` encargado de construir do
 * **Informes de Red y Mapa con IA:** Si el usuario solicita un análisis con IA, el generador captura esa explicación en tiempo real y la inserta elegantemente como introducción en el PDF antes de mostrar la tabla de datos correspondiente.
 
 ### 4.4 Optimización y Aceleración del Sistema
-Para garantizar que los gráficos y las búsquedas carguen en milisegundos, se programó un motor de aceleración basado en la lectura de los datos precalculados en formato CSV de la Fase 3:
+Para garantizar que los gráficos y las búsquedas carguen en milisegundos, se emplea un motor de aceleración basado en la lectura de los datos precalculados en formato CSV de la Fase 3:
 
 ```python
 # Carga directa de datos optimizados para evitar procesos pesados
@@ -218,7 +218,7 @@ if os.path.exists(csv_granular) and os.path.exists(csv_persons):
     evasions_count = int(df_granular['Evasiones_Detectadas'].sum())
 ```
 
-Adicionalmente, se configuró el aislamiento de la memoria del navegador clonando y separando el texto largo del chat de la visualización principal, previniendo que la aplicación se trabe o ralentice durante el uso.
+Adicionalmente, se aplica el aislamiento de la memoria del navegador clonando y separando el texto largo del chat de la visualización principal, previniendo que la aplicación se trabe o ralentice durante el uso.
 
 ---
 
