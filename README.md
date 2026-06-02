@@ -229,9 +229,15 @@ El sistema organiza la información analizada en ocho pestañas de trabajo espec
    * *Valor Analítico*: Funciona como un asistente de consulta rápida que procesa el contenido denso del expediente judicial y proporciona respuestas breves y verificadas, ahorrando horas de lectura y búsqueda manual.
 
 ### 4.2 Integración de Modelos de Inteligencia Artificial (LiteLLM)
-Para el chat conversacional y el Auditor de Contradicciones, se emplea una pasarela flexible de modelos de lenguaje (como Gemini de Google o Llama de Meta) utilizando la librería LiteLLM:
-* **Uso Seguro de Credenciales**: Las claves de acceso se leen directamente desde variables de entorno del sistema, evitando su exposición en el código fuente.
-* **Sistema de Respaldo Automático (Fallback)**: Si el proveedor principal presenta indisponibilidad o latencia excesiva, el software redirige de forma imperceptible la consulta hacia un proveedor alternativo, asegurando la continuidad del servicio.
+Para dar soporte al chat conversacional (Olvera AI), al Auditor de Contradicciones y a la generación dinámica de resúmenes analíticos en los reportes PDF, la aplicación se conecta con modelos de lenguaje de última generación. A través de la librería **LiteLLM**, el sistema tiene configurados y habilitados los siguientes modelos:
+
+* **Modelo Predeterminado (Google Gemini 2.0 Flash)**: Es el motor de procesamiento principal de la aplicación. Se seleccionó por su alta velocidad de respuesta, excelente manejo de contextos grandes y capacidades de análisis multimodal.
+* **Modelo de Razonamiento Avanzado (Meta Llama 3.3 70B a través de Groq)**: Se emplea para las auditorías de contradicciones y tareas complejas que requieren un análisis semántico estricto y detección de discrepancias narrativas complejas.
+* **Modelos de Respaldo y Alternativos**: El sistema incluye soporte para **Cerebras Llama 3.1 70B** (por su procesamiento de alta velocidad) y **GPT de OpenAI a través de OpenRouter**, sirviendo como canales redundantes de comunicación.
+
+**Protocolos de Integración y Seguridad:**
+* **Uso Seguro de Credenciales**: Las claves de acceso de los proveedores de IA (como `GEMINI_API_KEY`, `GROQ_API_KEY` o `CEREBRAS_API_KEY`) se leen directamente desde variables de entorno del sistema, evitando su exposición en el código fuente.
+* **Sistema de Respaldo Automático (Fallback)**: Si el modelo predeterminado de Google Gemini experimenta lentitud o una falla temporal en sus servidores, la aplicación redirige de forma automática e imperceptible la consulta del usuario hacia el motor de Meta Llama a través de Groq, garantizando que el asistente de chat y las descargas de reportes PDF sigan operativos sin interrupciones.
 
 ### 4.3 Generador Dinámico de Reportes Ejecutivos (PDF)
 El sistema integra un módulo de generación formal en PDF (report_generator.py) diseñado bajo estándares de presentación corporativa (empleando el término "Reporte"):
