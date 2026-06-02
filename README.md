@@ -54,18 +54,6 @@ graph TD
     F -->|Mapeo Folium| K[Inteligencia Geoespacial]
 ```
 
-##  Innovaciones de Grado Arquitectura
-
-Este proyecto integra tecnologías **State-of-the-Art** propias del análisis de datos moderno, llevando el procesamiento de lenguaje a un formato visual interactivo:
-
-1. **Grafo de Conocimiento Interactivo:** Se abandonan las gráficas planas por una red física interactiva generada con `PyVis` y `NetworkX`. El usuario puede interactuar con el grafo arrastrando los nodos para entender las dinámicas de poder y las asociaciones entre Jeffrey Epstein, Ghislaine Maxwell, políticos y testigos.
-2. **Dashboard Reactivo (Streaming de Datos en Vivo):** Integración de filtros reactivos en tiempo real ("streaming" de proporciones) directamente en la interfaz. Los sliders y selectores actualizan las métricas y gráficas al instante, reflejando proporciones exactas de evidencia sin latencia.
-3. **Motor Semántico RAG Local:** En lugar de hacer búsquedas tradicionales por palabras clave (`CTRL+F`), implementamos un modelo vectorial basado en TF-IDF y Similitud de Coseno. Si buscas *"viajes secretos a la isla"*, el algoritmo mapeará matemáticamente los vectores del texto y retornará los fragmentos relevantes de las 5,028 páginas, incluso si se usaron otras palabras.
-4. **Inteligencia Geoespacial:** Extracción automatizada de lugares de interés mencionados en los testimonios y renderizado en un mapa global interactivo oscuro usando `Folium` y `CartoDB`. Visualiza con precisión las rutas y ubicaciones clave de los reportes.
-5. **Agente Lógico Autónomo:** Integración con modelos fundacionales (LLM Llama 3.3 / Gemini) que funciona como un auditor inteligente. El modelo cruza testimonios, busca evasiones y genera un informe detallado de discrepancias en segundos utilizando los datos precisos del expediente.
-
----
-
 ##  Fase 1: Contexto y Obtención de Datos
 
 ### 1.1 Antecedentes del Expediente Judicial
@@ -192,44 +180,37 @@ Gracias a estas tablas ya calculadas, la aplicación web puede cargar y graficar
 
 ---
 
-##  Fase 4: Desarrollo del Dashboard e Inteligencia Artificial
+##  Fase 4: Desarrollo de la Aplicación e Inteligencia Artificial
 
-### Arquitectura de la Interfaz y Motor de Aceleración por Caching
-Para la visualización de los datos obtenidos, construimos un dashboard completamente interactivo utilizando la tecnología **Shiny for Python** (`app.py`), elegida por su capacidad reactiva superior para aplicaciones de ciencia de datos a gran escala.
+La interfaz visual se desarrolló utilizando la tecnología **Shiny para Python** (`app.py`), diseñada para ofrecer una interacción fluida y respuestas inmediatas sin lentitud en el navegador.
 
-Para evitar bloqueos visuales y latencias, diseñamos un motor acelerado que lee de forma instantánea los datos precalculados en formato CSV de la Fase 3, logrando que gráficas complejas carguen en milisegundos:
+### 4.1 Principales Funciones de la Aplicación
+El sistema organiza la información analizada en 5 herramientas interactivas:
+
+1. **Dashboard de Métricas:** Muestra gráficos y contadores con la cantidad de palabras, páginas y temas detectados. Se actualiza automáticamente al mover los filtros de personajes o menciones.
+2. **Buscador Semántico (Por Contexto):** Permite buscar frases por su significado y no solo por palabras exactas. Por ejemplo, al buscar "viajes secretos", el sistema encuentra fragmentos sobre vuelos y traslados aunque no lleven la palabra exacta "secretos". Muestra además el porcentaje de similitud y la página real de la cita.
+3. **Mapa de Rutas (Geoespacial):** Muestra de forma interactiva en un mapa oscuro las ubicaciones clave del expediente (como las islas de Epstein o sus mansiones) y permite descargar reportes que incluyen un análisis detallado redactado por Inteligencia Artificial.
+4. **Red de Relaciones Financieras (Grafo):** Permite ver en un gráfico de nodos interactivos el flujo de dinero entre bancos, abogados y empresas fachada. También permite generar informes escritos por IA sobre esta estructura financiera.
+5. **Auditor de Contradicciones y Chat (Olvera AI):**
+   * **Auditor:** Compara de forma lógica las declaraciones de los testigos en busca de inconsistencias o evasivas automáticas.
+   * **Chat Inteligente:** Permite hacer preguntas directas en lenguaje natural sobre el expediente y recibir respuestas basadas estrictamente en la documentación judicial.
+
+### 4.2 Optimización y Aceleración del Sistema
+Para garantizar que los gráficos y las búsquedas carguen en milisegundos, se programó un motor de aceleración basado en la lectura de los datos precalculados en formato CSV de la Fase 3:
 
 ```python
-# Aceleración mediante lectura de datasets precalculados en CSV
-if os.path.exists(csv_granular) and os.path.exists(csv_persons) and os.path.exists(csv_timeline):
+# Carga directa de datos optimizados para evitar procesos pesados
+if os.path.exists(csv_granular) and os.path.exists(csv_persons):
     import pandas as pd
     df_granular = pd.read_csv(csv_granular)
     df_persons = pd.read_csv(csv_persons)
     
-    # Sumarización de métricas en microsegundos sin re-procesar texto
+    # Obtiene sumas totales al instante
     redactions_count = int(df_granular['Menciones_Censuradas_REDACTED'].sum())
     evasions_count = int(df_granular['Evasiones_Detectadas'].sum())
 ```
 
-### Integración de Olvera AI Copilot con Modelos Fundacionales
-El Copilot conversacional **Olvera AI** se conecta con la API de inteligencia artificial mediante **LiteLLM**. El sistema recupera los resultados precalculados de los documentos y construye dinámicamente un contexto (prompt enriquecido) para que la IA responda basándose estrictamente en los documentos:
-
-```python
-# Payload de contexto enriquecido para inyectar al LLM en app.py
-results = extraction_results()
-metrics = results["metrics"]
-doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
-
-ctx = f"\n\n[CONTEXTO DE ANÁLISIS ANALÍTICO - DOCUMENTO: {doc_name}]\n"
-ctx += f"Páginas escaneadas: {results['pages_processed']}\n"
-ctx += f"Total de Evasiones Verbales: {metrics['evasiones_count']}\n"
-ctx += f"Fragmento del expediente: {results['text'][:10000]}...\n"
-```
-
-### Optimización Crítica de UI/UX y Filtros de Streaming en Vivo
-El dashboard no es estático; incluye una sección de **"Streaming" reactivo** donde las gráficas de anillo y los contadores KPI responden en milisegundos a los filtros laterales del usuario, ajustando la información proporcional en tiempo real. 
-
-Además, para garantizar que la interacción en el chat de la IA sea fluida, se modificó el comportamiento de la interfaz clonando los mensajes para aislar el gran bloque de texto de contexto del render visual (DOM), evitando que el navegador se sature durante las consultas.
+Adicionalmente, se configuró el aislamiento de la memoria del navegador clonando y separando el texto largo del chat de la visualización principal, previniendo que la aplicación se trabe o ralentice durante el uso.
 
 ---
 
