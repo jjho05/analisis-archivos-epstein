@@ -869,7 +869,7 @@ Si dos nodos (personas) están conectados, significa que sus nombres fueron docu
             document.addEventListener('DOMContentLoaded', runShadowInjection);
         """)
     ),
-    title=""
+    title="Analisis del Caso Epstein"
 )
 
 

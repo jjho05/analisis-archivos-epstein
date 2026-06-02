@@ -1,5 +1,5 @@
 ---
-title: Epstein Analytics Data Mining
+title: Analisis del Caso Epstein
 emoji: "⚖️"
 colorFrom: purple
 colorTo: indigo
