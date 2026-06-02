@@ -18,9 +18,11 @@ pinned: false
 
 ## Resumen del Proyecto
 
-En este trabajo creamos una aplicación web interactiva que permite explorar de forma automática las **5,028 páginas** de documentos desclasificados sobre el caso de **Jeffrey Epstein**. 
+En este trabajo creamos una aplicación web interactiva que permite explorar y analizar de forma automática las **5,028 páginas** de documentos desclasificados sobre el caso de **Jeffrey Epstein**, los cuales incluyen declaraciones bajo juramento, testimonios de testigos y registros de vuelo oficiales.
 
-El objetivo principal de nuestro proyecto es facilitar la lectura de este expediente gigante para que cualquier persona pueda entenderlo sin tener que leer miles de hojas a mano. Para lograrlo, programamos un sistema que limpia las hojas borrosas del escáner, cuenta cuántas veces se menciona a cada persona, detecta cuándo los testigos responden con evasivas (como decir "no recuerdo") y permite hacer búsquedas inteligentes por el significado de las oraciones en lugar de usar palabras exactas. Todos los resultados, mapas y conexiones se muestran de manera clara y visual en nuestra aplicación interactiva.
+El objetivo principal de nuestro proyecto es facilitar la lectura de este expediente gigante para que cualquier persona pueda entenderlo sin tener que revisar miles de hojas a mano. Para lograrlo, programamos un sistema que limpia el texto borroso de las copias escaneadas, cuenta cuántas veces se menciona a cada persona de interés y detecta cuándo los testigos responden con evasivas (como acogerse a la Quinta Enmienda o decir "no recuerdo"). 
+
+Además, la aplicación incluye mapas interactivos para seguir las rutas de vuelo, un grafo dinámico de conexiones para ver cómo se relacionaban las personas y los bancos involucrados, un buscador inteligente que comprende el significado de las preguntas y un asistente virtual que ayuda a auditar contradicciones. Todos estos gráficos, mapas y resultados se muestran de manera clara y visual en nuestra plataforma interactiva.
 
 ---
 
