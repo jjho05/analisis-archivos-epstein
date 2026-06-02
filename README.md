@@ -140,7 +140,35 @@ Durante la fase de diseño de la investigación, se evaluó la posibilidad de ut
 * **Alto Consumo de Memoria en Hugging Face:** Cargar y ejecutar un modelo Transformer de redes neuronales directamente en los servidores CPU gratuitos de Hugging Face consumía demasiada memoria RAM. Esto provocaba que la aplicación web tardara mucho en iniciar y presentara demoras al cargar los gráficos interactivos.
 * **Falta de Adaptación a la Jerga Legal:** DistilRoBERTa está entrenado con textos de internet de uso general (como opiniones o noticias). Al intentar leer transcripciones legales con términos de juicios, objeciones y palabras censuradas (`[REDACTED]`), el modelo cometía errores constantes al clasificar el tono y la gravedad de las menciones.
 
-Por ello, se prefirió un motor de análisis basado en listados de palabras específicas en local (que procesa las 5,028 páginas en milisegundos sin sobrecargar el servidor) y conectar las preguntas complejas del chat con modelos de lenguaje avanzados por medio de Inteligencia Artificial externa (RAG), garantizando rapidez y precisión.
+**Algoritmo alternativo implementado en su lugar:**
+En lugar de procesar los textos con redes neuronales pesadas, el sistema utiliza un enfoque de **Análisis de Sentimiento por Lexicones (Lexicon-based Sentiment Analysis)**. Este algoritmo recorre la transcripción, cuenta los hits de palabras con carga emocional y calcula el indicador mediante la siguiente lógica implementada en `analytic_processing.py`:
+
+```python
+# Definición de diccionarios de palabras con peso semántico (lexicones)
+NEGATIVE_LEXICON = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking'}
+POSITIVE_LEXICON = {'innocent', 'consent', 'cleared', 'dismissed', 'lawful', 'voluntary'}
+
+def calculate_page_sentiment(words_list):
+    # Contar cuántas palabras de la página coinciden con los diccionarios
+    pos_hits = sum(1 for w in words_list if w in POSITIVE_LEXICON)
+    neg_hits = sum(1 for w in words_list if w in NEGATIVE_LEXICON)
+    
+    total = pos_hits + neg_hits
+    if total == 0:
+        return 0.0, "Neutral"
+    
+    # Calcular el ratio de polaridad (entre -1.0 y 1.0)
+    score = (pos_hits - neg_hits) / total
+    
+    # Clasificación formal
+    if score < -0.3:
+        return score, "Altamente Negativo"
+    elif score < -0.05:
+        return score, "Negativo"
+    return score, "Neutral"
+```
+
+Esto nos permite analizar y estructurar las 5,028 páginas en pocos milisegundos de forma de procesamiento local acelerado, mientras que para las tareas complejas de razonamiento conversacional se conecta la base de conocimiento con modelos avanzados de inteligencia artificial (RAG).
 
 ### 3.6 Archivos de Datos Generados en Limpio (Directorio `03 Procesamiento Analítico`)
 Para asegurar que la aplicación web funcione al instante sin demoras, el proceso de análisis inicial genera 7 archivos organizados en formato CSV con toda la información ya procesada y resumida:
@@ -207,6 +235,25 @@ El sistema organiza la información analizada en ocho pestañas de trabajo espec
    * *Visualización*: Consta de un campo de búsqueda abierta y tarjetas de resultados en orden de relevancia. Cada tarjeta de resultado presenta el fragmento de declaración encontrado en el expediente, una etiqueta indicando la similitud porcentual calculada y el número de página de origen dentro de las 5,028 páginas analizadas.
    * *Interacción*: El usuario introduce consultas en lenguaje natural (ej. "vuelos secretos a la isla") y hace clic en buscar. También cuenta con un botón para descargar en PDF un reporte estructurado con las evidencias encontradas.
    * *Valor Analítico*: Facilita la recuperación de pasajes clave sin necesidad de coincidencia exacta de palabras, superando las limitaciones de la búsqueda convencional de texto (`Ctrl+F`).
+   * *Código de Implementación (Recuperador RAG Local)*: El buscador local calcula la relevancia de cada página utilizando `scikit-learn` en local mediante el siguiente flujo implementado en `app.py`:
+     ```python
+     from sklearn.feature_extraction.text import TfidfVectorizer
+     from sklearn.metrics.pairwise import cosine_similarity
+
+     # 1. Se segmenta la transcripción en un listado de páginas
+     # 2. Se vectorizan todas las páginas del expediente mediante pesos TF-IDF
+     vectorizer = TfidfVectorizer(stop_words='english', max_df=0.85)
+     tfidf_matrix = vectorizer.fit_transform(pages_text_list)
+
+     # 3. Se vectoriza la frase ingresada por el usuario (consulta)
+     query_vec = vectorizer.transform([user_query])
+
+     # 4. Se calcula la similitud de coseno entre el vector de consulta y el de cada página
+     similarities = cosine_similarity(query_vec, tfidf_matrix).flatten()
+
+     # 5. Se extraen los tres mejores resultados ordenados de mayor a menor relevancia
+     top_indices = similarities.argsort()[-3:][::-1]
+     ```
 4. **Auditor de Contradicciones**:
    * *Visualización*: Ofrece controles para seleccionar el tipo de contradicción a buscar y la persona de interés, además de un área de salida formal con los resultados lógicos estructurados.
    * *Interacción*: El usuario selecciona el enfoque analítico (ej. rutas de vuelos o discrepancias de abuso), la persona objetivo y el nivel de severidad de la auditoría. Luego de presionar el botón de inicio, puede descargar el reporte de contradicciones en PDF.
