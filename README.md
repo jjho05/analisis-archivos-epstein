@@ -146,37 +146,37 @@ Para asegurar que la aplicación web funcione al instante sin demoras, el proces
 
 ---
 
-## Arquitectura Técnica del Sistema de Procesamiento de Datos
+## Arquitectura del Sistema de Procesamiento de Datos
 
-Para lograr una latencia ultrabaja (menor a 0.05 segundos) y evitar la sobrecarga de memoria del servidor durante la interacción del usuario, el sistema está estructurado bajo una arquitectura de flujo de datos desacoplada en tres etapas secuenciales:
+Para que la aplicación funcione de manera inmediata sin demoras al cargar los gráficos y mapas, el sistema divide el trabajo en tres pasos sencillos:
 
 ```mermaid
 graph TD
-    subgraph Etapa 1: Ingesta e Higiene Léxica
-        A[Epstein_documents.pdf 5,028 páginas] -->|Extracción con pypdf| B[Texto Judicial en Crudo]
-        B -->|Normalización con preprocessing.py| C[consolidated_cleaned_text.txt 7.6 MB]
+    subgraph Paso 1: Extracción y Limpieza de Texto
+        A[Expediente en PDF 5,028 páginas] -->|Extractor de texto pypdf| B[Texto sin formato]
+        B -->|Limpieza automática de palabras| C[Archivo de texto limpio consolidated_cleaned_text.txt]
     end
 
-    subgraph Etapa 2: Procesamiento y Caché Analítica
-        C -->|Análisis con analytic_processing.py| D[Extracción de Métricas y Redes]
-        D -->|Indexación de Entidades| E[Archivos CSV y JSON Precalculados]
+    subgraph Paso 2: Análisis y Guardado de Datos
+        C -->|Análisis del texto con Python| D[Mapeo de nombres, evasiones y coordenadas]
+        D -->|Guardar datos simplificados| E[Archivos de datos estructurados CSV y JSON]
     end
 
-    subgraph Etapa 3: Consumo y Presentación Reactiva
-        E -->|Carga acelerada instantánea| F[Aplicación Shiny for Python app.py]
-        F -->|Grafo Social NetworkX / PyVis| G[Red de Co-ocurrencias e Influencia]
-        F -->|Búsqueda Semántica Local| H[Motor de Recuperación TF-IDF]
-        F -->|Careo Conversacional LiteLLM| I[Olvera AI Chat & Auditor]
-        F -->|Mapeo Folium / Leaflet| J[Mapa Geoespacial de Rutas]
-        F -->|Exportación ReportLab| K[Generador de Reportes PDF]
+    subgraph Paso 3: Aplicación Web Shiny app.py
+        E -->|Carga de datos al instante| F[Panel de Control Interactivo]
+        F -->|Gráficos de barras y burbujas| G[Dashboard de Métricas]
+        F -->|Búsqueda por significado| H[Buscador Semántico]
+        F -->|Chat y análisis automático| I[Asistente Olvera AI]
+        F -->|Mapas y gráficos de relaciones| J[Mapas y Red de Personas]
+        F -->|Botón de descarga directa| K[Generador de Reportes PDF]
     end
 ```
 
-### Descripción del Flujo del Pipeline de Datos
+### Descripción del Flujo de Datos
 
-1. **Etapa 1: Ingesta e Higiene Léxica**: El expediente en formato PDF de 5,028 páginas es procesado secuencialmente por el extractor para eliminar el ruido de digitalización (OCR). El texto limpio resultante se unifica en un archivo plano de 7.6 megabytes con etiquetas de paginación estructuradas, sirviendo de base textual única.
-2. **Etapa 2: Procesamiento y Caché Analítica**: Se ejecuta un proceso analítico independiente que escanea el texto plano normalizado. Este proceso identifica menciones de personajes, calcula índices de sentimiento y riesgo, extrae los fragmentos con tácticas de evasiva verbal y censura, y genera las matrices de relaciones geográficas, financieras y sociales. Toda esta información se almacena en formatos CSV y JSON de carga rápida en disco.
-3. **Etapa 3: Consumo y Presentación**: La aplicación Shiny for Python carga los datos precalculados en milisegundos en lugar de procesar el archivo PDF completo en tiempo de ejecución. Esto permite que los gráficos interactivos, mapas cartográficos y visualizaciones de redes respondan instantáneamente a los filtros del usuario. Además, se conecta localmente con algoritmos de similitud de coseno para búsquedas de contexto y mediante API seguras con modelos de lenguaje conversacionales (RAG).
+1. **Paso 1: Extracción y Limpieza de Texto**: El expediente original en PDF (que tiene más de 5,000 páginas) se procesa automáticamente con Python para extraer todo el texto. Se eliminan errores comunes del escáner y se unen palabras que quedaron cortadas por guiones al final de los renglones, guardando el resultado en un solo archivo de texto limpio de 7.6 megabytes.
+2. **Paso 2: Análisis y Guardado de Datos**: Se ejecuta un programa que lee el texto limpio para buscar menciones de personajes clave, identificar frases evasivas (como "no me acuerdo"), clasificar temas importantes y calcular coordenadas en el mapa. Toda esta información procesada se guarda en archivos pequeños de datos estructurados (CSV y JSON).
+3. **Paso 3: Aplicación Web**: La interfaz web (desarrollada en Shiny) lee directamente los archivos de datos estructurados del paso anterior. Como no tiene que procesar las 5,000 páginas de texto cada vez que el usuario hace clic, la aplicación responde al instante. Desde aquí, el usuario puede interactuar con el buscador semántico, el chat de inteligencia artificial, mapas interactivos, gráficos de relaciones sociales y descargar reportes finales en formato PDF.
 
 ---
 
