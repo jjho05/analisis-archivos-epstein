@@ -134,7 +134,15 @@ Cuando usas los filtros en la aplicación, el sistema calcula de forma automáti
 *   **Rol de Puente o Conector (Centralidad de Intermediación):** Mide qué tanto una persona sirve como "enlace" o puente para conectar a otros miembros que no se hablan directamente. Por ejemplo, Ghislaine Maxwell tiene un puntaje muy alto porque conectaba el dinero y las propiedades de Epstein con los políticos y las víctimas.
 *   **Círculo Cerrado (Coeficiente de Agrupamiento):** Mide qué tan conectados están los amigos de una persona entre sí. Un valor alto significa que la persona pertenece a un grupo cerrado y muy unido donde todos se conocen mutuamente.
 
-### 3.5 Archivos de Datos Generados en Limpio (Directorio `03 Procesamiento Analítico`)
+### 3.5 Justificación del Enfoque Analítico (Exclusión de Modelos Transformers como DistilRoBERTa)
+Durante la fase de diseño de la investigación, se evaluó la posibilidad de utilizar modelos de clasificación profunda basados en Transformers (como `distilroberta-base`) para analizar el tono del texto y clasificar las emociones de los testimonios. Sin embargo, se descartó su uso en favor del procesamiento analítico directo en Python por las siguientes razones:
+* **Límite de Palabras de los Modelos (Límite de Tokens):** Los modelos como DistilRoBERTa solo pueden leer un máximo de **512 tokens** (aproximadamente 380 palabras) a la vez. Como las hojas del expediente judicial contienen testimonios muy largos y detallados, el uso de estos modelos nos obligaba a cortar el texto a la mitad, perdiendo información valiosa sobre nombres de personajes y evasiones en cada página.
+* **Alto Consumo de Memoria en Hugging Face:** Cargar y ejecutar un modelo Transformer de redes neuronales directamente en los servidores CPU gratuitos de Hugging Face consumía demasiada memoria RAM. Esto provocaba que la aplicación web tardara mucho en iniciar y presentara demoras al cargar los gráficos interactivos.
+* **Falta de Adaptación a la Jerga Legal:** DistilRoBERTa está entrenado con textos de internet de uso general (como opiniones o noticias). Al intentar leer transcripciones legales con términos de juicios, objeciones y palabras censuradas (`[REDACTED]`), el modelo cometía errores constantes al clasificar el tono y la gravedad de las menciones.
+
+Por ello, se prefirió un motor de análisis basado en listados de palabras específicas en local (que procesa las 5,028 páginas en milisegundos sin sobrecargar el servidor) y conectar las preguntas complejas del chat con modelos de lenguaje avanzados por medio de Inteligencia Artificial externa (RAG), garantizando rapidez y precisión.
+
+### 3.6 Archivos de Datos Generados en Limpio (Directorio `03 Procesamiento Analítico`)
 Para asegurar que la aplicación web funcione al instante sin demoras, el proceso de análisis inicial genera 7 archivos organizados en formato CSV con toda la información ya procesada y resumida:
 1.  **`analytic_01_paginas_granular.csv`**: Contiene la información detallada hoja por hoja. Registra qué personajes aparecen en cada página, cuántas palabras están censuradas y cuántas evasiones hubo.
 2.  **`analytic_02_personas_sentimiento.csv`**: Resume las estadísticas finales por personaje. Guarda el total de menciones, el porcentaje de páginas donde aparece, su índice de sentimiento y su nivel de riesgo.
