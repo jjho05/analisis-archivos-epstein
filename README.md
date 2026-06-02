@@ -184,14 +184,38 @@ La interfaz visual se desarrolló utilizando la tecnología Shiny para Python (a
 ### 4.1 Herramientas Interactivas de la Aplicación
 El sistema organiza la información analizada en ocho pestañas de trabajo especializadas:
 
-1. **Dashboard de Métricas**: Muestra gráficos y contadores interactivos con la cantidad de palabras, páginas y temas de sospecha detectados. Se actualiza automáticamente en respuesta a los filtros de personajes o niveles de menciones mínimas seleccionados por el usuario.
-2. **Explorador de Transcripción (Análisis Léxico)**: Permite visualizar los fragmentos del texto original y muestra tarjetas de indicadores clave con la cantidad de palabras totales, palabras de contenido real (con significado), palabras de relleno (stopwords eliminadas), la densidad informativa (%) y la riqueza léxica del vocabulario empleado.
-3. **Búsqueda Semántica (Motor RAG Local)**: Permite buscar frases por su contexto e intención semántica en lugar de requerir palabras exactas. Por ejemplo, al buscar traslados irregulares se recuperan menciones de vuelos secretos aunque esa frase exacta no figure en el testimonio. El motor indica la similitud del texto y mapea la página real de origen dentro de las 5,028 fojas analizadas.
-4. **Auditor de Contradicciones**: Permite confrontar y analizar las deposiciones de testigos clave. El sistema busca discrepancias lógicas y respuestas evasivas, mostrando una bitácora detallada de hallazgos.
-5. **Inteligencia Geoespacial**: Muestra un mapa cartográfico en tonos oscuros con la ubicación física de las islas, mansiones y bases de operación mencionadas en las transcripciones, permitiendo trazar rutas aéreas frecuentes de la red de transporte.
-6. **Red Financiera**: Presenta un grafo de relaciones de red que expone la interacción de cuentas bancarias, firmas de abogados, fideicomisos y empresas fachada para el flujo de recursos.
-7. **Co-ocurrencia Social**: Analiza las conexiones e influencia entre personas basándose en su aparición conjunta en las mismas páginas del expediente. Incluye métricas estadísticas avanzadas como grado de conexión, intermediación (centralidad) y coeficientes de agrupamiento.
-8. **Olvera AI (Chat Conversacional)**: Permite realizar consultas directas sobre el expediente en lenguaje natural y obtener respuestas precisas estructuradas a partir de la base de conocimientos extraída de los expedientes.
+1. **Dashboard de Métricas**:
+   * *Visualización*: Presenta un panel de indicadores con contadores de palabras y evasiones verbales, gráficos de barras horizontales que desglosan la frecuencia de menciones por personaje, diagramas de distribución de temas de sospecha y un gráfico tridimensional simulado en burbujas que correlaciona el nivel de riesgo analítico de cada implicado con el tono (sentimiento positivo, neutral o negativo) de sus testimonios.
+   * *Interacción*: A través de una barra lateral interactiva, el usuario puede filtrar qué personajes desea incluir en los gráficos y determinar el umbral mínimo de menciones para depurar el ruido de nombres secundarios en la visualización.
+   * *Valor Analítico*: Proporciona un diagnóstico rápido del expediente completo, permitiendo identificar inmediatamente quiénes son los actores clave y qué áreas temáticas concentran el peso de la investigación.
+2. **Explorador de Transcripción (Análisis Léxico)**:
+   * *Visualización*: Muestra un panel superior con tarjetas de indicadores detallando palabras totales, palabras semánticas activas (las que aportan significado real), palabras de relleno o stopwords (artículos, preposiciones y conectores gramaticales), la densidad informativa (%) y la riqueza léxica del vocabulario. Debajo se despliega un área de texto con la transcripción limpia y un histograma interactivo de años mencionados en las deposiciones.
+   * *Interacción*: Permite examinar la transcripción en una vista previa de carga acelerada y cuenta con un botón de descarga directa para exportar la transcripción completa en formato de texto plano (`.txt`).
+   * *Valor Analítico*: Permite cuantificar la densidad de información en el testimonio, aislando la estructura procedimental judicial de los datos reales aportados por los testigos y revelando la concentración temporal de los hechos.
+3. **Búsqueda Semántica (Motor RAG Local)**:
+   * *Visualización*: Consta de un campo de búsqueda abierta y tarjetas de resultados en orden de relevancia. Cada tarjeta de resultado presenta el fragmento de declaración encontrado en el expediente, una etiqueta indicando la similitud porcentual calculada y el número de página de origen dentro de las 5,028 páginas analizadas.
+   * *Interacción*: El usuario introduce consultas en lenguaje natural (ej. "vuelos secretos a la isla") y hace clic en buscar. También cuenta con un botón para descargar en PDF un reporte estructurado con las evidencias encontradas.
+   * *Valor Analítico*: Facilita la recuperación de pasajes clave sin necesidad de coincidencia exacta de palabras, superando las limitaciones de la búsqueda convencional de texto (`Ctrl+F`).
+4. **Auditor de Contradicciones**:
+   * *Visualización*: Ofrece controles para seleccionar el tipo de contradicción a buscar y la persona de interés, además de un área de salida formal con los resultados lógicos estructurados.
+   * *Interacción*: El usuario selecciona el enfoque analítico (ej. rutas de vuelos o discrepancias de abuso), la persona objetivo y el nivel de severidad de la auditoría. Luego de presionar el botón de inicio, puede descargar el reporte de contradicciones en PDF.
+   * *Valor Analítico*: Funciona como un careo lógico automatizado que evalúa coartadas y detecta declaraciones contradictorias o patrones recurrentes de evasión al cruzar testimonios de diferentes declarantes.
+5. **Inteligencia Geoespacial**:
+   * *Visualización*: Renderiza un mapa interactivo con un tema visual oscuro que sitúa marcadores en coordenadas reales de islas privadas, mansiones, ranchos y oficinas de interés. Se representan mediante líneas de vuelo las conexiones de transporte de la red. El panel lateral muestra tarjetas analíticas para cada ubicación geográfica.
+   * *Interacción*: Permite hacer zoom, arrastrar el mapa y hacer clic en cada marcador para abrir detalles interactivos. El usuario puede generar y descargar en PDF un reporte formal que incorpora el análisis analítico redactado por el modelo de IA.
+   * *Valor Analítico*: Representa espacialmente la infraestructura y el alcance logístico de la red de transporte, revelando cómo se articulaban los traslados y los destinos recurrentes del caso.
+6. **Red Financiera**:
+   * *Visualización*: Muestra un grafo dinámico de nodos interactivos donde cada banco, firma de abogados, fideicomiso o empresa fantasma se representa como un círculo interconectado por aristas (líneas) cuyos colores e intensidades indican el tipo de flujo financiero.
+   * *Interacción*: Los nodos pueden ser arrastrados libremente por la pantalla para reorganizar la red y analizar las dependencias financieras. Un botón en el panel de control permite generar reportes asistidos por IA y exportar el mapa financiero en PDF.
+   * *Valor Analítico*: Expone el soporte económico del caso, identificando las cuentas y empresas utilizadas para dar cobertura monetaria a las operaciones de la red.
+7. **Co-ocurrencia Social**:
+   * *Visualización*: Presenta una red física interactiva que representa a personas físicas y sus lazos de cercanía según la cantidad de veces que son mencionadas juntas en las mismas páginas del expediente. A su lado, se despliega una tabla estructurada con métricas avanzadas (grado de conexión, intermediación de red o centralidad, y coeficiente de agrupamiento).
+   * *Interacción*: Los usuarios pueden arrastrar y acomodar los nodos del grafo, consultar la tabla analítica y presionar el botón de descarga del reporte formal en PDF.
+   * *Valor Analítico*: Determina de forma cuantitativa la estructura de influencia y la jerarquía organizativa de los involucrados en el caso, identificando quiénes funcionaban como intermediarios clave entre distintas células de la red.
+8. **Olvera AI (Chat Conversacional)**:
+   * *Visualización*: Muestra una interfaz de chat con burbujas de conversación con un diseño y tipografía de lectura clara.
+   * *Interacción*: El usuario escribe preguntas abiertas sobre hechos específicos del expediente y recibe respuestas inmediatas con justificación y fundamento en los testimonios reales del caso.
+   * *Valor Analítico*: Funciona como un asistente de consulta rápida que procesa el contenido denso del expediente judicial y proporciona respuestas breves y verificadas, ahorrando horas de lectura y búsqueda manual.
 
 ### 4.2 Integración de Modelos de Inteligencia Artificial (LiteLLM)
 Para el chat conversacional y el Auditor de Contradicciones, se emplea una pasarela flexible de modelos de lenguaje (como Gemini de Google o Llama de Meta) utilizando la librería LiteLLM:
