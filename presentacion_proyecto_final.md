@@ -4,7 +4,7 @@ theme: default
 paginate: true
 size: 16:9
 math: mathjax
-style: |
+style: 
   @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@300;400;600&display=swap');
   
   section {
@@ -200,8 +200,8 @@ Programación para Ciencia de Datos
 * **Fase 2: Procesamiento y Preparación de los Datos** — Extracción, higiene lingüística y consolidación del texto de 5,028 páginas.
 * **Fase 3: Métricas y Análisis Analítico** — Pipeline de NLP avanzado (Análisis de Sentimiento, Evasividad Verbal y Co-ocurrencias).
 * **Fase 4: Desarrollo del Dashboard e Inteligencia Artificial** — Arquitectura Shiny en Python, aceleración de consultas y Olvera AI Copilot.
-* **Fase 5: Resultados y Hallazgos Forenses** — Estadísticas métricas consolidadas del caso Epstein y mapeo de evasivas.
-* **Conclusiones y Perspectivas Técnicas** — Aportaciones y escalabilidad en informática forense legal.
+* **Fase 5: Resultados y Hallazgos Analíticas** — Estadísticas métricas consolidadas del caso Epstein y mapeo de evasivas.
+* **Conclusiones y Perspectivas Técnicas** — Aportaciones y escalabilidad en informática analítico legal.
 
 ---
 
@@ -210,7 +210,7 @@ Programación para Ciencia de Datos
 # FASE 1: CONTEXTO Y OBTENCIÓN DE DATOS
 ## Contexto del Expediente Judicial y Objetivos de la Investigación
 
-Este proyecto de analítica forense se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil entre **Virginia Giuffre** y **Ghislaine Maxwell** en la Corte Federal del Distrito Sur de Nueva York. 
+Este proyecto de analítica analítico se fundamenta en la desclasificación masiva de expedientes judiciales relacionados con el financiero estadounidense **Jeffrey Epstein**, derivados del litigio civil entre **Virginia Giuffre** y **Ghislaine Maxwell** en la Corte Federal del Distrito Sur de Nueva York. 
 
 Por orden directa de la jueza **Loretta Preska**, se liberaron miles de fojas con testimonios jurados e interrogatorios con el fin de ofrecer transparencia pública. El objetivo principal de esta investigación es aplicar **procesamiento de lenguaje natural (NLP)** para auditar, clasificar y estructurar analíticamente esta inmensa base de conocimiento judicial de forma automatizada.
 
@@ -243,7 +243,7 @@ Para la extracción y normalización del corpus de **5,028 páginas**, diseñamo
 <!-- _class: compact -->
 
 # FASE 2: PROCESAMIENTO Y PREPARACIÓN DE LOS DATOS
-## Algoritmo de Higiene y Limpieza de Texto (`preprocessing.py`)
+## Proceso de Higiene y Limpieza de Texto (`preprocessing.py`)
 
 La función `normalize_legal_text` aplica expresiones regulares en cascada para sanear el texto plano y resolver ruidos analógicos:
 
@@ -287,19 +287,19 @@ El resultado final se consolida en el archivo de alto rendimiento `consolidated_
 
 <!-- _class: compact -->
 
-# FASE 3: MÁTRICAS Y PROCESAMIENTO ANALÍTICO FORENSE
-## Arquitectura de Minería Lingüística e Diccionarios Forenses
+# FASE 3: METRICAS Y PROCESAMIENTO ANALÍTICO
+## Arquitectura de Minería Lingüística e Diccionarios Analíticas
 
-Para extraer inteligencia analítica de las 5,028 páginas, implementamos en `forensic_processing.py` un motor de análisis léxico y de reconocimiento de patrones. Definimos diccionarios dirigidos para evaluar la semántica y tácticas procesales del expediente:
+Para extraer inteligencia analítica de las 5,028 páginas, implementamos en `analytic_processing.py` un motor de análisis léxico y de reconocimiento de patrones. Definimos diccionarios dirigidos para evaluar la semántica y tácticas procesales del expediente:
 
 ```python
 # Léxicos de Sentimiento y Evasivas procesales
 NEGATIVE_LEXICON = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking', ...}
 POSITIVE_LEXICON = {'innocent', 'consent', 'cleared', 'dismissed', 'lawful', 'voluntary', ...}
 EVASION_PATTERNS = {
-    "I don't recall": r"\b(don't|do\s+not)\s+(recall|remember|recollect)\b",
-    "Objection": r"\b(objection|i\s+object)\b",
-    "Fifth Amendment": r"\b(fifth\s+amendment|plead\s+the\s+fifth)\b"
+    "I don't recall": r"\b(don'tdo\s+not)\s+(recallrememberrecollect)\b",
+    "Objection": r"\b(objectioni\s+object)\b",
+    "Fifth Amendment": r"\b(fifth\s+amendmentplead\s+the\s+fifth)\b"
 }
 ```
 
@@ -307,10 +307,10 @@ EVASION_PATTERNS = {
 
 <!-- _class: compact -->
 
-# FASE 3: MÁTRICAS Y PROCESAMIENTO ANALÍTICO FORENSE
-## Algoritmo de Sentimiento y Puntuación de Riesgo (`forensic_processing.py`)
+# FASE 3: METRICAS Y PROCESAMIENTO ANALÍTICO
+## Proceso de Sentimiento y Puntuación de Riesgo (`analytic_processing.py`)
 
-Diseñamos una métrica matemática de sentimiento y un *Índice de Riesgo Forense* basado en la densidad de vocablos negativos cruzados con tópicos críticos (Abuso/Menores y Logística de Aviones):
+Diseñamos una métrica matemática de sentimiento y un *Índice de Riesgo Analítico* basado en la densidad de vocablos negativos cruzados con tópicos críticos (Abuso/Menores y Logística de Aviones):
 
 ```python
 def sentiment_score(pos: int, neg: int) -> tuple:
@@ -332,7 +332,7 @@ for pat in TOPIC_KEYWORDS["Abuso / Menores"] + TOPIC_KEYWORDS["Logística / Avio
 
 <!-- _class: compact -->
 
-# FASE 3: MÁTRICAS Y PROCESAMIENTO ANALÍTICO FORENSE
+# FASE 3: METRICAS Y PROCESAMIENTO ANALÍTICO
 ## Extracción de Evasividad y Redes de Co-ocurrencia Social
 
 Para mapear la estructura social de la red de influencias, el pipeline evalúa la coexistencia de personajes en una misma página de manera matemática y extrae el contexto exacto de evasión verbal:
@@ -358,7 +358,7 @@ for match in re.finditer(pat, page, re.IGNORECASE):
 # FASE 4: DESARROLLO DEL DASHBOARD E IA
 ## Arquitectura de la Interfaz y Motor de Aceleración por Caching
 
-Para la visualización de los datos forenses, construimos un dashboard interactivo en **Python Shiny** (`app.py`). Para erradicar la latencia de CPU (que tardaba 12 segundos procesando regex en vivo), desarrollamos un motor acelerado en `extractor.py` que lee de forma instantánea los dataframes precalculados en la Fase 3:
+Para la visualización de los datos analíticos, construimos un dashboard interactivo en **Python Shiny** (`app.py`). Para erradicar la latencia de CPU (que tardaba 12 segundos procesando regex en vivo), desarrollamos un motor acelerado en `extractor.py` que lee de forma instantánea los dataframes precalculados en la Fase 3:
 
 ```python
 # Aceleración mediante lectura de datasets precalculados en CSV
@@ -388,7 +388,7 @@ results = extraction_results()
 metrics = results["metrics"]
 doc_name = pdf_files[0] if pdf_files else "Epstein_documents.pdf"
 
-ctx = f"\n\n[CONTEXTO DE ANÁLISIS FORENSE - DOCUMENTO: {doc_name}]\n"
+ctx = f"\n\n[CONTEXTO DE ANÁLISIS ANALÍTICO - DOCUMENTO: {doc_name}]\n"
 ctx += f"Páginas escaneadas: {results['pages_processed']} (Documento Completo)\n"
 ctx += f"Menciones de Censura [REDACTED]: {metrics['redactions_count']}\n"
 ctx += f"Total de Evasiones Verbales: {metrics['evasiones_count']}\n"
@@ -402,7 +402,7 @@ ctx += f"Fragmento del expediente: {results['text'][:10000]} (fin del fragmento)
 # FASE 4: DESARROLLO DEL DASHBOARD E IA
 ## Optimización Crítica de UI/UX y Fluidez Conversacional
 
-Para resolver el congelamiento del chat, modificamos `app.py` para aislar el payload del LLM del render visual del DOM. Clonamos los mensajes de la UI y les inyectamos el contexto forense en segundo plano:
+Para resolver el congelamiento del chat, modificamos `app.py` para aislar el payload del LLM del render visual del DOM. Clonamos los mensajes de la UI y les inyectamos el contexto analítico en segundo plano:
 
 ```python
 # Clonación de mensajes para aislar el contexto del DOM visual de PyShiny
@@ -421,47 +421,61 @@ if llm_messages and llm_messages[-1]["role"] == "user":
 
 <!-- _class: compact -->
 
-# FASE 5: RESULTADOS Y HALLAZGOS FORENSES
-## Métricas de Evasividad y Censura del Corpus Judicial
+# FASE 4: ARQUITECTURA LEGALTECH E INTELIGENCIA
+## Grafos, Búsqueda Semántica y Agentes (State-of-the-Art)
 
-El análisis masivo sobre las **5,028 páginas** y **1,323,138 palabras** del expediente arrojó un total de **1,367 instancias de censura administrativa** (`REDACTED`) y **2,338 tácticas verbales de evasividad** identificadas bajo juramento. A continuación se detalla la distribución de tácticas verbales:
+Para elevar el proyecto a un estándar industrial analítico, se integraron arquitecturas vanguardistas:
 
-| Táctica de Evasividad Detectada | Total de Instancias | Razón e Impacto Forense |
-| :--- | :---: | :--- |
-| **Objection** (Objeciones de Abogados) | 1,915 | Obstrucción sistemática de líneas de cuestionamiento clave. |
-| **Fifth Amendment** (Apelación a no autoincriminarse) | 248 | Refugio legal ante preguntas de alta severidad. |
-| **Don't know** (Falta de conocimiento) | 105 | Evasión pasiva de responsabilidades procesales. |
-| **Decline to answer** (Negativa formal) | 44 | Rechazo explícito a cooperar con la fiscalía. |
-| **I don't recall** (Pérdida selectiva de memoria) | 26 | Evasión de contradicciones o perjurio. |
+1. **Grafo Interactivo Criminal (PyVis):** Visualización interactiva 3D con simulación física de la red de involucrados, superando las limitaciones de los gráficos estáticos.
+2. **Motor de Búsqueda Semántica RAG:** Modelo basado en **TF-IDF** y *Similitud del Coseno*. Permite buscar "conceptos" y retornar la cita exacta del expediente aunque no coincidan las palabras exactas.
+3. **Mapeo Geoespacial (Folium):** Extracción automatizada de coordenadas y trazado interactivo de rutas logísticas de la red aérea (El *Lolita Express*).
+4. **Agente Lógico de Contradicciones:** Uso asíncrono del LLM como auditor autónomo que cruza narrativas para detectar discrepancias y emitir alertas.
 
 ---
 
 <!-- _class: compact -->
 
-# FASE 5: RESULTADOS Y HALLAZGOS FORENSES
-## Mapeo de Personas de Interés y Densidad de Riesgo Forense
+# FASE 5: RESULTADOS Y HALLAZGOS ANALÍTICOS
+## Métricas de Evasividad y Censura del Corpus Judicial
 
-El pipeline analítico estructuró el perfil forense de las personas clave con mayor mención en el corpus, calculando el cruzamiento semántico de su contexto de mención:
+El análisis masivo sobre las **5,028 páginas** y **1,323,138 palabras** del expediente arrojó un total de **1,367 instancias de censura administrativa** (`REDACTED`) y **2,338 tácticas verbales de evasividad** identificadas bajo juramento. A continuación se detalla la distribución de tácticas verbales:
 
-| Persona de Interés | Total Menciones | Sentimiento | Riesgo Forense | Clasificación de Contexto |
-| :--- | :---: | :---: | :---: | :--- |
-| **Jeffrey Epstein** | 1,744 | -0.294 | 516 | Altamente Negativo / Foco Principal |
-| **Ghislaine Maxwell** | 1,033 | -0.103 | 192 | Negativo / Co-organizadora |
-| **Virginia Giuffre** | 528 | 0.266 | 42 | Positivo / Contexto de Víctima |
-| **Prince Andrew** | 396 | -0.254 | 94 | Negativo / Red de Influencias |
-| **Alan Dershowitz** | 234 | -0.234 | 77 | Negativo / Red de Influencias |
+ Táctica de Evasividad Detectada  Total de Instancias  Razón e Impacto Analítico 
+ :---  :---:  :--- 
+ **Objection** (Objeciones de Abogados)  1,915  Obstrucción sistemática de líneas de cuestionamiento clave. 
+ **Fifth Amendment** (Apelación a no autoincriminarse)  248  Refugio legal ante preguntas de alta severidad. 
+ **Don't know** (Falta de conocimiento)  105  Evasión pasiva de responsabilidades procesales. 
+ **Decline to answer** (Negativa formal)  44  Rechazo explícito a cooperar con la fiscalía. 
+ **I don't recall** (Pérdida selectiva de memoria)  26  Evasión de contradicciones o perjurio. 
+
+---
+
+<!-- _class: compact -->
+
+# FASE 5: RESULTADOS Y HALLAZGOS ANALÍTICOS
+## Mapeo de Personas de Interés y Densidad de Riesgo Analítico
+
+El pipeline analítico estructuró el perfil analítico de las personas clave con mayor mención en el corpus, calculando el cruzamiento semántico de su contexto de mención:
+
+ Persona de Interés  Total Menciones  Sentimiento  Riesgo Analítico  Clasificación de Contexto 
+ :---  :---:  :---:  :---:  :--- 
+ **Jeffrey Epstein**  1,744  -0.294  516  Altamente Negativo / Foco Principal 
+ **Ghislaine Maxwell**  1,033  -0.103  192  Negativo / Co-organizadora 
+ **Virginia Giuffre**  528  0.266  42  Positivo / Contexto de Víctima 
+ **Prince Andrew**  396  -0.254  94  Negativo / Red de Influencias 
+ **Alan Dershowitz**  234  -0.234  77  Negativo / Red de Influencias 
 
 ---
 
 <!-- _class: compact -->
 
 # CONCLUSIONES Y PERSPECTIVAS TÉCNICAS
-## Aportaciones del Proyecto y Escalabilidad Forense
+## Aportaciones del Proyecto y Escalabilidad Analítica
 
 * **Automatización del Análisis Legal:** Logramos diseñar y desplegar un pipeline capaz de analizar un expediente judicial masivo en milisegundos, convirtiendo datos puramente no estructurados en dataframes limpios y bases de conocimiento.
-* **Mitigación de Cuellos de Botella Técnicos:** Optimizamos los hilos de CPU migrando el procesamiento pesado hacia una caché CSV estructurada, reduciendo los tiempos de respuesta del dashboard forense de **12 segundos a menos de 0.05 segundos**.
+* **Mitigación de Cuellos de Botella Técnicos:** Optimizamos los hilos de CPU migrando el procesamiento pesado hacia una caché CSV estructurada, reduciendo los tiempos de respuesta del dashboard analítico de **12 segundos a menos de 0.05 segundos**.
 * **Integración Conversacional Robusta:** Conseguimos conectar el Copilot conversacional **Olvera AI** con RAG de alta fidelidad, solventando problemas de rendimiento del DOM del navegador mediante aislamiento y estructuración de payload limpia.
-* **Escalabilidad Global:** Este pipeline forense es aplicable a cualquier conjunto documental desclasificado del mundo (archivos estatales, de derechos humanos o corporativos) acelerando de forma democrática y transparente la búsqueda de la verdad.
+* **Escalabilidad Global:** Este pipeline analítico es aplicable a cualquier conjunto documental desclasificado del mundo (archivos estatales, de derechos humanos o corporativos) acelerando de forma democrática y transparente la búsqueda de la verdad.
 
 ---
 

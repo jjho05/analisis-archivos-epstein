@@ -140,11 +140,11 @@ Durante la fase de diseño de la investigación, se evaluó la posibilidad de ut
 * **Alto Consumo de Memoria en Hugging Face:** Cargar y ejecutar un modelo Transformer de redes neuronales directamente en los servidores CPU gratuitos de Hugging Face consumía demasiada memoria RAM. Esto provocaba que la aplicación web tardara mucho en iniciar y presentara demoras al cargar los gráficos interactivos.
 * **Falta de Adaptación a la Jerga Legal:** DistilRoBERTa está entrenado con textos de internet de uso general (como opiniones o noticias). Al intentar leer transcripciones legales con términos de juicios, objeciones y palabras censuradas (`[REDACTED]`), el modelo cometía errores constantes al clasificar el tono y la gravedad de las menciones.
 
-**Algoritmo alternativo implementado en su lugar:**
-En lugar de procesar los textos con redes neuronales pesadas, el sistema utiliza un enfoque de **Análisis de Sentimiento por Lexicones (Lexicon-based Sentiment Analysis)**. Este algoritmo recorre la transcripción, cuenta los hits de palabras con carga emocional y calcula el indicador mediante la siguiente lógica implementada en `analytic_processing.py`:
+**Proceso alternativo implementado en su lugar:**
+En lugar de procesar los textos con redes neuronales pesadas, el sistema utiliza un enfoque de **Análisis de Sentimiento por Léxico**. Este método recorre la transcripción, cuenta las apariciones de palabras con carga emocional y calcula el indicador mediante la siguiente lógica implementada en `analytic_processing.py`:
 
 ```python
-# Definición de diccionarios de palabras con peso semántico (lexicones)
+# Definición de diccionarios de palabras con peso semántico (léxico)
 NEGATIVE_LEXICON = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking'}
 POSITIVE_LEXICON = {'innocent', 'consent', 'cleared', 'dismissed', 'lawful', 'voluntary'}
 

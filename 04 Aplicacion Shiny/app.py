@@ -657,7 +657,7 @@ app_ui = ui.page_sidebar(
             "Búsqueda Semántica",
             ui.div(
                 ui.h3("Buscador Inteligente (Por Contexto)", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
-                ui.p("A diferencia de un buscador normal que requiere la palabra exacta, este motor utiliza un algoritmo matemático para entender la intención y el significado de tu búsqueda. Esto te permite encontrar evidencia aunque los testigos hayan usado términos distintos para referirse a lo mismo.", style="color:#bfaec2; margin-bottom:25px;"),
+                ui.p("A diferencia de un buscador normal que requiere la palabra exacta, este motor utiliza un modelo matemático para entender la intención y el significado de tu búsqueda. Esto te permite encontrar evidencia aunque los testigos hayan usado términos distintos para referirse a lo mismo.", style="color:#bfaec2; margin-bottom:25px;"),
                 ui.layout_columns(
                     ui.input_text("search_query", " ¿Qué intentas encontrar en el expediente? (Ej. Encuentros en la isla, logística de vuelos secretos):", width="100%"),
                     ui.input_action_button("search_btn", "Buscar", class_="btn-primary", style="margin-top:24px; background:#a855f7; border:none; height:40px;"),
@@ -998,7 +998,7 @@ def server(input, output, session):
                 ui.div(
                     ui.div(
                         ui.div("Total Evasivas", class_="kpi-title"),
-                        ui.div(f"🤐 {metrics['evasions_count']:,}", class_="kpi-value", style="color: #eab308;"),
+                        ui.div(f"{metrics['evasions_count']:,}", class_="kpi-value", style="color: #eab308;"),
                         class_="kpi-card"
                     ),
                     class_="kpi-wrapper"
@@ -1058,7 +1058,7 @@ def server(input, output, session):
                     ui.card_header("Tácticas de Evasividad Verbal Detectadas"),
                     ui.output_plot("evasions_details_chart"),
                     ui.div(
-                        ui.div("🤐 PERFIL DE POSTURA DEFENSIVA", class_="explanation-title"),
+                        ui.div("PERFIL DE POSTURA DEFENSIVA", class_="explanation-title"),
                         ui.p("Clasifica las evasiones lingüísticas más comunes realizadas en el documento, distinguiendo objeciones de abogados de la pérdida de memoria alegada ('no recuerdo') o apelaciones constitucionales a la Quinta Enmienda."),
                         class_="explanation-box"
                     )
@@ -1949,7 +1949,7 @@ def server(input, output, session):
             ui.div(
                 ui.div(
                     ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'> Explicar Métricas</div><div style='color:#bfaec2;font-size:0.82rem;'>Analiza los gráficos y los KPIs actuales</div>"),
-                    onclick="Shiny.setInputValue('suggestion_click', 'Analiza y resume los KPIs y gráficos analíticas del documento actual', {priority:'event'})",
+                    onclick="Shiny.setInputValue('suggestion_click', 'Analiza y resume los KPIs y gráficos analíticos del documento actual', {priority:'event'})",
                     class_="chat-suggestion-box",
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"
                 ),
@@ -1960,7 +1960,7 @@ def server(input, output, session):
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"
                 ),
                 ui.div(
-                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'>🤐 Estrategia de Evasión</div><div style='color:#bfaec2;font-size:0.82rem;'>Analiza las tácticas evasivas del testimonio</div>"),
+                    ui.HTML("<div style='font-weight:700;color:#ffffff;font-size:0.9rem;margin-bottom:4px;'>Estrategia de Evasión</div><div style='color:#bfaec2;font-size:0.82rem;'>Analiza las tácticas evasivas del testimonio</div>"),
                     onclick="Shiny.setInputValue('suggestion_click', 'Evalúa las tácticas de evasión verbal encontradas. ¿Se observa una postura defensiva o evasiva sistemática?', {priority:'event'})",
                     class_="chat-suggestion-box",
                     style="background:#161224;border:1px solid rgba(168,85,247,0.22);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;"

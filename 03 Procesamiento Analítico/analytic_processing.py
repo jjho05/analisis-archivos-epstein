@@ -261,7 +261,7 @@ def main():
     # DATASET 3: REGISTRO DE EVASIONES VERBALES (instancia por instancia)
     # Una fila por cada evasión detectada en el texto, con contexto
     # 
-    print("🤐 [3/5] Generando dataset EVASIONES VERBALES por instancia...")
+    print("[3/5] Generando dataset EVASIONES VERBALES por instancia...")
     evasion_rows = []
     for i, page in enumerate(pages_text, start=1):
         for cat, pat in EVASION_PATTERNS.items():

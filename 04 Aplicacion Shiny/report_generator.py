@@ -163,7 +163,7 @@ def generate_dashboard_report(metrics_dict, themes_dict, persons_list, output_di
     
     pdf.chapter_title("3. PREVALENCIA TEMÁTICA EN LAS DEPOSICIONES", color=(16, 185, 129))
     pdf.chapter_body(
-        "A través de lexicones dirigidos y modelos de minería léxica, se clasificó la frecuencia de "
+        "A través de un análisis del léxico dirigido y modelos de minería léxica, se clasificó la frecuencia de "
         "menciones de conceptos clave dentro del expediente. Las categorías reflejan la distribución del "
         "interrogatorio y los focos de interés de la fiscalía:"
     )
