@@ -276,6 +276,49 @@ El motor de búsqueda y categorización permitió establecer qué proporción de
 
 ---
 
+## Fase 6: Publicación y Despliegue en Hugging Face Spaces
+
+El despliegue del proyecto interactivo se realizó en la plataforma Hugging Face Spaces utilizando contenedores Docker. A continuación, se detalla el procedimiento paso a paso empleado para la publicación del sistema:
+
+### 6.1 Configuración del Entorno en Hugging Face
+1. **Creación del Espacio (Space)**:
+   * Acceder a la cuenta de Hugging Face y crear un nuevo Space asignándole un nombre identificatorio (por ejemplo, `analisis-archivos-epstein`).
+   * Configurar el SDK de ejecución seleccionando la opción **Docker** (plantilla en blanco o *Blank*).
+   * Definir la visibilidad como **Pública** para permitir el acceso e interacción de usuarios externos con la aplicación.
+2. **Definición de Credenciales y Variables de Entorno Seguras**:
+   * En la configuración del Space, acceder a la pestaña de administración **Settings**.
+   * Localizar la sección **Variables and Secrets** y añadir un nuevo secreto con la clave `GEMINI_API_KEY`, asignándole el valor de la credencial personal del modelo de lenguaje. Esto permite que el contenedor acceda al modelo conversacional de forma segura sin exponer la clave en el código fuente del repositorio público.
+
+### 6.2 Construcción del Contenedor (Dockerfile)
+En la raíz del proyecto se incluyó un archivo `Dockerfile` optimizado encargado de estructurar el entorno aislado del servidor:
+* **Especificación del Entorno**: Utiliza una imagen base ligera de Python (`python:3.9-slim`) para agilizar los tiempos de construcción y descarga.
+* **Instalación de Dependencias**: Copia el archivo `requirements.txt` e instala las librerías necesarias (como pandas, matplotlib, sklearn, litellm, folium, networkx y pyvis).
+* **Puerto de Escucha Obligatorio**: Configura la ejecución del servidor Shiny en el puerto `7860`. Este puerto es un requisito mandatorio del balanceador de carga de Hugging Face para enrutar el tráfico HTTP de los usuarios hacia el contenedor de la aplicación.
+* **Comando de Arranque**:
+  ```dockerfile
+  CMD ["shiny", "run", "app.py", "--host", "0.0.0.0", "--port", "7860"]
+  ```
+
+### 6.3 Vinculación y Subida de Cambios con Git
+Para automatizar la subida y sincronización de código entre el repositorio local, GitHub y Hugging Face, se ejecutaron las siguientes acciones en el terminal:
+1. **Añadir el remoto de Hugging Face**:
+   ```bash
+   git remote add huggingface https://huggingface.co/spaces/JesusOlv05/analisis-archivos-epstein
+   ```
+2. **Sincronización y Empuje de Código**:
+   Cada actualización en la aplicación se envía de forma simétrica a ambos repositorios mediante la secuencia de comandos Git:
+   ```bash
+   git push origin main
+   git push huggingface main
+   ```
+
+### 6.4 Monitoreo de la Compilación e Inicio de la Aplicación
+* Al recibir los cambios, la plataforma inicia de inmediato la reconstrucción del contenedor Docker en sus servidores.
+* El progreso de la instalación y arranque de la interfaz Shiny se puede seguir en tiempo real desde la pestaña **Logs** del Space.
+* Una vez finalizado el proceso de construcción, el estado del Space cambia a verde indicando **Running**, y la aplicación se despliega de forma interactiva en la pestaña **App** del espacio.
+
+---
+
 ## Conclusiones y Perspectivas Técnicas
 
 * **Automatización del Procesamiento**: Se estructuró un pipeline capaz de procesar fojas judiciales masivas y convertirlas en bases de conocimiento y tablas relacionales accionables.
@@ -305,11 +348,3 @@ GEMINI_API_KEY="tu_clave_aquí"
 cd "04 Aplicacion Shiny"
 shiny run --reload app.py
 ```
-
----
-
-## Despliegue en Hugging Face Spaces (Docker)
-
-El proyecto incluye un `Dockerfile` optimizado en la carpeta raíz. Al subir los archivos de este directorio a tu Space de Hugging Face configurado con el SDK **Docker**, la plataforma compilará y desplegará la app automáticamente.
-
-> **Seguridad**: Recuerda agregar tu clave (`GEMINI_API_KEY`) de forma segura dentro de la sección **Variables de Entorno (Secrets)** en la configuración de tu Space en Hugging Face. Nunca subas el archivo `.env` al repositorio público.
