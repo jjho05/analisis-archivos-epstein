@@ -94,31 +94,31 @@ Para que un programa de computadora pueda leer y entender este expediente de for
 
 ##  Fase 2: Procesamiento y Preparación de los Datos
 
-### Arquitectura Tecnológica y Justificación de Herramientas
-Para la extracción y normalización del corpus de **5,028 páginas**, diseñamos un pipeline en Python empleando dos bibliotecas fundamentales para maximizar la eficiencia:
+### 2.1 Herramientas Utilizadas y por qué las elegimos
+Para extraer y limpiar el texto de las **5,028 páginas** de documentos, creamos un proceso automático en Python utilizando dos herramientas principales:
 
-* **`pypdf` (Librería de Extracción Binaria):** Elegida por su capacidad para procesar archivos binarios pesados de forma nativa sin requerir dependencias externas. Extrae flujos de texto plano de manera sumamente veloz y con bajo consumo de memoria RAM.
-* **`re` (Motor de Expresiones Regulares en C):** Seleccionado para la manipulación profunda del texto extraído. Su velocidad permite realizar búsquedas complejas para normalizar rupturas silábicas y limpiar el ruido tipográfico en cuestión de microsegundos.
+* **`pypdf` (Lector de archivos PDF):** Elegimos esta librería porque puede leer archivos PDF grandes y pesados directamente, sin necesidad de instalar programas adicionales. Extrae el texto de las páginas de manera muy rápida y consumiendo muy poca memoria de la computadora.
+* **`re` (Motor de Búsqueda y Reemplazo):** Esta herramienta permite realizar búsquedas y limpiezas profundas dentro del texto de forma casi instantánea. La usamos para unir palabras cortadas por guiones al final de un renglón y para limpiar símbolos extraños creados por el escáner.
 
-### Algoritmo de Higiene y Limpieza de Texto (`preprocessing.py`)
-La función base aplica expresiones regulares en cascada para sanear el texto plano y resolver los ruidos de la digitalización:
+### 2.2 Código para Limpieza de Texto (`preprocessing.py`)
+Utilizamos un conjunto de reglas automáticas para limpiar el texto de cada página y corregir los errores de la digitalización:
 
 ```python
 def normalize_legal_text(text: str) -> str:
     if not text: return ""
-    # 1. Une palabras cortadas con guion al final de línea (separación silábica)
+    # 1. Une palabras cortadas con guion al final de un renglón (separación en sílabas)
     text = re.sub(r'(\w+)-\s*\n\s*(\w+)', r'\1\2', text)
-    # 2. Reemplaza saltos de línea y tabuladores por espacios simples
+    # 2. Reemplaza los saltos de línea y tabuladores por espacios sencillos
     text = re.sub(r'[\n\r\t]+', ' ', text)
-    # 3. Elimina ruido tipográfico manteniendo signos gramaticales básicos
+    # 3. Elimina símbolos extraños del escáner y conserva los signos de puntuación básicos
     text = re.sub(r'[^\w\s\-\#\@\.\,\:\;]', '', text)
-    # 4. Colapsa múltiples espacios consecutivos en un espacio único
+    # 4. Reduce múltiples espacios seguidos a un solo espacio
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 ```
 
-### Orquestación del Bucle de Extracción y Consolidación
-El pipeline recorre secuencialmente el corpus indexando cada página, manteniendo así la fidelidad a los folios originales del documento judicial:
+### 2.3 Cómo Extraemos y Juntamos la Información
+El programa lee el archivo PDF página por página, limpia el texto de cada una y las guarda en orden para no perder la estructura del expediente judicial original:
 
 ```python
 consolidated_text = []
@@ -126,12 +126,12 @@ for idx in range(limit_pages):
     raw_text = reader.pages[idx].extract_text() or ""
     cleaned_text = normalize_legal_text(raw_text)
     
-    # Marcador de separación estructural para trazabilidad 1-a-1
+    # Marcador para saber exactamente a qué página pertenece cada texto
     page_block = f"--- PÁGINA {idx + 1} ---\n{cleaned_text}"
     consolidated_text.append(page_block)
 ```
 
-El resultado final se consolida en el archivo de alto rendimiento `consolidated_cleaned_text.txt` de **7.6 MB** y **6.8 millones de caracteres**, el cual actúa como la base de conocimiento depurada para las siguientes fases.
+El resultado de todo este proceso se guarda en un único archivo llamado `consolidated_cleaned_text.txt` que pesa **7.6 MB** y contiene **6.8 millones de caracteres**. Este archivo sirve como la base de texto limpio y listo para usarse en las siguientes etapas del proyecto.
 
 ---
 
