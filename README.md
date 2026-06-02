@@ -12,6 +12,7 @@ pinned: false
 
 > **Programación para Ciencia de Datos**  
 > **Autor:** Jesús Javier Hernández Olvera  
+> **Plataforma Interactiva en Vivo (Hugging Face Spaces):** [JesusOlv05/analisis-archivos-epstein](https://huggingface.co/spaces/JesusOlv05/analisis-archivos-epstein)
 
 ---
 
