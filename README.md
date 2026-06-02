@@ -176,13 +176,11 @@ Para asegurar que la aplicación web funcione al instante sin demoras, el proces
 6.  **`geospatial_data.csv`**: Contiene las coordenadas geográficas, nombres y resúmenes de los lugares clave mencionados en los testimonios (islas, ranchos, mansiones).
 7.  **`financial_network_data.csv`**: Estructura las relaciones y transacciones de dinero entre las fundaciones, abogados, empresas fachada y bancos implicados.
 
-Gracias a estas tablas ya calculadas, la aplicación web puede cargar y graficar toda la información en milisegundos.
-
 ---
 
 ##  Fase 4: Desarrollo de la Aplicación e Inteligencia Artificial
 
-La interfaz visual se desarrolló utilizando la tecnología **Shiny para Python** (`app.py`), diseñada para ofrecer una interacción fluida y respuestas inmediatas sin lentitud en el navegador.
+La interfaz visual se desarrolló utilizando la tecnología **Shiny para Python** (`app.py`), una herramienta diseñada para crear aplicaciones web interactivas de ciencia de datos con respuestas inmediatas y un rendimiento de alta velocidad.
 
 ### 4.1 Principales Funciones de la Aplicación
 El sistema organiza la información analizada en 5 herramientas interactivas:
@@ -192,10 +190,20 @@ El sistema organiza la información analizada en 5 herramientas interactivas:
 3. **Mapa de Rutas (Geoespacial):** Muestra de forma interactiva en un mapa oscuro las ubicaciones clave del expediente (como las islas de Epstein o sus mansiones) y permite descargar reportes que incluyen un análisis detallado redactado por Inteligencia Artificial.
 4. **Red de Relaciones Financieras (Grafo):** Permite ver en un gráfico de nodos interactivos el flujo de dinero entre bancos, abogados y empresas fachada. También permite generar informes escritos por IA sobre esta estructura financiera.
 5. **Auditor de Contradicciones y Chat (Olvera AI):**
-   * **Auditor:** Compara de forma lógica las declaraciones de los testigos en busca de inconsistencias o evasivas automáticas.
+   * **Auditor:** Compara de forma de careo lógico las declaraciones de los testigos en busca de inconsistencias o evasivas automáticas.
    * **Chat Inteligente:** Permite hacer preguntas directas en lenguaje natural sobre el expediente y recibir respuestas basadas estrictamente en la documentación judicial.
 
-### 4.2 Optimización y Aceleración del Sistema
+### 4.2 Integración de Modelos de Inteligencia Artificial (LiteLLM)
+Para el chat conversacional (*Olvera AI*) y el *Auditor de Contradicciones*, se implementó una conexión flexible con modelos de lenguaje avanzados (como Gemini de Google o Llama de Meta a través de Groq) utilizando la librería **LiteLLM**:
+* **Uso Seguro de API Keys:** La clave de acceso (`GEMINI_API_KEY`) se lee directamente desde variables de entorno seguras, evitando que la clave quede expuesta públicamente en el código.
+* **Sistema de Respaldo Automático (Fallback):** Si el servidor principal de un proveedor experimenta lentitud o fallas, el programa cambia automáticamente a otro proveedor de respaldo de forma transparente para el usuario, garantizando que el asistente conversacional siga funcionando.
+
+### 4.3 Generador Dinámico de Reportes Ejecutivos (PDF)
+El sistema incluye un módulo en `report_generator.py` encargado de construir documentos PDF formales de manera dinámica. Estos reportes no son listas de datos simples; se maquetan bajo los siguientes estándares:
+* **Reporte Ejecutivo del Dashboard:** Un reporte de 3 páginas con tablas de distribución temática, matrices de riesgo de personajes y explicaciones metodológicas formales.
+* **Informes de Red y Mapa con IA:** Si el usuario solicita un análisis con IA, el generador captura esa explicación en tiempo real y la inserta elegantemente como introducción en el PDF antes de mostrar la tabla de datos correspondiente.
+
+### 4.4 Optimización y Aceleración del Sistema
 Para garantizar que los gráficos y las búsquedas carguen en milisegundos, se programó un motor de aceleración basado en la lectura de los datos precalculados en formato CSV de la Fase 3:
 
 ```python
