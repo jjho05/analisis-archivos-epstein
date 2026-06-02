@@ -135,13 +135,13 @@ El resultado de todo este proceso se guarda en un único archivo llamado `consol
 
 ---
 
-##  Fase 3: Procesamiento Analítico y Matemático
+##  Fase 3: Procesamiento Analítico y Estadístico
 
-### 3.1 Diccionarios de Palabras para Clasificación (NLP)
-Para identificar de qué trata cada página y cómo respondían los testigos, en el archivo `analytic_processing.py` creamos listas de palabras específicas (lexicones) que la computadora busca automáticamente en el texto:
+### 3.1 Identificación de Palabras por Inteligencia Artificial (NLP)
+Para saber de qué trata cada una de las páginas y cómo respondían las personas interrogadas, el sistema utiliza un código en `analytic_processing.py` que escanea los textos buscando palabras de interés:
 
 ```python
-# Listas de palabras clave para clasificar el tono y las evasivas
+# Listas de palabras utilizadas para clasificar el tono y detectar evasivas
 NEGATIVE_LEXICON = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking'}
 POSITIVE_LEXICON = {'innocent', 'consent', 'cleared', 'dismissed', 'lawful', 'voluntary'}
 EVASION_PATTERNS = {
@@ -151,8 +151,10 @@ EVASION_PATTERNS = {
 }
 ```
 
-### 3.2 Cálculo de Sentimiento y Nivel de Riesgo
-Diseñamos una regla matemática para calcular qué tan negativo es el tono de una página, y creamos un **Índice de Riesgo** que aumenta cada vez que un personaje aparece mencionado junto a palabras críticas (como abusos o vuelos secretos):
+### 3.2 Medición de Sentimiento y Nivel de Riesgo
+Se programó una fórmula sencilla que cuenta las palabras positivas y negativas de cada página para obtener un puntaje. Si el puntaje es menor a -0.05 la página es negativa, y si es menor a -0.3 es altamente negativa. 
+
+Además, se creó un **Índice de Riesgo** que suma puntos cada vez que un personaje es nombrado en la misma hoja donde aparecen temas graves (como abuso de menores o vuelos sospechosos).
 
 ```python
 def sentiment_score(pos: int, neg: int) -> tuple:
@@ -165,42 +167,28 @@ def sentiment_score(pos: int, neg: int) -> tuple:
     return score, cat
 ```
 
-### 3.3 Red de Co-ocurrencias (Conexiones de Personas)
-Para saber quién se relaciona con quién en el expediente, el programa cuenta cuántas veces aparecen dos personajes en una misma página. Si aparecen juntos, se crea un enlace (arista) entre ellos:
+### 3.3 Conexión y Cercanía entre Personas (Co-ocurrencias)
+Para trazar el mapa de relaciones, el programa analiza página por página y cuenta cuántas veces aparecen dos personajes juntos en el mismo texto. Si coinciden, el sistema crea una línea de conexión entre ellos. El grosor de la línea representa cuántas veces se les mencionó juntos en todo el expediente judicial.
 
-```python
-# Cuenta en cuántas páginas coinciden dos personas
-for other in TARGET_PERSONS:
-    if other == person: continue
-    coinciden = len(set(paginas_persona) & set(paginas_otro))
-    if coinciden > 0:
-        relaciones.append((person, other, coinciden))
-```
+### 3.4 Análisis de Conexiones en Tiempo Real (Métricas de Red)
+Cuando usas los filtros en la aplicación, el sistema calcula de forma automática tres métricas para evaluar la posición de cada personaje en la red:
 
-### 3.4 Métricas de Teoría de Grafos en Tiempo Real
-Cuando interactúas con los filtros de la aplicación, el sistema utiliza la librería `NetworkX` para calcular tres métricas matemáticas clave sobre la red de personajes seleccionados:
+*   **Conexiones Directas (Centralidad de Grado):** Mide con cuántas personas del grupo está conectada directamente una persona. Si tiene un puntaje alto, significa que es alguien muy mencionado y conectado con casi todos los involucrados.
+*   **Rol de Puente o Conector (Centralidad de Intermediación):** Mide qué tanto una persona sirve como "enlace" o puente para conectar a otros miembros que no se hablan directamente. Por ejemplo, Ghislaine Maxwell tiene un puntaje muy alto porque conectaba el dinero y las propiedades de Epstein con los políticos y las víctimas.
+*   **Círculo Cerrado (Coeficiente de Agrupamiento):** Mide qué tan conectados están los amigos de una persona entre sí. Un valor alto significa que la persona pertenece a un grupo cerrado y muy unido donde todos se conocen mutuamente.
 
-#### A. Centralidad de Grado (Popularidad Directa)
-Mide la proporción de conexiones directas que tiene un personaje respecto al total de la red.
-$$C_D(v) = \frac{\deg(v)}{|V| - 1}$$
-*   **En palabras sencillas:** Indica qué tan conocido o mencionado directamente es un personaje en la red. Un valor de $1.0$ significa que tiene conexión con todos los personajes activos.
+### 3.5 Archivos de Datos Generados en Limpio (Directorio `03 Procesamiento Analítico`)
+Para asegurar que la aplicación web funcione al instante sin demoras, el proceso de análisis inicial genera 7 archivos organizados en formato CSV con toda la información ya procesada y resumida:
 
-#### B. Centralidad de Intermediación (Betweenness Centrality - Control de Flujo)
-Mide con qué frecuencia un personaje se encuentra en el camino más corto que conecta a otros dos personajes.
-$$C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}$$
-*   **En palabras sencillas:** Identifica quién actúa como "puente" o intermediario clave. Los personajes con alta intermediación (como Ghislaine Maxwell) controlaban la comunicación o el flujo de personas y recursos en la red.
+1.  **`analytic_01_paginas_granular.csv`**: Contiene la información detallada hoja por hoja. Registra qué personajes aparecen en cada página, cuántas palabras están censuradas y cuántas evasiones hubo.
+2.  **`analytic_02_personas_sentimiento.csv`**: Resume las estadísticas finales por personaje. Guarda el total de menciones, el porcentaje de páginas donde aparece, su índice de sentimiento y su nivel de riesgo.
+3.  **`analytic_03_evasiones_instancias.csv`**: Almacena el fragmento de texto exacto donde ocurrió cada frase evasiva (como decir "no recuerdo"), detallando en qué página pasó y quién lo dijo.
+4.  **`analytic_04_censura_redacted.csv`**: Registra los fragmentos de texto exactos donde hubo tachaduras de información confidencial (`[REDACTED]`) y en qué páginas se concentran.
+5.  **`analytic_05_timeline_cronologica.csv`**: Agrupa la cantidad de menciones de eventos clave y personajes año por año, permitiendo graficar la evolución del caso en el tiempo.
+6.  **`geospatial_data.csv`**: Contiene las coordenadas geográficas, nombres y resúmenes de los lugares clave mencionados en los testimonios (islas, ranchos, mansiones).
+7.  **`financial_network_data.csv`**: Estructura las relaciones y transacciones de dinero entre las fundaciones, abogados, empresas fachada y bancos implicados.
 
-#### C. Coeficiente de Agrupamiento Local (Clustering Coefficient - Cohesión Social)
-Mide la probabilidad de que los contactos de un personaje también estén conectados entre sí.
-$$C(v) = \frac{2 T(v)}{\deg(v)(\deg(v) - 1)}$$
-*   **En palabras sencillas:** Indica qué tan cerrado y unido es el círculo social de ese personaje. Un valor de $1.0$ significa que todos sus conocidos se conocen entre sí, formando un grupo cerrado.
-
-### 3.5 Creación de Archivos de Datos Limpios (CSVs)
-Para evitar que la aplicación web se vuelva lenta al recalcular todo el texto cada vez que se abre, el proceso analítico genera y guarda archivos de datos limpios en la carpeta `03 Procesamiento Analítico`:
-*   **`geospatial_data.csv`**: Tabla con las coordenadas y descripción de las locaciones clave (islas, ranchos, mansiones).
-*   **`financial_network_data.csv`**: Estructura de transferencias y relaciones entre los bancos principales y las empresas fachada.
-
-De esta forma, la aplicación Shiny lee directamente estas tablas optimizadas en menos de 0.05 segundos.
+Gracias a estas tablas ya calculadas, la aplicación web puede cargar y graficar toda la información en milisegundos.
 
 ---
 
