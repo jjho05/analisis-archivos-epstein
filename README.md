@@ -16,11 +16,11 @@ pinned: false
 
 ---
 
-##  Resumen del Proyecto
+## Resumen del Proyecto
 
-Este proyecto aplica **Procesamiento de Lenguaje Natural (NLP)**, **Análisis de Sentimiento** y **Mapeo de Co-ocurrencias** para auditar y estructurar analíticamente un corpus masivo de **5,028 páginas** de testimonios jurados, deposiciones oficiales y registros de vuelo desclasificados judicialmente por orden de la Corte Federal del Distrito Sur de Nueva York.
+En este proyecto aplicamos **Procesamiento de Lenguaje Natural (NLP)**, **Análisis de Sentimiento** y **Mapeo de Co-ocurrencias** para auditar y estructurar de forma analítica un corpus masivo de **5,028 páginas** de declaraciones juradas, testimonios oficiales y registros de vuelo desclasificados por orden de la Corte Federal de Nueva York.
 
-El objetivo central es automatizar la revisión de miles de fojas, transformando un mar de texto desestructurado en una plataforma interactiva. A través de inteligencia artificial y técnicas avanzadas de ciencia de datos, el sistema es capaz de detectar contradicciones, evaluar el índice de riesgo de los involucrados y presentar los resultados en un dashboard de alta velocidad.
+Nuestro objetivo principal fue automatizar la revisión de miles de fojas, transformando un expediente de texto desestructurado en una plataforma interactiva. A través de técnicas avanzadas de ciencia de datos y modelos de lenguaje, desarrollamos un sistema que limpia el ruido de digitalización, identifica contradicciones en los testimonios, calcula la postura de las personas implicadas y presenta todos estos hallazgos en un dashboard interactivo de alta velocidad.
 
 ---
 
