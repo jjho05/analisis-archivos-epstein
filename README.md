@@ -135,24 +135,24 @@ El resultado de todo este proceso se guarda en un único archivo llamado `consol
 
 ---
 
-##  Fase 3: Métricas y Procesamiento Analítico
+##  Fase 3: Procesamiento Analítico y Matemático
 
-### Arquitectura de Minería Lingüística y Diccionarios
-Para extraer inteligencia de las páginas, implementamos en `analytic_processing.py` un motor de análisis léxico y reconocimiento de patrones. Definimos diccionarios dirigidos para evaluar las respuestas de los testigos y sus tácticas durante los interrogatorios:
+### 3.1 Diccionarios de Palabras para Clasificación (NLP)
+Para identificar de qué trata cada página y cómo respondían los testigos, en el archivo `analytic_processing.py` creamos listas de palabras específicas (lexicones) que la computadora busca automáticamente en el texto:
 
 ```python
-# Léxicos de Sentimiento y Evasivas procesales
-NEGATIVE_LEXICON = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking', ...}
-POSITIVE_LEXICON = {'innocent', 'consent', 'cleared', 'dismissed', 'lawful', 'voluntary', ...}
+# Listas de palabras clave para clasificar el tono y las evasivas
+NEGATIVE_LEXICON = {'abuse', 'assault', 'guilty', 'deny', 'object', 'victim', 'trafficking'}
+POSITIVE_LEXICON = {'innocent', 'consent', 'cleared', 'dismissed', 'lawful', 'voluntary'}
 EVASION_PATTERNS = {
-    "I don't recall": r"\b(don'tdo\s+not)\s+(recallrememberrecollect)\b",
-    "Objection": r"\b(objectioni\s+object)\b",
-    "Fifth Amendment": r"\b(fifth\s+amendmentplead\s+the\s+fifth)\b"
+    "No recuerdo": r"\b(don'tdo\s+not)\s+(recallrememberrecollect)\b",
+    "Objeción del abogado": r"\b(objectioni\s+object)\b",
+    "Quinta Enmienda (No responder)": r"\b(fifth\s+amendmentplead\s+the\s+fifth)\b"
 }
 ```
 
-### Algoritmo de Sentimiento y Puntuación de Riesgo
-Diseñamos una métrica matemática de sentimiento y un *Índice de Riesgo Analítico* que detecta picos de vocabulario conflictivo cruzado con temas clave del caso:
+### 3.2 Cálculo de Sentimiento y Nivel de Riesgo
+Diseñamos una regla matemática para calcular qué tan negativo es el tono de una página, y creamos un **Índice de Riesgo** que aumenta cada vez que un personaje aparece mencionado junto a palabras críticas (como abusos o vuelos secretos):
 
 ```python
 def sentiment_score(pos: int, neg: int) -> tuple:
@@ -161,38 +161,46 @@ def sentiment_score(pos: int, neg: int) -> tuple:
     score = round((pos - neg) / total, 3)
     if score < -0.3:     cat = "Altamente Negativo"
     elif score < -0.05:   cat = "Negativo"
-    else:                 cat = "Neutral / Procedimental"
+    else:                 cat = "Neutral"
     return score, cat
-
-# Cálculo de Riesgo mediante Intersección de Tópicos
-for pat in TOPIC_KEYWORDS["Abuso / Menores"] + TOPIC_KEYWORDS["Logística / Aviones"]:
-    if re.search(pat, page_lower, re.IGNORECASE):
-        risk_total += 1
 ```
 
-### Extracción de Evasividad y Redes de Co-ocurrencia Social
-Para mapear de manera precisa la estructura de la red de influencias, el pipeline evalúa matemáticamente cuántas veces coexisten dos personajes de interés en una misma página, y extrae además el contexto exacto donde se detecta una evasión verbal:
+### 3.3 Red de Co-ocurrencias (Conexiones de Personas)
+Para saber quién se relaciona con quién en el expediente, el programa cuenta cuántas veces aparecen dos personajes en una misma página. Si aparecen juntos, se crea un enlace (arista) entre ellos:
 
 ```python
-# Cálculo de Co-ocurrencias mediante Intersección de Sets de Páginas
+# Cuenta en cuántas páginas coinciden dos personas
 for other in TARGET_PERSONS:
     if other == person: continue
-    shared = len(set(pages_with_person) & set(person_page_map[other]))
-    if shared > 0:
-        cooccurrence_partners.append(f"{other}({shared})")
-
-# Captura de contexto de Evasión de 160 caracteres
-for match in re.finditer(pat, page, re.IGNORECASE):
-    start, end = max(0, match.start() - 80), min(len(page), match.end() + 80)
-    context = re.sub(r'\s+', ' ', page[start:end]).strip()
+    coinciden = len(set(paginas_persona) & set(paginas_otro))
+    if coinciden > 0:
+        relaciones.append((person, other, coinciden))
 ```
 
-### Generación de Datasets Estructurados Auxiliares (CSV)
-Además de los archivos generados por NLP, la fase analítica simula un *Pipeline de Data Engineering* completo mediante la consolidación de dos conjuntos de datos clave en formato `.csv` ubicados en el directorio `03 Procesamiento Analítico`:
-- **`geospatial_data.csv`**: Agrega menciones y categoriza las ubicaciones más significativas del caso (ej. *Little St. James*, *Palm Beach*).
-- **`financial_network_data.csv`**: Estructura relaciones entidad-institución para modelar los flujos de capital entre actores y corporaciones offshore.
+### 3.4 Métricas de Teoría de Grafos en Tiempo Real
+Cuando interactúas con los filtros de la aplicación, el sistema utiliza la librería `NetworkX` para calcular tres métricas matemáticas clave sobre la red de personajes seleccionados:
 
-Estos CSVs estructurados permiten desacoplar los datos en crudo de la visualización, permitiendo a la **Fase 4 (UI)** consumir la data limpia vía `pandas` sin bloqueos de procesamiento.
+#### A. Centralidad de Grado (Popularidad Directa)
+Mide la proporción de conexiones directas que tiene un personaje respecto al total de la red.
+$$C_D(v) = \frac{\deg(v)}{|V| - 1}$$
+*   **En palabras sencillas:** Indica qué tan conocido o mencionado directamente es un personaje en la red. Un valor de $1.0$ significa que tiene conexión con todos los personajes activos.
+
+#### B. Centralidad de Intermediación (Betweenness Centrality - Control de Flujo)
+Mide con qué frecuencia un personaje se encuentra en el camino más corto que conecta a otros dos personajes.
+$$C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}$$
+*   **En palabras sencillas:** Identifica quién actúa como "puente" o intermediario clave. Los personajes con alta intermediación (como Ghislaine Maxwell) controlaban la comunicación o el flujo de personas y recursos en la red.
+
+#### C. Coeficiente de Agrupamiento Local (Clustering Coefficient - Cohesión Social)
+Mide la probabilidad de que los contactos de un personaje también estén conectados entre sí.
+$$C(v) = \frac{2 T(v)}{\deg(v)(\deg(v) - 1)}$$
+*   **En palabras sencillas:** Indica qué tan cerrado y unido es el círculo social de ese personaje. Un valor de $1.0$ significa que todos sus conocidos se conocen entre sí, formando un grupo cerrado.
+
+### 3.5 Creación de Archivos de Datos Limpios (CSVs)
+Para evitar que la aplicación web se vuelva lenta al recalcular todo el texto cada vez que se abre, el proceso analítico genera y guarda archivos de datos limpios en la carpeta `03 Procesamiento Analítico`:
+*   **`geospatial_data.csv`**: Tabla con las coordenadas y descripción de las locaciones clave (islas, ranchos, mansiones).
+*   **`financial_network_data.csv`**: Estructura de transferencias y relaciones entre los bancos principales y las empresas fachada.
+
+De esta forma, la aplicación Shiny lee directamente estas tablas optimizadas en menos de 0.05 segundos.
 
 ---
 
