@@ -48,7 +48,7 @@ MODEL_LABELS: Dict[str, str] = {
     "olvera-image-1.0": "Olvera Image 1.0 (Flux)",
 }
 
-DEFAULT_MODEL = "gemini/gemini-2.0-flash"
+DEFAULT_MODEL = "gemini/gemini-3.5-flash"
 
 def get_visible_models() -> List[str]:
     return [m for m, meta in MODEL_METADATA.items() if not meta.get("isHidden", False)]

@@ -231,9 +231,9 @@ El sistema organiza la información analizada en ocho pestañas de trabajo espec
 ### 4.2 Integración de Modelos de Inteligencia Artificial (LiteLLM)
 Para dar soporte al chat conversacional (Olvera AI), al Auditor de Contradicciones y a la generación dinámica de resúmenes analíticos en los reportes PDF, la aplicación se conecta con modelos de lenguaje de última generación. A través de la librería **LiteLLM**, el sistema tiene configurados y habilitados los siguientes modelos:
 
-* **Modelo Predeterminado (Google Gemini 2.0 Flash)**: Es el motor de procesamiento principal de la aplicación. Se seleccionó por su alta velocidad de respuesta, excelente manejo de contextos grandes y capacidades de análisis multimodal.
+* **Modelo Predeterminado (Google Gemini 3.5 Flash)**: Es el motor de procesamiento principal de la aplicación. Se seleccionó por su alta velocidad de respuesta, excelente manejo de contextos grandes y capacidades de análisis multimodal.
 * **Modelo de Razonamiento Avanzado (Meta Llama 3.3 70B a través de Groq)**: Se emplea para las auditorías de contradicciones y tareas complejas que requieren un análisis semántico estricto y detección de discrepancias narrativas complejas.
-* **Modelos de Respaldo y Alternativos**: El sistema incluye soporte para **Cerebras Llama 3.1 70B** (por su procesamiento de alta velocidad) y **GPT de OpenAI a través de OpenRouter**, sirviendo como canales redundantes de comunicación.
+* **Modelos de Respaldo y Alternativos**: El sistema incluye soporte para **Google Gemini 2.0 Flash** y **Gemini 1.5 Flash** (por su procesamiento de alta velocidad) y **GPT de OpenAI a través de OpenRouter**, sirviendo como canales redundantes de comunicación.
 
 **Protocolos de Integración y Seguridad:**
 * **Uso Seguro de Credenciales**: Las claves de acceso de los proveedores de IA (como `GEMINI_API_KEY`, `GROQ_API_KEY` o `CEREBRAS_API_KEY`) se leen directamente desde variables de entorno del sistema, evitando su exposición en el código fuente.
