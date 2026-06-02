@@ -167,7 +167,6 @@ Cuando usas los filtros en la aplicación, el sistema calcula de forma automáti
 
 ### 3.5 Archivos de Datos Generados en Limpio (Directorio `03 Procesamiento Analítico`)
 Para asegurar que la aplicación web funcione al instante sin demoras, el proceso de análisis inicial genera 7 archivos organizados en formato CSV con toda la información ya procesada y resumida:
-
 1.  **`analytic_01_paginas_granular.csv`**: Contiene la información detallada hoja por hoja. Registra qué personajes aparecen en cada página, cuántas palabras están censuradas y cuántas evasiones hubo.
 2.  **`analytic_02_personas_sentimiento.csv`**: Resume las estadísticas finales por personaje. Guarda el total de menciones, el porcentaje de páginas donde aparece, su índice de sentimiento y su nivel de riesgo.
 3.  **`analytic_03_evasiones_instancias.csv`**: Almacena el fragmento de texto exacto donde ocurrió cada frase evasiva (como decir "no recuerdo"), detallando en qué página pasó y quién lo dijo.
@@ -178,88 +177,77 @@ Para asegurar que la aplicación web funcione al instante sin demoras, el proces
 
 ---
 
-##  Fase 4: Desarrollo de la Aplicación e Inteligencia Artificial
+## Fase 4: Desarrollo de la Aplicación e Inteligencia Artificial
 
-La interfaz visual se desarrolló utilizando la tecnología **Shiny para Python** (`app.py`), una herramienta diseñada para crear aplicaciones web interactivas de ciencia de datos con respuestas inmediatas y un rendimiento de alta velocidad.
+La interfaz visual se desarrolló utilizando la tecnología Shiny para Python (app.py), una herramienta estructurada para crear aplicaciones web interactivas orientadas al análisis de datos, garantizando respuestas inmediatas y un rendimiento de alta velocidad.
 
-### 4.1 Principales Funciones de la Aplicación
-El sistema organiza la información analizada en 5 herramientas interactivas:
+### 4.1 Herramientas Interactivas de la Aplicación
+El sistema organiza la información analizada en ocho pestañas de trabajo especializadas:
 
-1. **Dashboard de Métricas:** Muestra gráficos y contadores con la cantidad de palabras, páginas y temas detectados. Se actualiza automáticamente al mover los filtros de personajes o menciones.
-2. **Buscador Semántico (Por Contexto):** Permite buscar frases por su significado y no solo por palabras exactas. Por ejemplo, al buscar "viajes secretos", el sistema encuentra fragmentos sobre vuelos y traslados aunque no lleven la palabra exacta "secretos". Muestra además el porcentaje de similitud y la página real de la cita.
-3. **Mapa de Rutas (Geoespacial):** Muestra de forma interactiva en un mapa oscuro las ubicaciones clave del expediente (como las islas de Epstein o sus mansiones) y permite descargar reportes que incluyen un análisis detallado redactado por Inteligencia Artificial.
-4. **Red de Relaciones Financieras (Grafo):** Permite ver en un gráfico de nodos interactivos el flujo de dinero entre bancos, abogados y empresas fachada. También permite generar informes escritos por IA sobre esta estructura financiera.
-5. **Auditor de Contradicciones y Chat (Olvera AI):**
-   * **Auditor:** Compara de forma de careo lógico las declaraciones de los testigos en busca de inconsistencias o evasivas automáticas.
-   * **Chat Inteligente:** Permite hacer preguntas directas en lenguaje natural sobre el expediente y recibir respuestas basadas estrictamente en la documentación judicial.
+1. **Dashboard de Métricas**: Muestra gráficos y contadores interactivos con la cantidad de palabras, páginas y temas de sospecha detectados. Se actualiza automáticamente en respuesta a los filtros de personajes o niveles de menciones mínimas seleccionados por el usuario.
+2. **Explorador de Transcripción (Análisis Léxico)**: Permite visualizar los fragmentos del texto original y muestra tarjetas de indicadores clave con la cantidad de palabras totales, palabras de contenido real (con significado), palabras de relleno (stopwords eliminadas), la densidad informativa (%) y la riqueza léxica del vocabulario empleado.
+3. **Búsqueda Semántica (Motor RAG Local)**: Permite buscar frases por su contexto e intención semántica en lugar de requerir palabras exactas. Por ejemplo, al buscar traslados irregulares se recuperan menciones de vuelos secretos aunque esa frase exacta no figure en el testimonio. El motor indica la similitud del texto y mapea la página real de origen dentro de las 5,028 fojas analizadas.
+4. **Auditor de Contradicciones**: Permite confrontar y analizar las deposiciones de testigos clave. El sistema busca discrepancias lógicas y respuestas evasivas, mostrando una bitácora detallada de hallazgos.
+5. **Inteligencia Geoespacial**: Muestra un mapa cartográfico en tonos oscuros con la ubicación física de las islas, mansiones y bases de operación mencionadas en las transcripciones, permitiendo trazar rutas aéreas frecuentes de la red de transporte.
+6. **Red Financiera**: Presenta un grafo de relaciones de red que expone la interacción de cuentas bancarias, firmas de abogados, fideicomisos y empresas fachada para el flujo de recursos.
+7. **Co-ocurrencia Social**: Analiza las conexiones e influencia entre personas basándose en su aparición conjunta en las mismas páginas del expediente. Incluye métricas estadísticas avanzadas como grado de conexión, intermediación (centralidad) y coeficientes de agrupamiento.
+8. **Olvera AI (Chat Conversacional)**: Permite realizar consultas directas sobre el expediente en lenguaje natural y obtener respuestas precisas estructuradas a partir de la base de conocimientos extraída de los expedientes.
 
 ### 4.2 Integración de Modelos de Inteligencia Artificial (LiteLLM)
-Para el chat conversacional (*Olvera AI*) y el *Auditor de Contradicciones*, se emplea una conexión flexible con modelos de lenguaje avanzados (como Gemini de Google o Llama de Meta a través de Groq) utilizando la librería **LiteLLM**:
-* **Uso Seguro de API Keys:** La clave de acceso (`GEMINI_API_KEY`) se lee directamente desde variables de entorno seguras, evitando que la clave quede expuesta públicamente en el código.
-* **Sistema de Respaldo Automático (Fallback):** Si el servidor principal de un proveedor experimenta lentitud o fallas, el programa cambia automáticamente a otro proveedor de respaldo de forma transparente para el usuario, garantizando que el asistente conversacional siga funcionando.
+Para el chat conversacional y el Auditor de Contradicciones, se emplea una pasarela flexible de modelos de lenguaje (como Gemini de Google o Llama de Meta) utilizando la librería LiteLLM:
+* **Uso Seguro de Credenciales**: Las claves de acceso se leen directamente desde variables de entorno del sistema, evitando su exposición en el código fuente.
+* **Sistema de Respaldo Automático (Fallback)**: Si el proveedor principal presenta indisponibilidad o latencia excesiva, el software redirige de forma imperceptible la consulta hacia un proveedor alternativo, asegurando la continuidad del servicio.
 
 ### 4.3 Generador Dinámico de Reportes Ejecutivos (PDF)
-El sistema incluye un módulo en `report_generator.py` encargado de construir documentos PDF formales de manera dinámica. Estos reportes no son listas de datos simples; se maquetan bajo los siguientes estándares:
-* **Reporte Ejecutivo del Dashboard:** Un reporte de 3 páginas con tablas de distribución temática, matrices de riesgo de personajes y explicaciones metodológicas formales.
-* **Informes de Red y Mapa con IA:** Si el usuario solicita un análisis con IA, el generador captura esa explicación en tiempo real y la inserta elegantemente como introducción en el PDF antes de mostrar la tabla de datos correspondiente.
+El sistema integra un módulo de generación formal en PDF (report_generator.py) diseñado bajo estándares de presentación corporativa (empleando el término "Reporte"):
+* **Reporte del Dashboard**: Un documento estructurado que consolida tablas de distribución de temas de sospecha, clasificaciones de riesgo y un resumen de las metodologías utilizadas.
+* **Integración Narrativa de Inteligencia Artificial**: Cuando el usuario solicita un análisis mediante IA en las secciones de mapa o red financiera, el generador incorpora esa narrativa analítica en tiempo real como una sección de introducción formal antes de plasmar las tablas de datos correspondientes.
 
-### 4.4 Optimización y Aceleración del Sistema
-Para garantizar que los gráficos y las búsquedas carguen en milisegundos, se emplea un motor de aceleración basado en la lectura de los datos precalculados en formato CSV de la Fase 3:
-
-```python
-# Carga directa de datos optimizados para evitar procesos pesados
-if os.path.exists(csv_granular) and os.path.exists(csv_persons):
-    import pandas as pd
-    df_granular = pd.read_csv(csv_granular)
-    df_persons = pd.read_csv(csv_persons)
-    
-    # Obtiene sumas totales al instante
-    redactions_count = int(df_granular['Menciones_Censuradas_REDACTED'].sum())
-    evasions_count = int(df_granular['Evasiones_Detectadas'].sum())
-```
-
-Adicionalmente, se aplica el aislamiento de la memoria del navegador clonando y separando el texto largo del chat de la visualización principal, previniendo que la aplicación se trabe o ralentice durante el uso.
+### 4.4 Optimización y Rendimiento del Sistema
+Para asegurar que los gráficos, redes y mapas carguen en milisegundos y evitar demoras del navegador, se implementaron técnicas de aceleración de datos:
+* **Caché en CSV**: La aplicación se conecta directamente a los conjuntos de datos limpios obtenidos en la Fase 3, reduciendo la necesidad de recalcular los análisis sobre las fojas originales en cada interacción.
+* **Aislamiento de Memoria del Navegador**: El historial largo de consultas y las respuestas extensas del chat se administran en memoria persistente aislada, impidiendo la saturación o congelamiento de la interfaz de usuario.
 
 ---
 
-##  Fase 5: Resultados y Hallazgos Consolidados
+## Fase 5: Resultados y Hallazgos Consolidados
 
-A partir del análisis profundo de **1,323,138 palabras**, el motor analítico extrajo estadísticas sumamente reveladoras sobre el comportamiento de los involucrados en la corte:
+A partir del procesamiento y estructuración de los datos del expediente, el motor analítico consolidó estadísticas descriptivas sobre el comportamiento procesal del caso:
 
-### 🤐 Tácticas de Evasividad Verbal Detectadas
-Se detectaron un total de **2,338 tácticas verbales de evasividad** bajo juramento y **1,367 instancias de censura administrativa** (`REDACTED`). Las evasiones más utilizadas fueron:
+### Tácticas de Evasividad Verbal Detectadas
+Se cuantificaron un total de 2,338 tácticas de evasión bajo juramento y 1,367 instancias de censura administrativa (información tachada como REDACTED). La frecuencia de evasivas se distribuye de la siguiente forma:
 
- Táctica de Evasividad Detectada  Total de Instancias  Razón e Impacto Analítico 
- :---  :---:  :--- 
- **Objection** (Objeciones de Abogados)  1,915  Obstrucción sistemática de líneas de cuestionamiento clave. 
- **Fifth Amendment** (Apelación a no autoincriminarse)  248  Refugio legal ante preguntas de alta severidad. 
- **Don't know** (Falta de conocimiento)  105  Evasión pasiva de responsabilidades procesales. 
- **Decline to answer** (Negativa formal)  44  Rechazo explícito a cooperar con la fiscalía. 
- **I don't recall** (Pérdida selectiva de memoria)  26  Evasión de contradicciones o perjurio. 
+| Táctica de Evasividad Detectada | Total de Instancias | Razón e Impacto Analítico |
+| :--- | :---: | :--- |
+| **Objection** (Objeciones de Abogados) | 1,915 | Obstrucción sistemática de líneas de cuestionamiento clave. |
+| **Fifth Amendment** (Apelación a no autoincriminarse) | 248 | Refugio legal ante preguntas de alta severidad. |
+| **Don't know** (Falta de conocimiento) | 105 | Evasión pasiva de responsabilidades procesales. |
+| **Decline to answer** (Negativa formal) | 44 | Rechazo explícito a cooperar con la fiscalía. |
+| **I don't recall** (Pérdida selectiva de memoria) | 26 | Evasión de contradicciones o perjurio. |
 
-###  Mapeo de Personas de Interés y Densidad de Riesgo
+### Mapeo de Personas de Interés y Densidad de Riesgo
 El cruzamiento semántico identificó el riesgo asociado a cada individuo dependiendo de los temas críticos mencionados a su alrededor (abuso y logística de transporte):
 
- Persona de Interés  Total Menciones  Sentimiento  Riesgo Analítico  Clasificación de Contexto 
- :---  :---:  :---:  :---:  :--- 
- **Jeffrey Epstein**  1,744  -0.294  516  Altamente Negativo / Foco Principal 
- **Ghislaine Maxwell**  1,033  -0.103  192  Negativo / Co-organizadora 
- **Virginia Giuffre**  528  0.266  42  Positivo / Contexto de Víctima 
- **Prince Andrew**  396  -0.254  94  Negativo / Red de Influencias 
- **Alan Dershowitz**  234  -0.234  77  Negativo / Red de Influencias 
+| Persona de Interés | Total Menciones | Sentimiento | Riesgo Analítico | Clasificación de Contexto |
+| :--- | :---: | :---: | :---: | :--- |
+| **Jeffrey Epstein** | 1,744 | -0.294 | 516 | Altamente Negativo / Foco Principal |
+| **Ghislaine Maxwell** | 1,033 | -0.103 | 192 | Negativo / Co-organizadora |
+| **Virginia Giuffre** | 528 | 0.266 | 42 | Positivo / Contexto de Víctima |
+| **Prince Andrew** | 396 | -0.254 | 94 | Negativo / Red de Influencias |
+| **Alan Dershowitz** | 234 | -0.234 | 77 | Negativo / Red de Influencias |
 
 ---
 
-##  Conclusiones y Perspectivas Técnicas
+## Conclusiones y Perspectivas Técnicas
 
-* **Automatización Masiva:** Se logró diseñar y desplegar un pipeline capaz de analizar un expediente judicial masivo en milisegundos, convirtiendo datos puramente no estructurados en dataframes limpios y bases de conocimiento accionables.
-* **Mitigación de Cuellos de Botella Técnicos:** Optimizamos drásticamente el consumo de recursos migrando el procesamiento pesado hacia una caché CSV estructurada.
-* **Integración Conversacional Robusta:** Se logró conectar un asistente de inteligencia artificial con RAG de alta fidelidad, solventando problemas de rendimiento del DOM del navegador mediante un aislamiento de datos avanzado.
-* **Escalabilidad General:** Este pipeline y su panel de control son altamente aplicables a cualquier otro conjunto documental masivo estructurado, lo que demuestra su utilidad en múltiples campos de la informática y ciencia de datos.
+* **Automatización del Procesamiento**: Se estructuró un pipeline capaz de procesar fojas judiciales masivas y convertirlas en bases de conocimiento y tablas relacionales accionables.
+* **Eficiencia de Carga**: El uso de datos precalculados e indexados eliminó el retardo en la carga de la interfaz, permitiendo visualizaciones en milisegundos.
+* **Integración RAG de Alta Fidelidad**: La arquitectura RAG local e inteligente asegura la recuperación de datos por su significado semántico real, complementada con el chat conversacional integrado de forma estable en el navegador.
+* **Escalabilidad**: El diseño modular del sistema permite aplicar este mismo pipeline a cualquier otro expediente judicial o volumen documental de características similares.
 
 ---
 
-##  Ejecución Local
+## Ejecución Local
 
 ### 1. Clonar el repositorio e instalar dependencias:
 ```bash
@@ -269,7 +257,7 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configurar variables de entorno:
-Crea un archivo `.env` dentro de la carpeta `04 Aplicacion Shiny/` con tu API Key:
+Crea un archivo `.env` dentro de la carpeta `04 Aplicacion Shiny/` con tu clave de API:
 ```env
 GEMINI_API_KEY="tu_clave_aquí"
 ```
@@ -282,8 +270,8 @@ shiny run --reload app.py
 
 ---
 
-##  Despliegue en Hugging Face Spaces (Docker)
+## Despliegue en Hugging Face Spaces (Docker)
 
 El proyecto incluye un `Dockerfile` optimizado en la carpeta raíz. Al subir los archivos de este directorio a tu Space de Hugging Face configurado con el SDK **Docker**, la plataforma compilará y desplegará la app automáticamente.
 
-> ** Seguridad**: Recuerda agregar tu clave (`GEMINI_API_KEY`) de forma segura dentro de la sección **Variables de Entorno (Secrets)** en la configuración de tu Space en Hugging Face. Nunca subas el archivo `.env` al repositorio público.
+> **Seguridad**: Recuerda agregar tu clave (`GEMINI_API_KEY`) de forma segura dentro de la sección **Variables de Entorno (Secrets)** en la configuración de tu Space en Hugging Face. Nunca subas el archivo `.env` al repositorio público.
