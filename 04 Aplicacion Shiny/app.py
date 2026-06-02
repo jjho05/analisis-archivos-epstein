@@ -1132,40 +1132,95 @@ def server(input, output, session):
         title_val = meta.get("Título", "No especificado")
         author_val = meta.get("Autor", "No especificado")
         
-        return ui.layout_columns(
-            ui.card(
-                ui.card_header("Vista Previa Judicial (Transcripción Limpia)"),
-                ui.input_text_area(
-                    "preview_area", 
-                    "", 
-                    value=results["text"][:3500] + ("\n\n[Expediente truncado para visualización rápida...]" if len(results["text"]) > 3500 else ""), 
-                    height="320px", 
-                    width="100%"
-                ),
-                ui.download_button(
-                    "download_btn", 
-                    "DESCARGAR TRANSCRIPCIÓN ANALÍTICO (.TXT)", 
-                    class_="btn-primary btn-download w-100",
-                    style="margin-top: 0.8rem;"
-                ),
+        metrics = results.get("metrics", {})
+        total_words = metrics.get("total_words", 0)
+        content_words = metrics.get("content_words_count", 0)
+        filler_words = metrics.get("filler_words_count", 0)
+        vocab_richness = metrics.get("vocab_richness", 0.0)
+        
+        info_density = (content_words / total_words * 100) if total_words > 0 else 0.0
+        
+        kpi_section = ui.layout_columns(
+            ui.div(
                 ui.div(
-                    ui.row(
-                        ui.column(6, ui.div(ui.div("Título de Expediente", class_="meta-item-title"), ui.div(title_val, class_="meta-item-value"))),
-                        ui.column(6, ui.div(ui.div("Autoría Legal", class_="meta-item-title"), ui.div(author_val, class_="meta-item-value")))
+                    ui.div("Palabras Totales", class_="kpi-title"),
+                    ui.div(f"{total_words:,}", class_="kpi-value"),
+                    class_="kpi-card"
+                )
+            ),
+            ui.div(
+                ui.div(
+                    ui.div("Palabras de Contenido", class_="kpi-title"),
+                    ui.div(f"{content_words:,}", class_="kpi-value"),
+                    class_="kpi-card"
+                )
+            ),
+            ui.div(
+                ui.div(
+                    ui.div("Palabras de Relleno (Stopwords)", class_="kpi-title"),
+                    ui.div(f"{filler_words:,}", class_="kpi-value"),
+                    class_="kpi-card"
+                )
+            ),
+            ui.div(
+                ui.div(
+                    ui.div("Densidad Informativa", class_="kpi-title"),
+                    ui.div(f"{info_density:.1f}%", class_="kpi-value"),
+                    class_="kpi-card"
+                )
+            ),
+            ui.div(
+                ui.div(
+                    ui.div("Riqueza Léxica", class_="kpi-title"),
+                    ui.div(f"{vocab_richness * 100:.1f}%", class_="kpi-value"),
+                    class_="kpi-card"
+                )
+            ),
+            col_widths=[2, 3, 3, 2, 2],
+            style="margin-bottom: 20px;"
+        )
+        
+        return ui.div(
+            ui.h3("Análisis de Estructura y Densidad Léxica del Expediente", style="color:#ffffff; margin-bottom:15px; font-weight:700;"),
+            ui.p("Visualización de las métricas obtenidas tras la tokenización y filtrado de stopwords del expediente judicial original. Esto permite evaluar el balance entre lenguaje procedimental (relleno) e informativo (semántico).", style="color:#bfaec2; margin-bottom:20px;"),
+            kpi_section,
+            ui.hr(style="border-color: rgba(168, 85, 247, 0.2); margin: 1.5rem 0;"),
+            ui.layout_columns(
+                ui.card(
+                    ui.card_header("Vista Previa Judicial (Transcripción Limpia)"),
+                    ui.input_text_area(
+                        "preview_area", 
+                        "", 
+                        value=results["text"][:3500] + ("\n\n[Expediente truncado para visualización rápida...]" if len(results["text"]) > 3500 else ""), 
+                        height="320px", 
+                        width="100%"
                     ),
-                    class_="meta-container"
-                )
+                    ui.download_button(
+                        "download_btn", 
+                        "DESCARGAR TRANSCRIPCIÓN ANALÍTICA (.TXT)", 
+                        class_="btn-primary btn-download w-100",
+                        style="margin-top: 0.8rem;"
+                    ),
+                    ui.div(
+                        ui.row(
+                            ui.column(6, ui.div(ui.div("Título de Expediente", class_="meta-item-title"), ui.div(title_val, class_="meta-item-value"))),
+                            ui.column(6, ui.div(ui.div("Autoría Legal", class_="meta-item-title"), ui.div(author_val, class_="meta-item-value")))
+                        ),
+                        class_="meta-container"
+                    )
+                ),
+                ui.card(
+                    ui.card_header("Frecuencia Temporal (Años Mencionados)"),
+                    ui.output_plot("timeline_chart"),
+                    ui.div(
+                        ui.div("HISTOGRAMA CRONOLÓGICO ANALÍTICO", class_="explanation-title"),
+                        ui.p("Rastrea la presencia de años lógicos específicos dentro de los testimonios o deposiciones judiciales. Ayuda a identificar en qué años se concentran los abusos o vuelos reportados en este expediente judicial."),
+                        class_="explanation-box"
+                    )
+                ),
+                col_widths=[8, 4]
             ),
-            ui.card(
-                ui.card_header("Frecuencia Temporal (Años Mencionados)"),
-                ui.output_plot("timeline_chart"),
-                ui.div(
-                    ui.div("HISTOGRAMA CRONOLÓGICO ANALÍTICO", class_="explanation-title"),
-                    ui.p("Rastrea la presencia de años lógicos específicos dentro de los testimonios o deposiciones judiciales. Ayuda a identificar en qué años se concentran los abusos o vuelos reportados en este expediente judicial."),
-                    class_="explanation-box"
-                )
-            ),
-            col_widths=[8, 4]
+            style="padding: 20px;"
         )
 
     # --- MATPLOTLIB PLOTS ---

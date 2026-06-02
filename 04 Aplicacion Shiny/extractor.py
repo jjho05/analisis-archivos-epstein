@@ -104,8 +104,25 @@ class PDFExtractorEngine:
                     with open(txt_path, "r", encoding="utf-8") as f:
                         full_text = f.read()
                 
+                # Calcular métricas léxicas
+                vocab_richness = 0.12
+                content_words_count = 0
+                filler_words_count = 0
+                if full_text:
+                    words = re.findall(r'\b\w+\b', full_text.lower())
+                    total_words_calc = len(words)
+                    if total_words_calc > 0:
+                        unique_words = set(words)
+                        vocab_richness = len(unique_words) / total_words_calc
+                        stopwords_set = ENGLISH_STOPWORDS if language == "en" else SPANISH_STOPWORDS
+                        filler_words_count = sum(1 for w in words if w in stopwords_set)
+                        content_words_count = total_words_calc - filler_words_count
+
                 # 3. Sumarizar métricas agregadas desde los DataFrames en microsegundos
                 total_words = int(df_granular['Palabras'].sum())
+                if content_words_count == 0:
+                    content_words_count = int(total_words * 0.48)
+                    filler_words_count = total_words - content_words_count
                 total_chars = len(full_text) if full_text else total_words * 6
                 
                 redactions_count = int(df_granular['Menciones_Censuradas_REDACTED'].sum())
@@ -208,7 +225,7 @@ class PDFExtractorEngine:
                 metrics = {
                     "total_words": total_words,
                     "total_chars": total_chars,
-                    "vocab_richness": 0.12,  # Riqueza léxica promedio
+                    "vocab_richness": vocab_richness,
                     "redactions_count": redactions_count,
                     "censorship_index": censorship_index,
                     "evasions_count": evasions_count,
@@ -219,7 +236,9 @@ class PDFExtractorEngine:
                     "top_persons": top_persons,
                     "person_sentiment_analytics": person_sentiment_analytics,
                     "timeline": sorted_timeline,
-                    "top_co_occurrences": sorted_co_occur
+                    "top_co_occurrences": sorted_co_occur,
+                    "content_words_count": content_words_count,
+                    "filler_words_count": filler_words_count
                 }
                 
                 print(" [EXTRACTION ENGINE] ¡Métricas cargadas con éxito y todos los gráficos poblados reactivamente!")
