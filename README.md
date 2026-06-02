@@ -236,21 +236,23 @@ Para asegurar que los gráficos, redes y mapas carguen en milisegundos y evitar 
 
 ## Fase 5: Resultados y Hallazgos Consolidados
 
-A partir del procesamiento y estructuración de los datos del expediente, el motor analítico consolidó estadísticas descriptivas sobre el comportamiento procesal del caso:
+A partir del procesamiento y estructuración de los datos del expediente, el motor analítico consolidó estadísticas descriptivas y hallazgos clave sobre el comportamiento procesal del caso:
 
-### Tácticas de Evasividad Verbal Detectadas
-Se cuantificaron un total de 2,338 tácticas de evasión bajo juramento y 1,367 instancias de censura administrativa (información tachada como REDACTED). La frecuencia de evasivas se distribuye de la siguiente forma:
+### 5.1 Análisis de Tácticas de Evasividad Verbal y Censura
+Se cuantificaron un total de **2,338 tácticas de evasión verbal** bajo juramento y **1,367 instancias de censura administrativa** (`REDACTED` o tachaduras). La frecuencia de estas tácticas revela la dinámica defensiva del juicio:
 
 | Táctica de Evasividad Detectada | Total de Instancias | Razón e Impacto Analítico |
 | :--- | :---: | :--- |
-| **Objection** (Objeciones de Abogados) | 1,915 | Obstrucción sistemática de líneas de cuestionamiento clave. |
-| **Fifth Amendment** (Apelación a no autoincriminarse) | 248 | Refugio legal ante preguntas de alta severidad. |
-| **Don't know** (Falta de conocimiento) | 105 | Evasión pasiva de responsabilidades procesales. |
-| **Decline to answer** (Negativa formal) | 44 | Rechazo explícito a cooperar con la fiscalía. |
-| **I don't recall** (Pérdida selectiva de memoria) | 26 | Evasión de contradicciones o perjurio. |
+| **Objection** (Objeciones de Abogados) | 1,915 | Representa una estrategia sistemática de interrupción legal por parte del equipo defensor, orientada a bloquear preguntas críticas e impedir declaraciones concluyentes. |
+| **Fifth Amendment** (Apelación a no autoincriminarse) | 248 | Refugio legal empleado directamente por los declarantes frente a cuestionamientos graves sobre abusos, coacciones y complicidades directas. |
+| **Don't know** (Falta de conocimiento) | 105 | Evasión de carácter pasivo que simula ignorancia sobre hechos operativos de la red de transporte y logística de las propiedades. |
+| **Decline to answer** (Negativa formal) | 44 | Rechazo directo y explícito a responder cuestionamientos de la fiscalía o de los representantes de las víctimas. |
+| **I don't recall** (Pérdida selectiva de memoria) | 26 | Táctica defensiva para evitar perjurio ante preguntas de careo cruzado donde ya existían evidencias previas. |
 
-### Mapeo de Personas de Interés y Densidad de Riesgo
-El cruzamiento semántico identificó el riesgo asociado a cada individuo dependiendo de los temas críticos mencionados a su alrededor (abuso y logística de transporte):
+**Impacto de la Censura Administrativa**: Las 1,367 instancias de texto tachado (`REDACTED`) documentan que una proporción significativa de los testimonios públicos fue resguardada para proteger la identidad de testigos menores de edad, intermediarios y personajes de alta influencia aún no procesados.
+
+### 5.2 Mapeo de Personas de Interés y Densidad de Riesgo
+El cruzamiento semántico identificó el riesgo asociado a cada individuo dependiendo de la frecuencia de aparición conjunta de sus nombres con temáticas críticas (abuso, captación de víctimas y logística de traslados):
 
 | Persona de Interés | Total Menciones | Sentimiento | Riesgo Analítico | Clasificación de Contexto |
 | :--- | :---: | :---: | :---: | :--- |
@@ -259,6 +261,18 @@ El cruzamiento semántico identificó el riesgo asociado a cada individuo depend
 | **Virginia Giuffre** | 528 | 0.266 | 42 | Positivo / Contexto de Víctima |
 | **Prince Andrew** | 396 | -0.254 | 94 | Negativo / Red de Influencias |
 | **Alan Dershowitz** | 234 | -0.234 | 77 | Negativo / Red de Influencias |
+
+**Interpretación de la Matriz de Personajes**:
+* **Foco y Operación Central**: Jeffrey Epstein y Ghislaine Maxwell presentan los índices de riesgo analítico más elevados (516 y 192). Esto se debe a que sus nombres aparecen de forma recurrente junto a palabras clave de abuso y logística aérea. Su sentimiento promedio es fuertemente negativo, lo que denota una caracterización incriminatoria en las declaraciones.
+* **Red de Influencias**: Prince Andrew y Alan Dershowitz registran niveles de riesgo significativos (94 y 77) derivados de menciones directas en bitácoras de vuelo y testimonios sobre encuentros en las residencias de Epstein.
+* **Validación de Testigo/Víctima**: Virginia Giuffre presenta un índice de riesgo bajo y un sentimiento promedio positivo (`+0.266`). Esto refleja su posición en los testimonios como víctima denunciante y su papel cooperador en el esclarecimiento del caso.
+
+### 5.3 Concentración de Tópicos de Sospecha
+El motor de búsqueda y categorización permitió establecer qué proporción del expediente se destina a cada área temática del caso:
+1. **Ámbito Legal / Juicio**: Tópico dominante que abarca las formalidades procesales, objeciones y terminología jurídica de las declaraciones bajo juramento.
+2. **Abuso / Menores**: Segunda categoría en volumen de menciones, concentrando los pasajes donde se describen patrones de captación y testimonios de las víctimas.
+3. **Logística / Aviones**: Registra las frecuencias de vuelos y bitácoras del Lolita Express que conectaban los diferentes puntos geográficos.
+4. **Propiedades / Lugares**: Agrupa las menciones a la isla Little St. James, la mansión de Manhattan y el rancho Zorro Ranch, delimitando el footprint físico de la red.
 
 ---
 
